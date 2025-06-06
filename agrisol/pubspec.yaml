@@ -1,0 +1,46 @@
+name: agrisol
+description: AI-Powered Precision Agriculture System for Sustainable Crop Management in Rwanda
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # UI Components
+  cupertino_icons: ^1.0.5
+  provider: ^6.0.5
+  
+  # Hardware Access
+  camera: ^0.10.5+2
+  image_picker: ^0.8.7+5
+  path_provider: ^2.0.15
+  path: ^1.8.3
+  
+  # ML and Data Processing
+  tflite_flutter: ^0.9.1
+  image: ^4.0.17
+  
+  # Utilities
+  share_plus: ^7.0.2
+  shared_preferences: ^2.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    # Model files
+    - assets/models/
+    # Localization files
+    - assets/i18n/
+    # Images
+    - assets/images/
