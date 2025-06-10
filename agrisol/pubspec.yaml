@@ -10,21 +10,21 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  
-  # UI Components
+
+  # UI Components!
   cupertino_icons: ^1.0.5
   provider: ^6.0.5
-  
+
   # Hardware Access
   camera: ^0.10.5+2
   image_picker: ^0.8.7+5
   path_provider: ^2.0.15
   path: ^1.8.3
-  
+
   # ML and Data Processing
-  tflite_flutter: ^0.9.1
+  tflite_flutter: ^0.10.3
   image: ^4.0.17
-  
+
   # Utilities
   share_plus: ^7.0.2
   shared_preferences: ^2.1.1
@@ -36,7 +36,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
+
   assets:
     # Model files
     - assets/models/

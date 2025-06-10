@@ -17,11 +17,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _imageFile;
   final picker = ImagePicker();
-  
+
   @override
   Widget build(BuildContext context) {
     final tfliteService = Provider.of<TFLiteService>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Agrisol'),
@@ -42,17 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 120,
-                  ),
+                  Image.asset('assets/images/logo.png', height: 120),
                   SizedBox(height: 16),
                   Text(
                     'AI-Powered Crop Health Monitor',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -62,9 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            
+
             SizedBox(height: 32),
-            
+
             // Main action cards
             Expanded(
               child: GridView.count(
@@ -99,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            
+
             // Status indicator
             Container(
               padding: EdgeInsets.all(8),
@@ -115,9 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 12,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: tfliteService.isModelLoaded 
-                          ? Colors.green 
-                          : Colors.red,
+                      color:
+                          tfliteService.isModelLoaded
+                              ? Colors.green
+                              : Colors.red,
                     ),
                   ),
                   SizedBox(width: 8),
@@ -125,10 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     tfliteService.isModelLoaded
                         ? 'AI Model Ready'
                         : 'Loading AI Model...',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -138,17 +130,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  
+
   void _navigateToCameraScreen(BuildContext context) async {
     try {
       final cameras = await availableCameras();
       if (cameras.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No camera available')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('No camera available')));
         return;
       }
-      
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -161,12 +153,12 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       print('Error accessing camera: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error accessing camera: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error accessing camera: $e')));
     }
   }
-  
+
   void _getImageFromGallery(BuildContext context) async {
     try {
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -175,22 +167,22 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       print('Error picking image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
     }
   }
-  
+
   void _processImage(BuildContext context, File imageFile) async {
     final tfliteService = Provider.of<TFLiteService>(context, listen: false);
-    
+
     if (!tfliteService.isModelLoaded) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('AI model is still loading. Please wait.')),
       );
       return;
     }
-    
+
     // Show loading dialog
     showDialog(
       context: context,
@@ -211,31 +203,29 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
-    
+
     // Process the image
     final results = await tfliteService.processImage(imageFile);
-    
+
     // Close loading dialog
     Navigator.pop(context);
-    
+
     // Navigate to results screen
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ResultsScreen(
-          imageFile: imageFile,
-          results: results,
-        ),
+        builder:
+            (context) => ResultsScreen(imageFile: imageFile, results: results),
       ),
     );
   }
-  
+
   void _showFeatureComingSoon(BuildContext context, String feature) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('$feature will be available in the next update')),
     );
   }
-  
+
   void _showAboutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -256,10 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(height: 8),
-              Text(
-                'Version: 1.0.0 (MVP)',
-                style: TextStyle(fontSize: 14),
-              ),
+              Text('Version: 1.0.0 (MVP)', style: TextStyle(fontSize: 14)),
               SizedBox(height: 16),
               Text(
                 'This application uses computer vision and machine learning to detect crop diseases and provide management recommendations to farmers.',
