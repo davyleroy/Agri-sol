@@ -10,6 +10,8 @@ import 'camera_screen.dart';
 import 'results_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -24,17 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agrisol'),
+        title: const Text('Agrisol'),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.info_outline),
+            icon: const Icon(Icons.info_outline),
             onPressed: () => _showAboutDialog(context),
           ),
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -43,13 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Image.asset('assets/images/logo.png', height: 120),
-                  SizedBox(height: 16),
-                  Text(
+                  const SizedBox(height: 16),
+                  const Text(
                     'AI-Powered Crop Health Monitor',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     'Take or select a photo to identify crop diseases',
                     textAlign: TextAlign.center,
                   ),
@@ -57,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Main action cards
             Expanded(
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Status indicator
             Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(8),
@@ -109,18 +111,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 12,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color:
-                          tfliteService.isModelLoaded
-                              ? Colors.green
-                              : Colors.red,
+                      color: tfliteService.isModelLoaded
+                          ? Colors.green
+                          : Colors.red,
                     ),
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
                     tfliteService.isModelLoaded
                         ? 'AI Model Ready'
                         : 'Loading AI Model...',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -137,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (cameras.isEmpty) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('No camera available')));
+        ).showSnackBar(const SnackBar(content: Text('No camera available')));
         return;
       }
 
@@ -178,7 +180,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (!tfliteService.isModelLoaded) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('AI model is still loading. Please wait.')),
+        const SnackBar(
+            content: Text('AI model is still loading. Please wait.')),
       );
       return;
     }
@@ -188,9 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
+        return const Dialog(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(20.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -214,8 +217,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder:
-            (context) => ResultsScreen(imageFile: imageFile, results: results),
+        builder: (context) =>
+            ResultsScreen(imageFile: imageFile, results: results),
       ),
     );
   }
@@ -231,8 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('About Agrisol'),
-          content: Column(
+          title: const Text('About Agrisol'),
+          content: const Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -256,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           actions: [
             TextButton(
-              child: Text('Close'),
+              child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

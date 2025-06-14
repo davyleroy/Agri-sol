@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 class CameraScreen extends StatefulWidget {
   final CameraDescription camera;
 
-  CameraScreen({required this.camera});
+  const CameraScreen({super.key, required this.camera});
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -40,7 +40,7 @@ class _CameraScreenState extends State<CameraScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Take a Photo'),
+        title: const Text('Take a Photo'),
         backgroundColor: Colors.black,
       ),
       body: FutureBuilder<void>(
@@ -53,7 +53,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 Center(
                   child: CameraPreview(_controller),
                 ),
-                
+
                 // Overlay for better framing
                 Container(
                   decoration: BoxDecoration(
@@ -63,18 +63,19 @@ class _CameraScreenState extends State<CameraScreen> {
                     ),
                     shape: BoxShape.circle,
                   ),
-                  margin: EdgeInsets.all(50),
+                  margin: const EdgeInsets.all(50),
                 ),
-                
+
                 // Guidance text
                 Positioned(
                   bottom: 100,
                   left: 0,
                   right: 0,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     color: Colors.black54,
-                    child: Text(
+                    child: const Text(
                       'Position the plant leaf in the center',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -87,17 +88,17 @@ class _CameraScreenState extends State<CameraScreen> {
               ],
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
+        onPressed: _isTakingPicture ? null : _takePicture,
         child: Icon(
           Icons.camera,
           color: Colors.black,
         ),
-        onPressed: _isTakingPicture ? null : _takePicture,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -106,7 +107,7 @@ class _CameraScreenState extends State<CameraScreen> {
   Future<void> _takePicture() async {
     // Prevent multiple taps
     if (_isTakingPicture) return;
-    
+
     setState(() {
       _isTakingPicture = true;
     });
@@ -124,7 +125,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
       // Take the picture
       final image = await _controller.takePicture();
-      
+
       // Copy image to our app directory
       File(image.path).copy(imagePath);
 

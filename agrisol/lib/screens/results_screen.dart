@@ -8,7 +8,8 @@ class ResultsScreen extends StatelessWidget {
   final File imageFile;
   final Map<String, dynamic> results;
 
-  ResultsScreen({
+  const ResultsScreen({
+    super.key,
     required this.imageFile,
     required this.results,
   });
@@ -18,7 +19,7 @@ class ResultsScreen extends StatelessWidget {
     // Check for error in results
     if (results.containsKey('error')) {
       return Scaffold(
-        appBar: AppBar(title: Text('Error')),
+        appBar: AppBar(title: const Text('Error')),
         body: Center(
           child: Text('Error: ${results['error']}'),
         ),
@@ -39,10 +40,10 @@ class ResultsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analysis Results'),
+        title: const Text('Analysis Results'),
         actions: [
           IconButton(
-            icon: Icon(Icons.share),
+            icon: const Icon(Icons.share),
             onPressed: () => _shareResults(context),
           ),
         ],
@@ -52,7 +53,7 @@ class ResultsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Image container
-            Container(
+            SizedBox(
               height: 250,
               width: double.infinity,
               child: Image.file(
@@ -60,10 +61,10 @@ class ResultsScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            
+
             // Results container
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -78,7 +79,7 @@ class ResultsScreen extends StatelessWidget {
                       ),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -91,11 +92,11 @@ class ResultsScreen extends StatelessWidget {
                                 color: statusColor,
                                 size: 28,
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   topPrediction,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -103,26 +104,26 @@ class ResultsScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Text(
                             'Confidence: ${confidence.toStringAsFixed(2)}%',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(height: 16),
-                          Text(
+                          const SizedBox(height: 16),
+                          const Text(
                             'Recommendation:',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             recommendation,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                             ),
                           ),
@@ -130,32 +131,32 @@ class ResultsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
-                  SizedBox(height: 24),
-                  
+
+                  const SizedBox(height: 24),
+
                   // Other possibilities section
-                  Text(
+                  const Text(
                     'Other possibilities:',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 12),
-                  
+                  const SizedBox(height: 12),
+
                   // List of other possibilities
                   ...top3.asMap().entries.map((entry) {
                     final index = entry.key;
                     final prediction = entry.value;
-                    
+
                     // Skip the first one as it's already displayed above
-                    if (index == 0) return SizedBox.shrink();
-                    
+                    if (index == 0) return const SizedBox.shrink();
+
                     final label = prediction['label'] as String;
                     final conf = (prediction['confidence'] as double) * 100;
-                    
+
                     return ListTile(
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         horizontal: 4,
                         vertical: 4,
                       ),
@@ -167,17 +168,17 @@ class ResultsScreen extends StatelessWidget {
                       ),
                     );
                   }).toList(),
-                  
-                  SizedBox(height: 24),
-                  
+
+                  const SizedBox(height: 24),
+
                   // Notes and disclaimer
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Column(
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -204,33 +205,33 @@ class ResultsScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton.icon(
-                icon: Icon(Icons.camera_alt),
-                label: Text('New Scan'),
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('New Scan'),
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 12,
                   ),
                 ),
               ),
               ElevatedButton.icon(
-                icon: Icon(Icons.save_alt),
-                label: Text('Save'),
+                icon: const Icon(Icons.save_alt),
+                label: const Text('Save'),
                 onPressed: () => _saveResult(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 12,
                   ),
@@ -250,7 +251,7 @@ class ResultsScreen extends StatelessWidget {
       final topPrediction = results['topPrediction'] as String;
       final confidence = (results['confidence'] as double) * 100;
       final recommendation = results['recommendation'] as String;
-      
+
       final textToShare = '''
 Agrisol Crop Analysis Results:
 Detected: $topPrediction
@@ -279,7 +280,7 @@ Analyzed with Agrisol - AI-Powered Precision Agriculture
     // In the MVP, just show a success message
     // In a full version, this would save to local DB
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Analysis saved successfully')),
+      const SnackBar(content: Text('Analysis saved successfully')),
     );
   }
 }

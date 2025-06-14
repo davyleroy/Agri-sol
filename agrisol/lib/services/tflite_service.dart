@@ -30,7 +30,7 @@ class TFLiteService extends ChangeNotifier {
           modelData.offsetInBytes, modelData.lengthInBytes));
 
       // Load interpreter
-      _interpreter = await Interpreter.fromFile(modelFile);
+      _interpreter = Interpreter.fromFile(modelFile);
 
       // Load labels
       final labelsData =
@@ -205,6 +205,7 @@ class TFLiteService extends ChangeNotifier {
   }
 
   // Clean up resources
+  @override
   void dispose() {
     _interpreter?.close();
     super.dispose();

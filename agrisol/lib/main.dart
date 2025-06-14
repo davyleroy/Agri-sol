@@ -22,6 +22,8 @@ void main() async {
 }
 
 class AgrisolApp extends StatelessWidget {
+  const AgrisolApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,12 +32,12 @@ class AgrisolApp extends StatelessWidget {
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en', ''), // English
         Locale('rw', ''), // Kinyarwanda
       ],

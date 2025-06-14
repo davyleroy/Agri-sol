@@ -1,0 +1,3 @@
+Dataset/
+# If you need to ignore JPGs only in specific directories
+Dataset/*.jpg
