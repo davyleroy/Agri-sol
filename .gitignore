@@ -1,3 +1,5 @@
 Dataset/
 # If you need to ignore JPGs only in specific directories
 Dataset/*.jpg
+Notebook/*.h5
+Notebook/*.pkl
