@@ -95,7 +95,7 @@ class _CameraScreenState extends State<CameraScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: _isTakingPicture ? null : _takePicture,
-        child: Icon(
+        child: const Icon(
           Icons.camera,
           color: Colors.black,
         ),

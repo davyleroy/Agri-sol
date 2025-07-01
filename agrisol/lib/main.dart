@@ -16,7 +16,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => tfliteService)],
-      child: AgrisolApp(),
+      child: const AgrisolApp(),
     ),
   );
 }
@@ -41,7 +41,7 @@ class AgrisolApp extends StatelessWidget {
         Locale('en', ''), // English
         Locale('rw', ''), // Kinyarwanda
       ],
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

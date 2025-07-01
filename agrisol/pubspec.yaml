@@ -22,7 +22,8 @@ dependencies:
   path: ^1.8.3
 
   # ML and Data Processing
-  tflite_flutter: ^0.10.3
+  tflite_flutter: ^0.10.4
+  tflite_flutter_helper: ^0.4.4
   image: ^4.0.17
 
   # Utilities
@@ -33,6 +34,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.1
+
+dependency_overrides:
+  tflite_flutter:
+    git:
+      url: https://github.com/tensorflow/flutter-tflite.git
+      path: packages/tflite_flutter
+      ref: 9b3a7798861c3d3be23ecb2a88a31de1e45de539
 
 flutter:
   uses-material-design: true
