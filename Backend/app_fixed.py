@@ -26,7 +26,7 @@ api = Api(
     app,
     version='1.0',
     title='AgriSol Plant Disease Detection API',
-    description='Machine Learning API for detecting plant diseases in tomatoes, potatoes, and maize',
+    description='Machine Learning API for detecting plant diseases in tomatoes, potatoes, maize, and beans',
     doc='/docs/'  # This creates the /docs endpoint
 )
 
@@ -208,52 +208,18 @@ def get_treatment_recommendations(disease, crop_type):
         "Avoid overhead watering to reduce moisture on leaves"
     ]
     
-    disease_lower = disease.lower()
-    
-    if disease_lower == 'healthy':
+    if disease.lower() == 'healthy':
         return [
             "Plant appears healthy - continue current care routine",
             "Monitor regularly for early signs of disease",
             "Maintain proper watering and nutrition"
         ]
-    elif 'blight' in disease_lower:
+    elif 'blight' in disease.lower():
         return [
             f"Remove affected {crop_type} leaves immediately",
             "Apply copper-based fungicide as directed",
             "Improve air circulation and reduce humidity",
             "Consider organic neem oil treatment"
-        ] + base_recommendations
-    elif 'angular leaf spot' in disease_lower:
-        return [
-            "Remove infected plant debris",
-            "Apply copper-based fungicide",
-            "Improve air circulation between plants",
-            "Avoid overhead watering",
-            "Plant disease-resistant varieties"
-        ] + base_recommendations
-    elif 'bean rust' in disease_lower or 'rust' in disease_lower:
-        return [
-            "Apply sulfur-based fungicide",
-            "Remove infected leaves immediately",
-            "Increase spacing between plants",
-            "Avoid working with wet plants",
-            "Consider resistant bean varieties"
-        ] + base_recommendations
-    elif 'bacterial spot' in disease_lower or 'bacterial' in disease_lower:
-        return [
-            "Remove infected plants to prevent spread",
-            "Apply copper-based bactericide",
-            "Disinfect tools between plants",
-            "Avoid working with wet plants",
-            "Improve air circulation around plants"
-        ] + base_recommendations
-    elif 'mosaic virus' in disease_lower or 'virus' in disease_lower:
-        return [
-            "Remove infected plants immediately",
-            "Control insect vectors (aphids, whiteflies)",
-            "Use virus-free seeds",
-            "Disinfect tools regularly",
-            "Plant resistant varieties"
         ] + base_recommendations
     else:
         return [

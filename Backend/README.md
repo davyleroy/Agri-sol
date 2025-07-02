@@ -1,19 +1,93 @@
-# AgriSol Plant Disease Detection API
+# AgriSol Plant Disease Detection Backend API
 
-A Flask-based REST API for detecting plant diseases in tomatoes, potatoes, and maize using deep learning models.
+A Flask-based machine learning API for detecting plant diseases in tomatoes, potatoes, and maize crops using deep learning models.
 
-## Features
+## 🚀 Quick Start
 
-- **Multi-crop Support**: Detect diseases in tomatoes (10 classes), potatoes (3 classes), and maize (4 classes)
-- **Image Processing**: Automatic image preprocessing and normalization
-- **Treatment Recommendations**: Comprehensive treatment advice for detected diseases
-- **CORS Enabled**: Ready for frontend integration
-- **Error Handling**: Robust error handling and logging
-- **Model Flexibility**: Automatic fallback to alternative models if primary models are unavailable
+### Prerequisites
 
-## Supported Crops and Diseases
+- Python 3.8+
+- TensorFlow 2.13+
+- All dependencies in `requirements.txt`
 
-### Tomatoes (10 classes)
+### Installation
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the API with documentation
+python app_with_docs.py
+```
+
+## 📚 API Documentation
+
+### Interactive Documentation
+
+- **Swagger UI**: http://localhost:5000/docs
+- **Testing Interface**: http://localhost:5000/test
+
+### Core Endpoints
+
+#### 1. Health Check
+
+```
+GET http://localhost:5000/
+```
+
+Returns API status and loaded models.
+
+#### 2. Plant Disease Prediction
+
+```
+POST http://localhost:5000/api/ml/{crop_type}
+```
+
+**Supported crop types**: `tomatoes`, `potatoes`, `maize`
+
+**Request**:
+
+- Method: POST
+- Content-Type: multipart/form-data
+- Body: image file (JPG, PNG, etc.)
+
+**Response**:
+
+```json
+{
+  "success": true,
+  "predicted_class": "Early Blight",
+  "confidence": 0.95,
+  "confidence_percentage": 95.0,
+  "severity": "High",
+  "recommendations": [
+    "Treat Early Blight immediately",
+    "Monitor plant regularly",
+    "Improve air circulation"
+  ],
+  "treatment_urgency": "High",
+  "estimated_recovery": "2-3 weeks",
+  "crop_type": "tomatoes",
+  "all_predictions": {
+    "Bacterial Spot": 0.01,
+    "Early Blight": 0.95,
+    "Healthy": 0.02,
+    "..."
+  }
+}
+```
+
+#### 3. Model Information
+
+```
+GET http://localhost:5000/api/models
+```
+
+Returns information about all available models.
+
+## 🔬 Disease Classes
+
+### 🍅 Tomatoes (10 classes)
 
 - Bacterial Spot
 - Early Blight
@@ -26,338 +100,202 @@ A Flask-based REST API for detecting plant diseases in tomatoes, potatoes, and m
 - Mosaic Virus
 - Yellow Leaf Curl Virus
 
-### Potatoes (3 classes)
+### 🥔 Potatoes (3 classes)
 
 - Early Blight
 - Healthy
 - Late Blight
 
-### Maize/Corn (4 classes)
+### 🌽 Maize (4 classes) - Currently Unavailable
 
 - Common Rust
 - Gray Leaf Spot
 - Healthy
 - Northern Corn Leaf Blight
 
-## Installation
+## 🛠️ Model Status
 
-### Prerequisites
+### Current Working Models
 
-- Python 3.8 or higher
-- pip package manager
-- TensorFlow-compatible system
+- ✅ **Tomatoes**: `tomato_disease_best_model_fixed.h5` (10 classes)
+- ✅ **Potatoes**: `agrisol_potato_model.keras` (3 classes)
+- ❌ **Maize**: Model loading issues (investigating)
 
-### Setup
+### Model Diagnostics
 
-1. **Clone the repository**
+Run the diagnostic tool to check model status:
 
-   ```bash
-   cd Backend
-   ```
-
-2. **Create virtual environment**
-
-   ```bash
-   python -m venv agrisol_env
-
-   # On Windows
-   agrisol_env\Scripts\activate
-
-   # On macOS/Linux
-   source agrisol_env/bin/activate
-   ```
-
-3. **Install dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Verify model files**
-
-   Ensure the following model files exist in the `../Notebook/` directory:
-
-   - `tomato_disease_best_model_fixed.h5` (or alternatives)
-   - `sweet_spot_potato_model.keras` (or alternatives)
-   - `corn_gentle_v3.h5` (or alternatives)
-
-5. **Run the application**
-   ```bash
-   python app.py
-   ```
-
-The API will start on `http://localhost:5000`
-
-## API Endpoints
-
-### Health Check
-
-```
-GET /
+```bash
+python fix_models.py
 ```
 
-Returns API status and loaded models.
+## 🧪 Testing the API
 
-**Response:**
+### 1. Web Interface
 
-```json
-{
-  "status": "healthy",
-  "message": "Plant Disease Detection API is running",
-  "models_loaded": ["tomatoes", "potatoes", "maize"],
-  "timestamp": "2024-01-01T12:00:00"
-}
-```
+Visit http://localhost:5000/test for a user-friendly testing interface.
 
-### Disease Prediction
-
-```
-POST /api/ml/{crop_type}
-```
-
-Where `crop_type` is one of: `tomatoes`, `potatoes`, `maize`
-
-**Request:**
-
-- Content-Type: `multipart/form-data`
-- `image`: Image file (JPG, PNG, BMP, TIFF)
-- `crop_type` (optional): Crop type identifier
-
-**Response:**
-
-```json
-{
-  "success": true,
-  "predicted_class": "Early Blight",
-  "confidence": 0.92,
-  "confidence_percentage": 92.0,
-  "severity": "High",
-  "recommendations": [
-    "Remove affected leaves immediately",
-    "Apply copper-based fungicide",
-    "Improve air circulation around plants"
-  ],
-  "treatment_urgency": "Medium",
-  "estimated_recovery": "2-3 weeks",
-  "crop_type": "tomatoes",
-  "all_predictions": {
-    "Early Blight": 0.92,
-    "Healthy": 0.05,
-    "Late Blight": 0.03
-  }
-}
-```
-
-### Model Information
-
-```
-GET /api/models
-```
-
-Returns information about available models.
-
-**Response:**
-
-```json
-{
-  "models": {
-    "tomatoes": {
-      "loaded": true,
-      "classes": ["Bacterial Spot", "Early Blight", ...],
-      "endpoint": "/api/ml/tomatoes"
-    }
-  },
-  "total_models": 3
-}
-```
-
-## Usage Examples
-
-### Python Client Example
-
-```python
-import requests
-
-# Health check
-response = requests.get('http://localhost:5000/')
-print(response.json())
-
-# Disease prediction
-with open('plant_image.jpg', 'rb') as image_file:
-    files = {'image': image_file}
-    response = requests.post(
-        'http://localhost:5000/api/ml/tomatoes',
-        files=files
-    )
-    result = response.json()
-    print(f"Disease: {result['predicted_class']}")
-    print(f"Confidence: {result['confidence_percentage']}%")
-```
-
-### JavaScript/Fetch Example
-
-```javascript
-const formData = new FormData();
-formData.append("image", imageFile);
-
-fetch("http://localhost:5000/api/ml/tomatoes", {
-  method: "POST",
-  body: formData,
-})
-  .then((response) => response.json())
-  .then((data) => {
-    console.log("Disease:", data.predicted_class);
-    console.log("Confidence:", data.confidence_percentage + "%");
-    console.log("Recommendations:", data.recommendations);
-  });
-```
-
-### cURL Example
+### 2. cURL Example
 
 ```bash
 curl -X POST \
   http://localhost:5000/api/ml/tomatoes \
-  -F "image=@plant_image.jpg"
+  -F "image=@path/to/your/plant_image.jpg"
 ```
 
-## Configuration
+### 3. Python Example
+
+```python
+import requests
+
+url = "http://localhost:5000/api/ml/tomatoes"
+files = {"image": open("plant_image.jpg", "rb")}
+
+response = requests.post(url, files=files)
+result = response.json()
+
+print(f"Disease: {result['predicted_class']}")
+print(f"Confidence: {result['confidence_percentage']}%")
+```
+
+## 🏗️ Architecture
+
+```
+Backend/
+├── app_with_docs.py          # Enhanced API with documentation
+├── app.py                    # Original API (fallback)
+├── requirements.txt          # Dependencies
+├── config.py                 # Configuration settings
+├── run.py                    # Production startup script
+├── utils/
+│   ├── model_utils.py        # Model loading and prediction
+│   └── treatment_utils.py    # Treatment recommendations
+├── uploads/                  # Temporary image storage
+└── README.md                 # This file
+```
+
+## 🔧 Configuration
 
 ### Environment Variables
 
-- `FLASK_ENV`: Set to `development` or `production`
-- `SECRET_KEY`: Flask secret key
-- `PORT`: Server port (default: 5000)
+- `FLASK_ENV`: development/production
+- `MODEL_PATH`: Custom model directory path
+- `MAX_CONTENT_LENGTH`: Max upload size (default: 16MB)
 
-### Model Configuration
+### Model Paths
 
-Edit `MODEL_PATHS` in `app.py` to change model file locations:
+Models are loaded from `../Notebook/` directory:
 
-```python
-MODEL_PATHS = {
-    'tomatoes': '../Notebook/your_tomato_model.h5',
-    'potatoes': '../Notebook/your_potato_model.keras',
-    'maize': '../Notebook/your_maize_model.h5'
-}
-```
+- Primary paths defined in `MODEL_PATHS`
+- Alternative paths in `ALTERNATIVE_PATHS`
+- Automatic fallback to working models
 
-## Error Handling
-
-The API returns appropriate HTTP status codes:
-
-- `200`: Success
-- `400`: Bad Request (invalid input)
-- `500`: Internal Server Error
-
-Error response format:
-
-```json
-{
-  "success": false,
-  "error": "Error description"
-}
-```
-
-## Image Requirements
-
-- **Supported formats**: JPG, JPEG, PNG, BMP, TIFF
-- **Maximum file size**: 16MB
-- **Recommended resolution**: 256x256 pixels or higher
-- **Color**: RGB images preferred
-
-## Treatment Recommendations
-
-The API provides comprehensive treatment advice including:
-
-- Immediate actions to take
-- Chemical and organic treatment options
-- Prevention measures
-- Recovery time estimates
-- Treatment urgency levels
-
-## Logging
-
-Logs are written to the console and include:
-
-- Model loading status
-- Prediction requests and results
-- Error messages and stack traces
-
-## Production Deployment
-
-### Using Gunicorn
-
-```bash
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
-
-### Docker Deployment
-
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-EXPOSE 5000
-
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
-```
-
-## Performance Considerations
-
-- **Model Loading**: Models are loaded once at startup
-- **Memory Usage**: Each model requires ~100-500MB RAM
-- **Processing Time**: Typical prediction takes 1-3 seconds
-- **Concurrent Requests**: Limited by available RAM and CPU
-
-## Troubleshooting
+## 🚨 Troubleshooting
 
 ### Common Issues
 
 1. **Model Loading Errors**
 
-   - Verify model files exist and are not corrupted
-   - Check TensorFlow version compatibility
-   - Ensure sufficient RAM for model loading
+   ```bash
+   python fix_models.py  # Diagnose model issues
+   ```
 
-2. **Image Processing Errors**
+2. **Port Already in Use**
 
-   - Verify image format is supported
-   - Check file size is under 16MB
-   - Ensure image is not corrupted
+   ```bash
+   # Kill existing Flask processes
+   taskkill /f /im python.exe  # Windows
+   # or change port in app.py
+   ```
 
-3. **CORS Issues**
-   - Update `CORS_ORIGINS` in config.py
-   - Check browser developer console for CORS errors
+3. **Memory Issues**
+   - Reduce batch size
+   - Use CPU instead of GPU
+   - Close unused applications
 
-### Debug Mode
+### Model Issues
 
-Run with debug logging:
+- **Maize models**: Currently experiencing loading errors
+- **Workaround**: Use API with tomatoes and potatoes only
+- **Solution**: Retrain maize models with compatible format
+
+## 📊 Performance
+
+### Response Times
+
+- Health check: ~10ms
+- Model loading: ~2-5 seconds (startup)
+- Image prediction: ~100-500ms per image
+
+### Resource Usage
+
+- RAM: ~2-4GB (with models loaded)
+- CPU: ~10-30% during prediction
+- Disk: ~100MB for model files
+
+## 🔐 Security
+
+- File upload size limits (16MB)
+- Allowed file types validation
+- CORS enabled for frontend integration
+- Input sanitization and validation
+
+## 📈 Monitoring
+
+### Health Monitoring
+
+- Health check endpoint: `/`
+- Model status: `/api/models`
+- Logs: Check console output
+
+### Metrics
+
+- Request count
+- Response times
+- Model accuracy
+- Error rates
+
+## 🚀 Deployment
+
+### Development
 
 ```bash
-export FLASK_ENV=development
-python app.py
+python app_with_docs.py
 ```
 
-## License
+### Production
+
+```bash
+python run.py
+# or
+gunicorn -w 4 -b 0.0.0.0:5000 app:app
+```
+
+## 📝 Changelog
+
+### Version 1.1.0 (Current)
+
+- ✅ Added Swagger documentation (`/docs`)
+- ✅ Added web testing interface (`/test`)
+- ✅ Enhanced error handling
+- ✅ Model diagnostics tool
+- ✅ Automatic model fallback
+- ✅ Improved logging
+
+### Version 1.0.0
+
+- ✅ Basic API with prediction endpoints
+- ✅ Support for tomatoes, potatoes, maize
+- ✅ Treatment recommendations
+- ✅ CORS support
+
+## 🤝 Contributing
+
+1. Run diagnostics: `python fix_models.py`
+2. Test your changes: `python test_api.py`
+3. Update documentation
+4. Submit pull request
+
+## 📄 License
 
 This project is part of the AgriSol plant disease detection system.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## Support
-
-For issues and questions:
-
-- Check existing GitHub issues
-- Create new issue with detailed description
-- Include error logs and system information
