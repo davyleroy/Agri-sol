@@ -40,7 +40,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Updated model paths based on our diagnostics
 MODEL_PATHS = {
     'tomatoes': '../Notebook/tomato_disease_best_model_fixed.h5',
-    'potatoes': '../Notebook/agrisol_potato_model.keras',  # This one works
+    'potatoes': '../Notebook/potato_disease_model_best.keras',  # This one works
     'maize': '../Notebook/corn_gentle_v3.h5',  # Use general model as fallback
     'beans': '../Notebook/bean_disease_model_best.h5'  # Use general model for beans
 }
@@ -52,7 +52,7 @@ ALTERNATIVE_PATHS = {
         '../Notebook/tomato_transfer_best.h5'
     ],
     'potatoes': [
-        '../Notebook/nuclear_potato_model.keras',
+        '../Notebook/potato_disease_model_best.keras',
         '../Notebook/potato_model_best.h5',
         '../Notebook/best_potato_react_model.h5'
     ],
@@ -60,7 +60,7 @@ ALTERNATIVE_PATHS = {
         '../Notebook/tomato_disease_best_model_fixed.h5',  # Use tomato model as fallback
     ],
     'beans': [
-        '../Notebook/tomato_disease_best_model_fixed.h5',  # Use tomato model as fallback
+        '../Notebook/bean_disease_model_best.h5',  # Use tomato model as fallback
     ]
 }
 

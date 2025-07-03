@@ -40,15 +40,17 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Model paths (relative to notebook directory)
 MODEL_PATHS = {
     'tomatoes': '../Notebook/tomato_disease_best_model_fixed.h5',
-    'potatoes': '../Notebook/sweet_spot_potato_model.keras',
-    'maize': '../Notebook/corn_gentle_v3.h5'
+    'potatoes': '../Notebook/potato_disease_model_best.keras',
+    'maize': '../Notebook/corn_gentle_v3.h5',
+    'beans': '../Notebook/bean_disease_model_best.keras'
 }
 
 # Alternative model paths if primary ones don't exist
 ALTERNATIVE_PATHS = {
     'tomatoes': ['../Notebook/tomato_disease_best_model.h5', '../Notebook/tomato_transfer_best.h5'],
-    'potatoes': ['../Notebook/agrisol_potato_model.keras', '../Notebook/nuclear_potato_model.keras'],
-    'maize': ['../Notebook/corn_antibias_v2.h5', '../Notebook/corn_disease_balanced_model.h5']
+    'potatoes': ['../Notebook/potato_disease_model_best.keras', '../Notebook/nuclear_potato_model.keras'],
+    'maize': ['../Notebook/corn_antibias_v2.h5', '../Notebook/corn_disease_balanced_model.h5'],
+    'beans': ['../Notebook/bean_disease_model_best.keras']
 }
 
 # Disease class mappings
@@ -63,6 +65,9 @@ DISEASE_CLASSES = {
     ],
     'maize': [
         'Common Rust', 'Gray Leaf Spot', 'Healthy', 'Northern Corn Leaf Blight'
+    ],
+    'beans': [
+        'Healthy', 'Bacterial Spot', 'Angular Leaf Spot', 'Healthy'
     ]
 }
 

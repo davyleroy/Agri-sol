@@ -56,7 +56,7 @@ def suggest_maize_alternatives():
     print("=" * 50)
     
     alternatives = [
-        "../Notebook/best_plant_disease_model.h5",
+        "../Notebook/corn_gentle_v3.h5",
         "../Notebook/potato_model_best.h5",  # Might work as it's large
         "../Notebook/tomato_disease_best_model.h5"
     ]

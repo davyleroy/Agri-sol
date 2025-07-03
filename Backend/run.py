@@ -17,7 +17,7 @@ def main():
     # Load configuration
     app_config = config.get(env, config['default'])
     
-    print("🍅 AgriSol Plant Disease Detection API")
+    print("🍅🥔🌽🫘 AgriSol Plant Disease Detection API")
     print("=" * 50)
     print(f"Environment: {env}")
     print(f"Debug Mode: {app_config.DEBUG}")
