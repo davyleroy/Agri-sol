@@ -41,8 +41,8 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 MODEL_PATHS = {
     'tomatoes': '../Notebook/tomato_disease_best_model_fixed.h5',
     'potatoes': '../Notebook/agrisol_potato_model.keras',  # This one works
-    'maize': '../Notebook/best_plant_disease_model.h5',  # Use general model as fallback
-    'beans': '../Notebook/best_plant_disease_model.h5'  # Use general model for beans
+    'maize': '../Notebook/corn_gentle_v3.h5',  # Use general model as fallback
+    'beans': '../Notebook/bean_disease_model_best.h5'  # Use general model for beans
 }
 
 # Alternative model paths if primary ones don't exist
@@ -58,11 +58,9 @@ ALTERNATIVE_PATHS = {
     ],
     'maize': [
         '../Notebook/tomato_disease_best_model_fixed.h5',  # Use tomato model as fallback
-        '../Notebook/best_plant_disease_model.h5'
     ],
     'beans': [
         '../Notebook/tomato_disease_best_model_fixed.h5',  # Use tomato model as fallback
-        '../Notebook/agrisol_potato_model.keras'
     ]
 }
 

@@ -1,0 +1,2413 @@
+{
+  "country": {
+    "en": "Rwanda",
+    "fr": "Rwanda (le)",
+    "rw": "U Rwanda",
+    "sw": "Rwanda"
+  },
+  "code": "RW",
+  "metadata": {
+    "totalRecords": 416,
+    "generatedAt": "2025-07-03T15:02:11.585Z",
+    "source": "Rwanda Administrative Subdivisions Complete CSV",
+    "levels": "Country > Province > District > Sector (no cells in this dataset)",
+    "coverage": "All 5 provinces of Rwanda"
+  },
+  "provinces": {
+    "Kigali City": {
+      "names": {
+        "en": "Kigali City",
+        "fr": "Ville de Kigali",
+        "rw": "Umujyi wa Kigali"
+      },
+      "districts": {
+        "Nyarugenge": {
+          "names": {
+            "en": "Nyarugenge",
+            "fr": "Nyarugenge",
+            "rw": "Nyarugenge"
+          },
+          "sectors": [
+            {
+              "en": "Gitega",
+              "fr": "Gitega",
+              "rw": "Gitega"
+            },
+            {
+              "en": "Kanyinya",
+              "fr": "Kanyinya",
+              "rw": "Kanyinya"
+            },
+            {
+              "en": "Kigali",
+              "fr": "Kigali",
+              "rw": "Kigali"
+            },
+            {
+              "en": "Kimisagara",
+              "fr": "Kimisagara",
+              "rw": "Kimisagara"
+            },
+            {
+              "en": "Mageragere",
+              "fr": "Mageragere",
+              "rw": "Mageragere"
+            },
+            {
+              "en": "Kabagari",
+              "fr": "Kabagari",
+              "rw": "Kabagari"
+            },
+            {
+              "en": "Rugalika",
+              "fr": "Rugalika",
+              "rw": "Rugalika"
+            },
+            {
+              "en": "Gishari",
+              "fr": "Gishari",
+              "rw": "Gishari"
+            },
+            {
+              "en": "Nyakiliba",
+              "fr": "Nyakiliba",
+              "rw": "Nyakiliba"
+            },
+            {
+              "en": "Shyorongi",
+              "fr": "Shyorongi",
+              "rw": "Shyorongi"
+            }
+          ]
+        },
+        "Gasabo": {
+          "names": {
+            "en": "Gasabo",
+            "fr": "Gasabo",
+            "rw": "Gasabo"
+          },
+          "sectors": [
+            {
+              "en": "Rusarabuge",
+              "fr": "Rusarabuge",
+              "rw": "Rusarabuge"
+            },
+            {
+              "en": "Gishari",
+              "fr": "Gishari",
+              "rw": "Gishari"
+            },
+            {
+              "en": "Nyakariro",
+              "fr": "Nyakariro",
+              "rw": "Nyakariro"
+            },
+            {
+              "en": "Mimuri",
+              "fr": "Mimuri",
+              "rw": "Mimuri"
+            },
+            {
+              "en": "Jabana",
+              "fr": "Jabana",
+              "rw": "Jabana"
+            },
+            {
+              "en": "Jali",
+              "fr": "Jali",
+              "rw": "Jali"
+            },
+            {
+              "en": "Kacyiru",
+              "fr": "Kacyiru",
+              "rw": "Kacyiru"
+            },
+            {
+              "en": "Kimihurura",
+              "fr": "Kimihurura",
+              "rw": "Kimihurura"
+            },
+            {
+              "en": "Kimironko",
+              "fr": "Kimironko",
+              "rw": "Kimironko"
+            },
+            {
+              "en": "Kinyinya",
+              "fr": "Kinyinya",
+              "rw": "Kinyinya"
+            },
+            {
+              "en": "Ndera",
+              "fr": "Ndera",
+              "rw": "Ndera"
+            },
+            {
+              "en": "Nduba",
+              "fr": "Nduba",
+              "rw": "Nduba"
+            },
+            {
+              "en": "Remera",
+              "fr": "Remera",
+              "rw": "Remera"
+            },
+            {
+              "en": "Rusororo",
+              "fr": "Rusororo",
+              "rw": "Rusororo"
+            },
+            {
+              "en": "Rutunga",
+              "fr": "Rutunga",
+              "rw": "Rutunga"
+            }
+          ]
+        },
+        "Kicukiro": {
+          "names": {
+            "en": "Kicukiro",
+            "fr": "Kicukiro",
+            "rw": "Kicukiro"
+          },
+          "sectors": [
+            {
+              "en": "Gahanga",
+              "fr": "Gahanga",
+              "rw": "Gahanga"
+            },
+            {
+              "en": "Gatenga",
+              "fr": "Gatenga",
+              "rw": "Gatenga"
+            },
+            {
+              "en": "Gikondo",
+              "fr": "Gikondo",
+              "rw": "Gikondo"
+            },
+            {
+              "en": "Kagarama",
+              "fr": "Kagarama",
+              "rw": "Kagarama"
+            },
+            {
+              "en": "Kanombe",
+              "fr": "Kanombe",
+              "rw": "Kanombe"
+            },
+            {
+              "en": "Kicukiro",
+              "fr": "Kicukiro",
+              "rw": "Kicukiro"
+            },
+            {
+              "en": "Kigarama",
+              "fr": "Kigarama",
+              "rw": "Kigarama"
+            },
+            {
+              "en": "Masaka",
+              "fr": "Masaka",
+              "rw": "Masaka"
+            },
+            {
+              "en": "Niboye",
+              "fr": "Niboye",
+              "rw": "Niboye"
+            },
+            {
+              "en": "Nyarugunga",
+              "fr": "Nyarugunga",
+              "rw": "Nyarugunga"
+            }
+          ]
+        }
+      }
+    },
+    "Southern Province": {
+      "names": {
+        "en": "Southern Province",
+        "fr": "Province du Sud",
+        "rw": "Amajyepfo"
+      },
+      "districts": {
+        "Nyanza": {
+          "names": {
+            "en": "Nyanza",
+            "fr": "Nyanza",
+            "rw": "Nyanza"
+          },
+          "sectors": [
+            {
+              "en": "Busasamana",
+              "fr": "Busasamana",
+              "rw": "Busasamana"
+            },
+            {
+              "en": "Busoro",
+              "fr": "Busoro",
+              "rw": "Busoro"
+            },
+            {
+              "en": "Cyabakamyi",
+              "fr": "Cyabakamyi",
+              "rw": "Cyabakamyi"
+            },
+            {
+              "en": "Kibilizi",
+              "fr": "Kibilizi",
+              "rw": "Kibilizi"
+            },
+            {
+              "en": "Kigoma",
+              "fr": "Kigoma",
+              "rw": "Kigoma"
+            },
+            {
+              "en": "Mukingo",
+              "fr": "Mukingo",
+              "rw": "Mukingo"
+            },
+            {
+              "en": "Muyira",
+              "fr": "Muyira",
+              "rw": "Muyira"
+            },
+            {
+              "en": "Ntyazo",
+              "fr": "Ntyazo",
+              "rw": "Ntyazo"
+            },
+            {
+              "en": "Nyagisozi",
+              "fr": "Nyagisozi",
+              "rw": "Nyagisozi"
+            },
+            {
+              "en": "Rwabicuma",
+              "fr": "Rwabicuma",
+              "rw": "Rwabicuma"
+            }
+          ]
+        },
+        "Gisagara": {
+          "names": {
+            "en": "Gisagara",
+            "fr": "Gisagara",
+            "rw": "Gisagara"
+          },
+          "sectors": [
+            {
+              "en": "Gikonko",
+              "fr": "Gikonko",
+              "rw": "Gikonko"
+            },
+            {
+              "en": "Gishubi",
+              "fr": "Gishubi",
+              "rw": "Gishubi"
+            },
+            {
+              "en": "Kansi",
+              "fr": "Kansi",
+              "rw": "Kansi"
+            },
+            {
+              "en": "Kibirizi",
+              "fr": "Kibirizi",
+              "rw": "Kibirizi"
+            },
+            {
+              "en": "Kigembe",
+              "fr": "Kigembe",
+              "rw": "Kigembe"
+            },
+            {
+              "en": "Mamba",
+              "fr": "Mamba",
+              "rw": "Mamba"
+            },
+            {
+              "en": "Muganza",
+              "fr": "Muganza",
+              "rw": "Muganza"
+            },
+            {
+              "en": "Mugombwa",
+              "fr": "Mugombwa",
+              "rw": "Mugombwa"
+            },
+            {
+              "en": "Mukindo",
+              "fr": "Mukindo",
+              "rw": "Mukindo"
+            },
+            {
+              "en": "Musha",
+              "fr": "Musha",
+              "rw": "Musha"
+            },
+            {
+              "en": "Ndora",
+              "fr": "Ndora",
+              "rw": "Ndora"
+            },
+            {
+              "en": "Nyanza",
+              "fr": "Nyanza",
+              "rw": "Nyanza"
+            },
+            {
+              "en": "Save",
+              "fr": "Save",
+              "rw": "Save"
+            }
+          ]
+        },
+        "Nyaruguru": {
+          "names": {
+            "en": "Nyaruguru",
+            "fr": "Nyaruguru",
+            "rw": "Nyaruguru"
+          },
+          "sectors": [
+            {
+              "en": "Busanze",
+              "fr": "Busanze",
+              "rw": "Busanze"
+            },
+            {
+              "en": "Cyahinda",
+              "fr": "Cyahinda",
+              "rw": "Cyahinda"
+            },
+            {
+              "en": "Kibeho",
+              "fr": "Kibeho",
+              "rw": "Kibeho"
+            },
+            {
+              "en": "Kivu",
+              "fr": "Kivu",
+              "rw": "Kivu"
+            },
+            {
+              "en": "Mata",
+              "fr": "Mata",
+              "rw": "Mata"
+            },
+            {
+              "en": "Muganza",
+              "fr": "Muganza",
+              "rw": "Muganza"
+            },
+            {
+              "en": "Munini",
+              "fr": "Munini",
+              "rw": "Munini"
+            },
+            {
+              "en": "Ngera",
+              "fr": "Ngera",
+              "rw": "Ngera"
+            },
+            {
+              "en": "Ngoma",
+              "fr": "Ngoma",
+              "rw": "Ngoma"
+            },
+            {
+              "en": "Nyabimata",
+              "fr": "Nyabimata",
+              "rw": "Nyabimata"
+            },
+            {
+              "en": "Nyagisozi",
+              "fr": "Nyagisozi",
+              "rw": "Nyagisozi"
+            },
+            {
+              "en": "Ruheru",
+              "fr": "Ruheru",
+              "rw": "Ruheru"
+            },
+            {
+              "en": "Ruramba",
+              "fr": "Ruramba",
+              "rw": "Ruramba"
+            },
+            {
+              "en": "Rusenge",
+              "fr": "Rusenge",
+              "rw": "Rusenge"
+            }
+          ]
+        },
+        "Huye": {
+          "names": {
+            "en": "Huye",
+            "fr": "Huye",
+            "rw": "Huye"
+          },
+          "sectors": [
+            {
+              "en": "Gishamvu",
+              "fr": "Gishamvu",
+              "rw": "Gishamvu"
+            },
+            {
+              "en": "Huye",
+              "fr": "Huye",
+              "rw": "Huye"
+            },
+            {
+              "en": "Karama",
+              "fr": "Karama",
+              "rw": "Karama"
+            },
+            {
+              "en": "Kigoma",
+              "fr": "Kigoma",
+              "rw": "Kigoma"
+            },
+            {
+              "en": "Kinazi",
+              "fr": "Kinazi",
+              "rw": "Kinazi"
+            },
+            {
+              "en": "Maraba",
+              "fr": "Maraba",
+              "rw": "Maraba"
+            },
+            {
+              "en": "Mbazi",
+              "fr": "Mbazi",
+              "rw": "Mbazi"
+            },
+            {
+              "en": "Mukura",
+              "fr": "Mukura",
+              "rw": "Mukura"
+            },
+            {
+              "en": "Ngoma",
+              "fr": "Ngoma",
+              "rw": "Ngoma"
+            },
+            {
+              "en": "Ruhashya",
+              "fr": "Ruhashya",
+              "rw": "Ruhashya"
+            },
+            {
+              "en": "Rusatira",
+              "fr": "Rusatira",
+              "rw": "Rusatira"
+            },
+            {
+              "en": "Rwaniro",
+              "fr": "Rwaniro",
+              "rw": "Rwaniro"
+            },
+            {
+              "en": "Simbi",
+              "fr": "Simbi",
+              "rw": "Simbi"
+            },
+            {
+              "en": "Tumba",
+              "fr": "Tumba",
+              "rw": "Tumba"
+            }
+          ]
+        },
+        "Nyamagabe": {
+          "names": {
+            "en": "Nyamagabe",
+            "fr": "Nyamagabe",
+            "rw": "Nyamagabe"
+          },
+          "sectors": [
+            {
+              "en": "Buruhukiro",
+              "fr": "Buruhukiro",
+              "rw": "Buruhukiro"
+            },
+            {
+              "en": "Cyanika",
+              "fr": "Cyanika",
+              "rw": "Cyanika"
+            },
+            {
+              "en": "Gasaka",
+              "fr": "Gasaka",
+              "rw": "Gasaka"
+            },
+            {
+              "en": "Gatare",
+              "fr": "Gatare",
+              "rw": "Gatare"
+            },
+            {
+              "en": "Kaduha",
+              "fr": "Kaduha",
+              "rw": "Kaduha"
+            },
+            {
+              "en": "Kamegeri",
+              "fr": "Kamegeri",
+              "rw": "Kamegeri"
+            },
+            {
+              "en": "Kibirizi",
+              "fr": "Kibirizi",
+              "rw": "Kibirizi"
+            },
+            {
+              "en": "Kibumbwe",
+              "fr": "Kibumbwe",
+              "rw": "Kibumbwe"
+            },
+            {
+              "en": "Kitabi",
+              "fr": "Kitabi",
+              "rw": "Kitabi"
+            },
+            {
+              "en": "Mbazi",
+              "fr": "Mbazi",
+              "rw": "Mbazi"
+            },
+            {
+              "en": "Mugano",
+              "fr": "Mugano",
+              "rw": "Mugano"
+            },
+            {
+              "en": "Musange",
+              "fr": "Musange",
+              "rw": "Musange"
+            },
+            {
+              "en": "Musebeya",
+              "fr": "Musebeya",
+              "rw": "Musebeya"
+            },
+            {
+              "en": "Mushubi",
+              "fr": "Mushubi",
+              "rw": "Mushubi"
+            },
+            {
+              "en": "Nkomane",
+              "fr": "Nkomane",
+              "rw": "Nkomane"
+            },
+            {
+              "en": "Tare",
+              "fr": "Tare",
+              "rw": "Tare"
+            },
+            {
+              "en": "Uwinkingi",
+              "fr": "Uwinkingi",
+              "rw": "Uwinkingi"
+            }
+          ]
+        },
+        "Ruhango": {
+          "names": {
+            "en": "Ruhango",
+            "fr": "Ruhango",
+            "rw": "Ruhango"
+          },
+          "sectors": [
+            {
+              "en": "Bweramana",
+              "fr": "Bweramana",
+              "rw": "Bweramana"
+            },
+            {
+              "en": "Byimana",
+              "fr": "Byimana",
+              "rw": "Byimana"
+            },
+            {
+              "en": "Kabagari",
+              "fr": "Kabagari",
+              "rw": "Kabagari"
+            },
+            {
+              "en": "Kinazi",
+              "fr": "Kinazi",
+              "rw": "Kinazi"
+            },
+            {
+              "en": "Kinihira",
+              "fr": "Kinihira",
+              "rw": "Kinihira"
+            },
+            {
+              "en": "Mbuye",
+              "fr": "Mbuye",
+              "rw": "Mbuye"
+            },
+            {
+              "en": "Mwendo",
+              "fr": "Mwendo",
+              "rw": "Mwendo"
+            },
+            {
+              "en": "Ntongwe",
+              "fr": "Ntongwe",
+              "rw": "Ntongwe"
+            },
+            {
+              "en": "Ruhango",
+              "fr": "Ruhango",
+              "rw": "Ruhango"
+            }
+          ]
+        },
+        "Muhanga": {
+          "names": {
+            "en": "Muhanga",
+            "fr": "Muhanga",
+            "rw": "Muhanga"
+          },
+          "sectors": [
+            {
+              "en": "Cyeza",
+              "fr": "Cyeza",
+              "rw": "Cyeza"
+            },
+            {
+              "en": "Kabacuzi",
+              "fr": "Kabacuzi",
+              "rw": "Kabacuzi"
+            },
+            {
+              "en": "Kibangu",
+              "fr": "Kibangu",
+              "rw": "Kibangu"
+            },
+            {
+              "en": "Kiyumba",
+              "fr": "Kiyumba",
+              "rw": "Kiyumba"
+            },
+            {
+              "en": "Muhanga",
+              "fr": "Muhanga",
+              "rw": "Muhanga"
+            },
+            {
+              "en": "Mushishiro",
+              "fr": "Mushishiro",
+              "rw": "Mushishiro"
+            },
+            {
+              "en": "Nyabinoni",
+              "fr": "Nyabinoni",
+              "rw": "Nyabinoni"
+            },
+            {
+              "en": "Nyamabuye",
+              "fr": "Nyamabuye",
+              "rw": "Nyamabuye"
+            },
+            {
+              "en": "Nyarusange",
+              "fr": "Nyarusange",
+              "rw": "Nyarusange"
+            },
+            {
+              "en": "Rongi",
+              "fr": "Rongi",
+              "rw": "Rongi"
+            },
+            {
+              "en": "Rugendabari",
+              "fr": "Rugendabari",
+              "rw": "Rugendabari"
+            },
+            {
+              "en": "Shyogwe",
+              "fr": "Shyogwe",
+              "rw": "Shyogwe"
+            }
+          ]
+        },
+        "Kamonyi": {
+          "names": {
+            "en": "Kamonyi",
+            "fr": "Kamonyi",
+            "rw": "Kamonyi"
+          },
+          "sectors": [
+            {
+              "en": "Gacurabwenge",
+              "fr": "Gacurabwenge",
+              "rw": "Gacurabwenge"
+            },
+            {
+              "en": "Karama",
+              "fr": "Karama",
+              "rw": "Karama"
+            },
+            {
+              "en": "Kayenzi",
+              "fr": "Kayenzi",
+              "rw": "Kayenzi"
+            },
+            {
+              "en": "Kayumbu",
+              "fr": "Kayumbu",
+              "rw": "Kayumbu"
+            },
+            {
+              "en": "Mugina",
+              "fr": "Mugina",
+              "rw": "Mugina"
+            },
+            {
+              "en": "Musambira",
+              "fr": "Musambira",
+              "rw": "Musambira"
+            },
+            {
+              "en": "Ngamba",
+              "fr": "Ngamba",
+              "rw": "Ngamba"
+            },
+            {
+              "en": "Nyamiyaga",
+              "fr": "Nyamiyaga",
+              "rw": "Nyamiyaga"
+            },
+            {
+              "en": "Nyarubaka",
+              "fr": "Nyarubaka",
+              "rw": "Nyarubaka"
+            },
+            {
+              "en": "Rugarika",
+              "fr": "Rugarika",
+              "rw": "Rugarika"
+            },
+            {
+              "en": "Rukoma",
+              "fr": "Rukoma",
+              "rw": "Rukoma"
+            },
+            {
+              "en": "Runda",
+              "fr": "Runda",
+              "rw": "Runda"
+            }
+          ]
+        }
+      }
+    },
+    "Western Province": {
+      "names": {
+        "en": "Western Province",
+        "fr": "Province de l'Ouest",
+        "rw": "Iburengerazuba"
+      },
+      "districts": {
+        "Karongi": {
+          "names": {
+            "en": "Karongi",
+            "fr": "Karongi",
+            "rw": "Karongi"
+          },
+          "sectors": [
+            {
+              "en": "Bwishyura",
+              "fr": "Bwishyura",
+              "rw": "Bwishyura"
+            },
+            {
+              "en": "Gishari",
+              "fr": "Gishari",
+              "rw": "Gishari"
+            },
+            {
+              "en": "Gishyita",
+              "fr": "Gishyita",
+              "rw": "Gishyita"
+            },
+            {
+              "en": "Gitesi",
+              "fr": "Gitesi",
+              "rw": "Gitesi"
+            },
+            {
+              "en": "Mubuga",
+              "fr": "Mubuga",
+              "rw": "Mubuga"
+            },
+            {
+              "en": "Murambi",
+              "fr": "Murambi",
+              "rw": "Murambi"
+            },
+            {
+              "en": "Murundi",
+              "fr": "Murundi",
+              "rw": "Murundi"
+            },
+            {
+              "en": "Mutuntu",
+              "fr": "Mutuntu",
+              "rw": "Mutuntu"
+            },
+            {
+              "en": "Rubengera",
+              "fr": "Rubengera",
+              "rw": "Rubengera"
+            },
+            {
+              "en": "Rugabano",
+              "fr": "Rugabano",
+              "rw": "Rugabano"
+            },
+            {
+              "en": "Ruganda",
+              "fr": "Ruganda",
+              "rw": "Ruganda"
+            },
+            {
+              "en": "Rwankuba",
+              "fr": "Rwankuba",
+              "rw": "Rwankuba"
+            },
+            {
+              "en": "Twumba",
+              "fr": "Twumba",
+              "rw": "Twumba"
+            }
+          ]
+        },
+        "Rutsiro": {
+          "names": {
+            "en": "Rutsiro",
+            "fr": "Rutsiro",
+            "rw": "Rutsiro"
+          },
+          "sectors": [
+            {
+              "en": "Boneza",
+              "fr": "Boneza",
+              "rw": "Boneza"
+            },
+            {
+              "en": "Gihango",
+              "fr": "Gihango",
+              "rw": "Gihango"
+            },
+            {
+              "en": "Kigeyo",
+              "fr": "Kigeyo",
+              "rw": "Kigeyo"
+            },
+            {
+              "en": "Kivumu",
+              "fr": "Kivumu",
+              "rw": "Kivumu"
+            },
+            {
+              "en": "Manihira",
+              "fr": "Manihira",
+              "rw": "Manihira"
+            },
+            {
+              "en": "Mukura",
+              "fr": "Mukura",
+              "rw": "Mukura"
+            },
+            {
+              "en": "Murunda",
+              "fr": "Murunda",
+              "rw": "Murunda"
+            },
+            {
+              "en": "Musasa",
+              "fr": "Musasa",
+              "rw": "Musasa"
+            },
+            {
+              "en": "Mushonyi",
+              "fr": "Mushonyi",
+              "rw": "Mushonyi"
+            },
+            {
+              "en": "Mushubati",
+              "fr": "Mushubati",
+              "rw": "Mushubati"
+            },
+            {
+              "en": "Nyabirasi",
+              "fr": "Nyabirasi",
+              "rw": "Nyabirasi"
+            },
+            {
+              "en": "Ruhango",
+              "fr": "Ruhango",
+              "rw": "Ruhango"
+            },
+            {
+              "en": "Rusebeya",
+              "fr": "Rusebeya",
+              "rw": "Rusebeya"
+            }
+          ]
+        },
+        "Rubavu": {
+          "names": {
+            "en": "Rubavu",
+            "fr": "Rubavu",
+            "rw": "Rubavu"
+          },
+          "sectors": [
+            {
+              "en": "Bugeshi",
+              "fr": "Bugeshi",
+              "rw": "Bugeshi"
+            },
+            {
+              "en": "Busasamana",
+              "fr": "Busasamana",
+              "rw": "Busasamana"
+            },
+            {
+              "en": "Cyanzarwe",
+              "fr": "Cyanzarwe",
+              "rw": "Cyanzarwe"
+            },
+            {
+              "en": "Gisenyi",
+              "fr": "Gisenyi",
+              "rw": "Gisenyi"
+            },
+            {
+              "en": "Kanama",
+              "fr": "Kanama",
+              "rw": "Kanama"
+            },
+            {
+              "en": "Kanzenze",
+              "fr": "Kanzenze",
+              "rw": "Kanzenze"
+            },
+            {
+              "en": "Mudende",
+              "fr": "Mudende",
+              "rw": "Mudende"
+            },
+            {
+              "en": "Nyakiriba",
+              "fr": "Nyakiriba",
+              "rw": "Nyakiriba"
+            },
+            {
+              "en": "Nyamyumba",
+              "fr": "Nyamyumba",
+              "rw": "Nyamyumba"
+            },
+            {
+              "en": "Nyundo",
+              "fr": "Nyundo",
+              "rw": "Nyundo"
+            },
+            {
+              "en": "Rubavu",
+              "fr": "Rubavu",
+              "rw": "Rubavu"
+            },
+            {
+              "en": "Rugerero",
+              "fr": "Rugerero",
+              "rw": "Rugerero"
+            }
+          ]
+        },
+        "Nyabihu": {
+          "names": {
+            "en": "Nyabihu",
+            "fr": "Nyabihu",
+            "rw": "Nyabihu"
+          },
+          "sectors": [
+            {
+              "en": "Bigogwe",
+              "fr": "Bigogwe",
+              "rw": "Bigogwe"
+            },
+            {
+              "en": "Jenda",
+              "fr": "Jenda",
+              "rw": "Jenda"
+            },
+            {
+              "en": "Jomba",
+              "fr": "Jomba",
+              "rw": "Jomba"
+            },
+            {
+              "en": "Kabatwa",
+              "fr": "Kabatwa",
+              "rw": "Kabatwa"
+            },
+            {
+              "en": "Karago",
+              "fr": "Karago",
+              "rw": "Karago"
+            },
+            {
+              "en": "Kintobo",
+              "fr": "Kintobo",
+              "rw": "Kintobo"
+            },
+            {
+              "en": "Mukamira",
+              "fr": "Mukamira",
+              "rw": "Mukamira"
+            },
+            {
+              "en": "Muringa",
+              "fr": "Muringa",
+              "rw": "Muringa"
+            },
+            {
+              "en": "Rambura",
+              "fr": "Rambura",
+              "rw": "Rambura"
+            },
+            {
+              "en": "Rugera",
+              "fr": "Rugera",
+              "rw": "Rugera"
+            },
+            {
+              "en": "Rurembo",
+              "fr": "Rurembo",
+              "rw": "Rurembo"
+            },
+            {
+              "en": "Shyira",
+              "fr": "Shyira",
+              "rw": "Shyira"
+            }
+          ]
+        },
+        "Ngororero": {
+          "names": {
+            "en": "Ngororero",
+            "fr": "Ngororero",
+            "rw": "Ngororero"
+          },
+          "sectors": [
+            {
+              "en": "Bwira",
+              "fr": "Bwira",
+              "rw": "Bwira"
+            },
+            {
+              "en": "Gatumba",
+              "fr": "Gatumba",
+              "rw": "Gatumba"
+            },
+            {
+              "en": "Hindiro",
+              "fr": "Hindiro",
+              "rw": "Hindiro"
+            },
+            {
+              "en": "Kabaya",
+              "fr": "Kabaya",
+              "rw": "Kabaya"
+            },
+            {
+              "en": "Kageyo",
+              "fr": "Kageyo",
+              "rw": "Kageyo"
+            },
+            {
+              "en": "Kavumu",
+              "fr": "Kavumu",
+              "rw": "Kavumu"
+            },
+            {
+              "en": "Matyazo",
+              "fr": "Matyazo",
+              "rw": "Matyazo"
+            },
+            {
+              "en": "Muhanda",
+              "fr": "Muhanda",
+              "rw": "Muhanda"
+            },
+            {
+              "en": "Muhororo",
+              "fr": "Muhororo",
+              "rw": "Muhororo"
+            },
+            {
+              "en": "Ndaro",
+              "fr": "Ndaro",
+              "rw": "Ndaro"
+            },
+            {
+              "en": "Ngororero",
+              "fr": "Ngororero",
+              "rw": "Ngororero"
+            },
+            {
+              "en": "Nyange",
+              "fr": "Nyange",
+              "rw": "Nyange"
+            },
+            {
+              "en": "Sovu",
+              "fr": "Sovu",
+              "rw": "Sovu"
+            }
+          ]
+        },
+        "Rusizi": {
+          "names": {
+            "en": "Rusizi",
+            "fr": "Rusizi",
+            "rw": "Rusizi"
+          },
+          "sectors": [
+            {
+              "en": "Bugarama",
+              "fr": "Bugarama",
+              "rw": "Bugarama"
+            },
+            {
+              "en": "Butare",
+              "fr": "Butare",
+              "rw": "Butare"
+            },
+            {
+              "en": "Bweyeye",
+              "fr": "Bweyeye",
+              "rw": "Bweyeye"
+            },
+            {
+              "en": "Gashonga",
+              "fr": "Gashonga",
+              "rw": "Gashonga"
+            },
+            {
+              "en": "Giheke",
+              "fr": "Giheke",
+              "rw": "Giheke"
+            },
+            {
+              "en": "Gihundwe",
+              "fr": "Gihundwe",
+              "rw": "Gihundwe"
+            },
+            {
+              "en": "Gikundamvura",
+              "fr": "Gikundamvura",
+              "rw": "Gikundamvura"
+            },
+            {
+              "en": "Gitambi",
+              "fr": "Gitambi",
+              "rw": "Gitambi"
+            },
+            {
+              "en": "Kamembe",
+              "fr": "Kamembe",
+              "rw": "Kamembe"
+            },
+            {
+              "en": "Muganza",
+              "fr": "Muganza",
+              "rw": "Muganza"
+            },
+            {
+              "en": "Mururu",
+              "fr": "Mururu",
+              "rw": "Mururu"
+            },
+            {
+              "en": "Nkanka",
+              "fr": "Nkanka",
+              "rw": "Nkanka"
+            },
+            {
+              "en": "Nkombo",
+              "fr": "Nkombo",
+              "rw": "Nkombo"
+            },
+            {
+              "en": "Nkungu",
+              "fr": "Nkungu",
+              "rw": "Nkungu"
+            },
+            {
+              "en": "Nyakabuye",
+              "fr": "Nyakabuye",
+              "rw": "Nyakabuye"
+            },
+            {
+              "en": "Nyakarenzo",
+              "fr": "Nyakarenzo",
+              "rw": "Nyakarenzo"
+            },
+            {
+              "en": "Nzahaha",
+              "fr": "Nzahaha",
+              "rw": "Nzahaha"
+            },
+            {
+              "en": "Rwimbogo",
+              "fr": "Rwimbogo",
+              "rw": "Rwimbogo"
+            }
+          ]
+        },
+        "Nyamasheke": {
+          "names": {
+            "en": "Nyamasheke",
+            "fr": "Nyamasheke",
+            "rw": "Nyamasheke"
+          },
+          "sectors": [
+            {
+              "en": "Bushekeri",
+              "fr": "Bushekeri",
+              "rw": "Bushekeri"
+            },
+            {
+              "en": "Bushenge",
+              "fr": "Bushenge",
+              "rw": "Bushenge"
+            },
+            {
+              "en": "Cyato",
+              "fr": "Cyato",
+              "rw": "Cyato"
+            },
+            {
+              "en": "Gihombo",
+              "fr": "Gihombo",
+              "rw": "Gihombo"
+            },
+            {
+              "en": "Kagano",
+              "fr": "Kagano",
+              "rw": "Kagano"
+            },
+            {
+              "en": "Kanjongo",
+              "fr": "Kanjongo",
+              "rw": "Kanjongo"
+            },
+            {
+              "en": "Karambi",
+              "fr": "Karambi",
+              "rw": "Karambi"
+            },
+            {
+              "en": "Karengera",
+              "fr": "Karengera",
+              "rw": "Karengera"
+            },
+            {
+              "en": "Kirimbi",
+              "fr": "Kirimbi",
+              "rw": "Kirimbi"
+            },
+            {
+              "en": "Macuba",
+              "fr": "Macuba",
+              "rw": "Macuba"
+            },
+            {
+              "en": "Mahembe",
+              "fr": "Mahembe",
+              "rw": "Mahembe"
+            },
+            {
+              "en": "Nyabitekeri",
+              "fr": "Nyabitekeri",
+              "rw": "Nyabitekeri"
+            },
+            {
+              "en": "Rangiro",
+              "fr": "Rangiro",
+              "rw": "Rangiro"
+            },
+            {
+              "en": "Ruharambuga",
+              "fr": "Ruharambuga",
+              "rw": "Ruharambuga"
+            },
+            {
+              "en": "Shangi",
+              "fr": "Shangi",
+              "rw": "Shangi"
+            }
+          ]
+        }
+      }
+    },
+    "Northern Province": {
+      "names": {
+        "en": "Northern Province",
+        "fr": "Province du Nord",
+        "rw": "Amajyaruguru"
+      },
+      "districts": {
+        "Rulindo": {
+          "names": {
+            "en": "Rulindo",
+            "fr": "Rulindo",
+            "rw": "Rulindo"
+          },
+          "sectors": [
+            {
+              "en": "Base",
+              "fr": "Base",
+              "rw": "Base"
+            },
+            {
+              "en": "Burega",
+              "fr": "Burega",
+              "rw": "Burega"
+            },
+            {
+              "en": "Bushoki",
+              "fr": "Bushoki",
+              "rw": "Bushoki"
+            },
+            {
+              "en": "Buyoga",
+              "fr": "Buyoga",
+              "rw": "Buyoga"
+            },
+            {
+              "en": "Cyinzuzi",
+              "fr": "Cyinzuzi",
+              "rw": "Cyinzuzi"
+            },
+            {
+              "en": "Cyungo",
+              "fr": "Cyungo",
+              "rw": "Cyungo"
+            },
+            {
+              "en": "Kinihira",
+              "fr": "Kinihira",
+              "rw": "Kinihira"
+            },
+            {
+              "en": "Kisaro",
+              "fr": "Kisaro",
+              "rw": "Kisaro"
+            },
+            {
+              "en": "Masoro",
+              "fr": "Masoro",
+              "rw": "Masoro"
+            },
+            {
+              "en": "Mbogo",
+              "fr": "Mbogo",
+              "rw": "Mbogo"
+            },
+            {
+              "en": "Murambi",
+              "fr": "Murambi",
+              "rw": "Murambi"
+            },
+            {
+              "en": "Ngoma",
+              "fr": "Ngoma",
+              "rw": "Ngoma"
+            },
+            {
+              "en": "Ntarabana",
+              "fr": "Ntarabana",
+              "rw": "Ntarabana"
+            },
+            {
+              "en": "Rukozo",
+              "fr": "Rukozo",
+              "rw": "Rukozo"
+            },
+            {
+              "en": "Rusiga",
+              "fr": "Rusiga",
+              "rw": "Rusiga"
+            },
+            {
+              "en": "Shyrongi",
+              "fr": "Shyrongi",
+              "rw": "Shyrongi"
+            },
+            {
+              "en": "Tumba",
+              "fr": "Tumba",
+              "rw": "Tumba"
+            }
+          ]
+        },
+        "Gakenke": {
+          "names": {
+            "en": "Gakenke",
+            "fr": "Gakenke",
+            "rw": "Gakenke"
+          },
+          "sectors": [
+            {
+              "en": "Busengo",
+              "fr": "Busengo",
+              "rw": "Busengo"
+            },
+            {
+              "en": "Coko",
+              "fr": "Coko",
+              "rw": "Coko"
+            },
+            {
+              "en": "Cyabingo",
+              "fr": "Cyabingo",
+              "rw": "Cyabingo"
+            },
+            {
+              "en": "Gakenke",
+              "fr": "Gakenke",
+              "rw": "Gakenke"
+            },
+            {
+              "en": "Gashenyi",
+              "fr": "Gashenyi",
+              "rw": "Gashenyi"
+            },
+            {
+              "en": "Janja",
+              "fr": "Janja",
+              "rw": "Janja"
+            },
+            {
+              "en": "Kamubuga",
+              "fr": "Kamubuga",
+              "rw": "Kamubuga"
+            },
+            {
+              "en": "Karambo",
+              "fr": "Karambo",
+              "rw": "Karambo"
+            },
+            {
+              "en": "Kivuruga",
+              "fr": "Kivuruga",
+              "rw": "Kivuruga"
+            },
+            {
+              "en": "Mataba",
+              "fr": "Mataba",
+              "rw": "Mataba"
+            },
+            {
+              "en": "Minazi",
+              "fr": "Minazi",
+              "rw": "Minazi"
+            },
+            {
+              "en": "Mugunga",
+              "fr": "Mugunga",
+              "rw": "Mugunga"
+            },
+            {
+              "en": "Muhondo",
+              "fr": "Muhondo",
+              "rw": "Muhondo"
+            },
+            {
+              "en": "Muyongwe",
+              "fr": "Muyongwe",
+              "rw": "Muyongwe"
+            },
+            {
+              "en": "Muzo",
+              "fr": "Muzo",
+              "rw": "Muzo"
+            },
+            {
+              "en": "Nemba",
+              "fr": "Nemba",
+              "rw": "Nemba"
+            },
+            {
+              "en": "Ruli",
+              "fr": "Ruli",
+              "rw": "Ruli"
+            },
+            {
+              "en": "Rusasa",
+              "fr": "Rusasa",
+              "rw": "Rusasa"
+            },
+            {
+              "en": "Rushashi",
+              "fr": "Rushashi",
+              "rw": "Rushashi"
+            }
+          ]
+        },
+        "Musanze": {
+          "names": {
+            "en": "Musanze",
+            "fr": "Musanze",
+            "rw": "Musanze"
+          },
+          "sectors": [
+            {
+              "en": "Busogo",
+              "fr": "Busogo",
+              "rw": "Busogo"
+            },
+            {
+              "en": "Cyuve",
+              "fr": "Cyuve",
+              "rw": "Cyuve"
+            },
+            {
+              "en": "Gacaca",
+              "fr": "Gacaca",
+              "rw": "Gacaca"
+            },
+            {
+              "en": "Gashaki",
+              "fr": "Gashaki",
+              "rw": "Gashaki"
+            },
+            {
+              "en": "Gataraga",
+              "fr": "Gataraga",
+              "rw": "Gataraga"
+            },
+            {
+              "en": "Kimonyi",
+              "fr": "Kimonyi",
+              "rw": "Kimonyi"
+            },
+            {
+              "en": "Kinigi",
+              "fr": "Kinigi",
+              "rw": "Kinigi"
+            },
+            {
+              "en": "Muhoza",
+              "fr": "Muhoza",
+              "rw": "Muhoza"
+            },
+            {
+              "en": "Muko",
+              "fr": "Muko",
+              "rw": "Muko"
+            },
+            {
+              "en": "Musanze",
+              "fr": "Musanze",
+              "rw": "Musanze"
+            },
+            {
+              "en": "Nkotsi",
+              "fr": "Nkotsi",
+              "rw": "Nkotsi"
+            },
+            {
+              "en": "Nyange",
+              "fr": "Nyange",
+              "rw": "Nyange"
+            },
+            {
+              "en": "Remera",
+              "fr": "Remera",
+              "rw": "Remera"
+            },
+            {
+              "en": "Rwaza",
+              "fr": "Rwaza",
+              "rw": "Rwaza"
+            },
+            {
+              "en": "Shingiro",
+              "fr": "Shingiro",
+              "rw": "Shingiro"
+            }
+          ]
+        },
+        "Burera": {
+          "names": {
+            "en": "Burera",
+            "fr": "Burera",
+            "rw": "Burera"
+          },
+          "sectors": [
+            {
+              "en": "Bungwe",
+              "fr": "Bungwe",
+              "rw": "Bungwe"
+            },
+            {
+              "en": "Butaro",
+              "fr": "Butaro",
+              "rw": "Butaro"
+            },
+            {
+              "en": "Cyanika",
+              "fr": "Cyanika",
+              "rw": "Cyanika"
+            },
+            {
+              "en": "Cyeru",
+              "fr": "Cyeru",
+              "rw": "Cyeru"
+            },
+            {
+              "en": "Gahunga",
+              "fr": "Gahunga",
+              "rw": "Gahunga"
+            },
+            {
+              "en": "Gatebe",
+              "fr": "Gatebe",
+              "rw": "Gatebe"
+            },
+            {
+              "en": "Gitovu",
+              "fr": "Gitovu",
+              "rw": "Gitovu"
+            },
+            {
+              "en": "Kagogo",
+              "fr": "Kagogo",
+              "rw": "Kagogo"
+            },
+            {
+              "en": "Kinoni",
+              "fr": "Kinoni",
+              "rw": "Kinoni"
+            },
+            {
+              "en": "Kinyababa",
+              "fr": "Kinyababa",
+              "rw": "Kinyababa"
+            },
+            {
+              "en": "Kivuye",
+              "fr": "Kivuye",
+              "rw": "Kivuye"
+            },
+            {
+              "en": "Nemba",
+              "fr": "Nemba",
+              "rw": "Nemba"
+            },
+            {
+              "en": "Rugarama",
+              "fr": "Rugarama",
+              "rw": "Rugarama"
+            },
+            {
+              "en": "Rugengabari",
+              "fr": "Rugengabari",
+              "rw": "Rugengabari"
+            },
+            {
+              "en": "Ruhunde",
+              "fr": "Ruhunde",
+              "rw": "Ruhunde"
+            },
+            {
+              "en": "Rusarabuye",
+              "fr": "Rusarabuye",
+              "rw": "Rusarabuye"
+            },
+            {
+              "en": "Rwerere",
+              "fr": "Rwerere",
+              "rw": "Rwerere"
+            }
+          ]
+        },
+        "Gicumbi": {
+          "names": {
+            "en": "Gicumbi",
+            "fr": "Gicumbi",
+            "rw": "Gicumbi"
+          },
+          "sectors": [
+            {
+              "en": "Bukure",
+              "fr": "Bukure",
+              "rw": "Bukure"
+            },
+            {
+              "en": "Bwisige",
+              "fr": "Bwisige",
+              "rw": "Bwisige"
+            },
+            {
+              "en": "Byumba",
+              "fr": "Byumba",
+              "rw": "Byumba"
+            },
+            {
+              "en": "Cyumba",
+              "fr": "Cyumba",
+              "rw": "Cyumba"
+            },
+            {
+              "en": "Giti",
+              "fr": "Giti",
+              "rw": "Giti"
+            },
+            {
+              "en": "Kageyo",
+              "fr": "Kageyo",
+              "rw": "Kageyo"
+            },
+            {
+              "en": "Kaniga",
+              "fr": "Kaniga",
+              "rw": "Kaniga"
+            },
+            {
+              "en": "Manyagiro",
+              "fr": "Manyagiro",
+              "rw": "Manyagiro"
+            },
+            {
+              "en": "Miyove",
+              "fr": "Miyove",
+              "rw": "Miyove"
+            },
+            {
+              "en": "Mukarange",
+              "fr": "Mukarange",
+              "rw": "Mukarange"
+            },
+            {
+              "en": "Muko",
+              "fr": "Muko",
+              "rw": "Muko"
+            },
+            {
+              "en": "Mutete",
+              "fr": "Mutete",
+              "rw": "Mutete"
+            },
+            {
+              "en": "Nyamiyaga",
+              "fr": "Nyamiyaga",
+              "rw": "Nyamiyaga"
+            },
+            {
+              "en": "Nyankenke",
+              "fr": "Nyankenke",
+              "rw": "Nyankenke"
+            },
+            {
+              "en": "Rubaya",
+              "fr": "Rubaya",
+              "rw": "Rubaya"
+            },
+            {
+              "en": "Rukomo",
+              "fr": "Rukomo",
+              "rw": "Rukomo"
+            },
+            {
+              "en": "Rushaki",
+              "fr": "Rushaki",
+              "rw": "Rushaki"
+            },
+            {
+              "en": "Rutare",
+              "fr": "Rutare",
+              "rw": "Rutare"
+            },
+            {
+              "en": "Ruvune",
+              "fr": "Ruvune",
+              "rw": "Ruvune"
+            },
+            {
+              "en": "Rwamiko",
+              "fr": "Rwamiko",
+              "rw": "Rwamiko"
+            },
+            {
+              "en": "Shangasha",
+              "fr": "Shangasha",
+              "rw": "Shangasha"
+            }
+          ]
+        }
+      }
+    },
+    "Eastern Province": {
+      "names": {
+        "en": "Eastern Province",
+        "fr": "Province de l'Est",
+        "rw": "Iburasirazuba"
+      },
+      "districts": {
+        "Rwamagana": {
+          "names": {
+            "en": "Rwamagana",
+            "fr": "Rwamagana",
+            "rw": "Rwamagana"
+          },
+          "sectors": [
+            {
+              "en": "Fumbwe",
+              "fr": "Fumbwe",
+              "rw": "Fumbwe"
+            },
+            {
+              "en": "Gahengeri",
+              "fr": "Gahengeri",
+              "rw": "Gahengeri"
+            },
+            {
+              "en": "Gishali",
+              "fr": "Gishali",
+              "rw": "Gishali"
+            },
+            {
+              "en": "Karenge",
+              "fr": "Karenge",
+              "rw": "Karenge"
+            },
+            {
+              "en": "Kigabiro",
+              "fr": "Kigabiro",
+              "rw": "Kigabiro"
+            },
+            {
+              "en": "Muhazi",
+              "fr": "Muhazi",
+              "rw": "Muhazi"
+            },
+            {
+              "en": "Munyaga",
+              "fr": "Munyaga",
+              "rw": "Munyaga"
+            },
+            {
+              "en": "Munyiginya",
+              "fr": "Munyiginya",
+              "rw": "Munyiginya"
+            },
+            {
+              "en": "Musha",
+              "fr": "Musha",
+              "rw": "Musha"
+            },
+            {
+              "en": "Muyumbu",
+              "fr": "Muyumbu",
+              "rw": "Muyumbu"
+            },
+            {
+              "en": "Mwulire",
+              "fr": "Mwulire",
+              "rw": "Mwulire"
+            },
+            {
+              "en": "Nyakariro",
+              "fr": "Nyakariro",
+              "rw": "Nyakariro"
+            },
+            {
+              "en": "Nzige",
+              "fr": "Nzige",
+              "rw": "Nzige"
+            },
+            {
+              "en": "Rubona",
+              "fr": "Rubona",
+              "rw": "Rubona"
+            }
+          ]
+        },
+        "Nyagatare": {
+          "names": {
+            "en": "Nyagatare",
+            "fr": "Nyagatare",
+            "rw": "Nyagatare"
+          },
+          "sectors": [
+            {
+              "en": "Gatunda",
+              "fr": "Gatunda",
+              "rw": "Gatunda"
+            },
+            {
+              "en": "Karama",
+              "fr": "Karama",
+              "rw": "Karama"
+            },
+            {
+              "en": "Karangazi",
+              "fr": "Karangazi",
+              "rw": "Karangazi"
+            },
+            {
+              "en": "Katabagemu",
+              "fr": "Katabagemu",
+              "rw": "Katabagemu"
+            },
+            {
+              "en": "Kiyombe",
+              "fr": "Kiyombe",
+              "rw": "Kiyombe"
+            },
+            {
+              "en": "Matimba",
+              "fr": "Matimba",
+              "rw": "Matimba"
+            },
+            {
+              "en": "Mimuri",
+              "fr": "Mimuri",
+              "rw": "Mimuri"
+            },
+            {
+              "en": "Mukama",
+              "fr": "Mukama",
+              "rw": "Mukama"
+            },
+            {
+              "en": "Musheri",
+              "fr": "Musheri",
+              "rw": "Musheri"
+            },
+            {
+              "en": "Nyagatare",
+              "fr": "Nyagatare",
+              "rw": "Nyagatare"
+            },
+            {
+              "en": "Rukomo",
+              "fr": "Rukomo",
+              "rw": "Rukomo"
+            },
+            {
+              "en": "Rwempasha",
+              "fr": "Rwempasha",
+              "rw": "Rwempasha"
+            },
+            {
+              "en": "Rwimiyaga",
+              "fr": "Rwimiyaga",
+              "rw": "Rwimiyaga"
+            },
+            {
+              "en": "Tabagwe",
+              "fr": "Tabagwe",
+              "rw": "Tabagwe"
+            }
+          ]
+        },
+        "Gatsibo": {
+          "names": {
+            "en": "Gatsibo",
+            "fr": "Gatsibo",
+            "rw": "Gatsibo"
+          },
+          "sectors": [
+            {
+              "en": "Gasange",
+              "fr": "Gasange",
+              "rw": "Gasange"
+            },
+            {
+              "en": "Gatsibo",
+              "fr": "Gatsibo",
+              "rw": "Gatsibo"
+            },
+            {
+              "en": "Gitoki",
+              "fr": "Gitoki",
+              "rw": "Gitoki"
+            },
+            {
+              "en": "Kabarore",
+              "fr": "Kabarore",
+              "rw": "Kabarore"
+            },
+            {
+              "en": "Kageyo",
+              "fr": "Kageyo",
+              "rw": "Kageyo"
+            },
+            {
+              "en": "Kiramuruzi",
+              "fr": "Kiramuruzi",
+              "rw": "Kiramuruzi"
+            },
+            {
+              "en": "Kiziguro",
+              "fr": "Kiziguro",
+              "rw": "Kiziguro"
+            },
+            {
+              "en": "Muhura",
+              "fr": "Muhura",
+              "rw": "Muhura"
+            },
+            {
+              "en": "Murambi",
+              "fr": "Murambi",
+              "rw": "Murambi"
+            },
+            {
+              "en": "Ngarama",
+              "fr": "Ngarama",
+              "rw": "Ngarama"
+            },
+            {
+              "en": "Nyagihanga",
+              "fr": "Nyagihanga",
+              "rw": "Nyagihanga"
+            },
+            {
+              "en": "Remera",
+              "fr": "Remera",
+              "rw": "Remera"
+            },
+            {
+              "en": "Rugarama",
+              "fr": "Rugarama",
+              "rw": "Rugarama"
+            },
+            {
+              "en": "Rwimbogo",
+              "fr": "Rwimbogo",
+              "rw": "Rwimbogo"
+            }
+          ]
+        },
+        "Kayonza": {
+          "names": {
+            "en": "Kayonza",
+            "fr": "Kayonza",
+            "rw": "Kayonza"
+          },
+          "sectors": [
+            {
+              "en": "Gahini",
+              "fr": "Gahini",
+              "rw": "Gahini"
+            },
+            {
+              "en": "Kabare",
+              "fr": "Kabare",
+              "rw": "Kabare"
+            },
+            {
+              "en": "Kabarondo",
+              "fr": "Kabarondo",
+              "rw": "Kabarondo"
+            },
+            {
+              "en": "Mukarange",
+              "fr": "Mukarange",
+              "rw": "Mukarange"
+            },
+            {
+              "en": "Murama",
+              "fr": "Murama",
+              "rw": "Murama"
+            },
+            {
+              "en": "Murundi",
+              "fr": "Murundi",
+              "rw": "Murundi"
+            },
+            {
+              "en": "Mwiri",
+              "fr": "Mwiri",
+              "rw": "Mwiri"
+            },
+            {
+              "en": "Ndego",
+              "fr": "Ndego",
+              "rw": "Ndego"
+            },
+            {
+              "en": "Nyamirama",
+              "fr": "Nyamirama",
+              "rw": "Nyamirama"
+            },
+            {
+              "en": "Rukara",
+              "fr": "Rukara",
+              "rw": "Rukara"
+            },
+            {
+              "en": "Ruramira",
+              "fr": "Ruramira",
+              "rw": "Ruramira"
+            },
+            {
+              "en": "Rwinkwavu",
+              "fr": "Rwinkwavu",
+              "rw": "Rwinkwavu"
+            }
+          ]
+        },
+        "Kirehe": {
+          "names": {
+            "en": "Kirehe",
+            "fr": "Kirehe",
+            "rw": "Kirehe"
+          },
+          "sectors": [
+            {
+              "en": "Gahara",
+              "fr": "Gahara",
+              "rw": "Gahara"
+            },
+            {
+              "en": "Gatore",
+              "fr": "Gatore",
+              "rw": "Gatore"
+            },
+            {
+              "en": "Kigarama",
+              "fr": "Kigarama",
+              "rw": "Kigarama"
+            },
+            {
+              "en": "Kigina",
+              "fr": "Kigina",
+              "rw": "Kigina"
+            },
+            {
+              "en": "Kirehe",
+              "fr": "Kirehe",
+              "rw": "Kirehe"
+            },
+            {
+              "en": "Mahama",
+              "fr": "Mahama",
+              "rw": "Mahama"
+            },
+            {
+              "en": "Mpanga",
+              "fr": "Mpanga",
+              "rw": "Mpanga"
+            },
+            {
+              "en": "Musaza",
+              "fr": "Musaza",
+              "rw": "Musaza"
+            },
+            {
+              "en": "Mushikiri",
+              "fr": "Mushikiri",
+              "rw": "Mushikiri"
+            },
+            {
+              "en": "Nasho",
+              "fr": "Nasho",
+              "rw": "Nasho"
+            },
+            {
+              "en": "Nyamugari",
+              "fr": "Nyamugari",
+              "rw": "Nyamugari"
+            },
+            {
+              "en": "Nyarubuye",
+              "fr": "Nyarubuye",
+              "rw": "Nyarubuye"
+            }
+          ]
+        },
+        "Ngoma": {
+          "names": {
+            "en": "Ngoma",
+            "fr": "Ngoma",
+            "rw": "Ngoma"
+          },
+          "sectors": [
+            {
+              "en": "Gashanda",
+              "fr": "Gashanda",
+              "rw": "Gashanda"
+            },
+            {
+              "en": "Jarama",
+              "fr": "Jarama",
+              "rw": "Jarama"
+            },
+            {
+              "en": "Karembo",
+              "fr": "Karembo",
+              "rw": "Karembo"
+            },
+            {
+              "en": "Kazo",
+              "fr": "Kazo",
+              "rw": "Kazo"
+            },
+            {
+              "en": "Kibungo",
+              "fr": "Kibungo",
+              "rw": "Kibungo"
+            },
+            {
+              "en": "Mugesera",
+              "fr": "Mugesera",
+              "rw": "Mugesera"
+            },
+            {
+              "en": "Murama",
+              "fr": "Murama",
+              "rw": "Murama"
+            },
+            {
+              "en": "Mutenderi",
+              "fr": "Mutenderi",
+              "rw": "Mutenderi"
+            },
+            {
+              "en": "Remera",
+              "fr": "Remera",
+              "rw": "Remera"
+            },
+            {
+              "en": "Rukira",
+              "fr": "Rukira",
+              "rw": "Rukira"
+            },
+            {
+              "en": "Rukumberi",
+              "fr": "Rukumberi",
+              "rw": "Rukumberi"
+            },
+            {
+              "en": "Rurenge",
+              "fr": "Rurenge",
+              "rw": "Rurenge"
+            },
+            {
+              "en": "Sake",
+              "fr": "Sake",
+              "rw": "Sake"
+            },
+            {
+              "en": "Zaza",
+              "fr": "Zaza",
+              "rw": "Zaza"
+            }
+          ]
+        },
+        "Bugesera": {
+          "names": {
+            "en": "Bugesera",
+            "fr": "Bugesera",
+            "rw": "Bugesera"
+          },
+          "sectors": [
+            {
+              "en": "Gashora",
+              "fr": "Gashora",
+              "rw": "Gashora"
+            },
+            {
+              "en": "Juru",
+              "fr": "Juru",
+              "rw": "Juru"
+            },
+            {
+              "en": "Kamabuye",
+              "fr": "Kamabuye",
+              "rw": "Kamabuye"
+            },
+            {
+              "en": "Mareba",
+              "fr": "Mareba",
+              "rw": "Mareba"
+            },
+            {
+              "en": "Mayange",
+              "fr": "Mayange",
+              "rw": "Mayange"
+            },
+            {
+              "en": "Musenyi",
+              "fr": "Musenyi",
+              "rw": "Musenyi"
+            },
+            {
+              "en": "Mwogo",
+              "fr": "Mwogo",
+              "rw": "Mwogo"
+            },
+            {
+              "en": "Ngeruka",
+              "fr": "Ngeruka",
+              "rw": "Ngeruka"
+            },
+            {
+              "en": "Ntarama",
+              "fr": "Ntarama",
+              "rw": "Ntarama"
+            },
+            {
+              "en": "Nyamata",
+              "fr": "Nyamata",
+              "rw": "Nyamata"
+            },
+            {
+              "en": "Nyarugenge",
+              "fr": "Nyarugenge",
+              "rw": "Nyarugenge"
+            },
+            {
+              "en": "Rilima",
+              "fr": "Rilima",
+              "rw": "Rilima"
+            },
+            {
+              "en": "Ruhuha",
+              "fr": "Ruhuha",
+              "rw": "Ruhuha"
+            },
+            {
+              "en": "Rweru",
+              "fr": "Rweru",
+              "rw": "Rweru"
+            },
+            {
+              "en": "Shyara",
+              "fr": "Shyara",
+              "rw": "Shyara"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

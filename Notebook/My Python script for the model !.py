@@ -1,388 +1,161 @@
-# %% [markdown]
-# ### Importing necessary libraries
-
-# %%
-%pip install scikit-image
-
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.image import imread
-import cv2
-import random
-import os
-from os import listdir
-from PIL import Image
 import tensorflow as tf
-from keras.preprocessing import image
-from tensorflow. keras.utils import img_to_array, array_to_img
-from keras.optimizers import Adam
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import Activation, Flatten, Dropout, Dense
-from sklearn. model_selection import train_test_split
-from keras.models import model_from_json
-from keras.utils import to_categorical
-from skimage.io import imread
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+import matplotlib.pyplot as plt
+import os
+import cv2
+from PIL import Image
+from collections import Counter
+
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
+from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
-from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.utils import to_categorical, img_to_array
 from sklearn.model_selection import train_test_split
-import numpy as np
-import matplotlib.pyplot as plt
-from collections import Counter
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
 
-# %%
-print(tf. __version__)
+print(f'TensorFlow Version: {tf.__version__}')
 
-# %% [markdown]
-# ### Defining the path of dataset directory
+DATASET_PATH = r'C:\Users\mbuto\Agri-sol\Dataset\Bean_Dataset'
+CLASSES = ['angular_leaf_spot', 'bean_rust', 'healthy']
+NUM_CLASSES = len(CLASSES)
+IMAGE_SIZE = (224, 224) # VGG16 was trained on 224x224 images
 
-# %%
-dataset_path = "C:\Plant-Disease-Detection\Dataset"
+def load_data(dataset_path, classes, image_size):
+    image_list, label_list = [], []
+    for i, class_name in enumerate(classes):
+        class_path = os.path.join(dataset_path, class_name)
+        print(f'Loading images from: {class_path}')
+        for image_name in os.listdir(class_path):
+            image_path = os.path.join(class_path, image_name)
+            try:
+                image = cv2.imread(image_path)
+                if image is not None:
+                    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # Matplotlib uses RGB
+                    image = cv2.resize(image, image_size)
+                    image_list.append(img_to_array(image))
+                    label_list.append(i)
+            except Exception as e:
+                print(f'Error loading image {image_path}: {e}')
+    return np.array(image_list), np.array(label_list)
 
-# %% [markdown]
-# ### Visualizing the images and Resize images
+X, y = load_data(DATASET_PATH, CLASSES, IMAGE_SIZE)
+print(f'\nTotal images loaded: {len(X)}')
+print(f'Class distribution: {Counter(y)}')
 
-# %%
-# Using raw string (r prefix) to avoid escape character issues
-dataset_path = r"C:\Users\mbuto\Agri-sol\Dataset\Potato___Early_blight"
+# Normalize pixel values
+X = X.astype('float32') / 255.0
 
-# Check if directory exists
-if not os.path.exists(dataset_path):
-    print(f"Error: Directory '{dataset_path}' does not exist!")
-else:
-    plt.figure(figsize=(12, 12))
-    
-    files = sorted(os.listdir(dataset_path))
-    
-    if len(files) == 0:
-        print(f"Warning: No files found in '{dataset_path}'")
-    else:
-        for i in range(1, min(17, len(files) + 1)):
-            plt.subplot(4, 4, i)
-            plt.tight_layout()
-            rand_img = imread(os.path.join(dataset_path, random.choice(files)))
-            plt.imshow(rand_img)
-            plt.xlabel(rand_img.shape[1], fontsize=10)
-            plt.ylabel(rand_img.shape[0], fontsize=10)
+# One-hot encode labels
+y_cat = to_categorical(y, NUM_CLASSES)
 
-# %% [markdown]
-# ### Convert the images into a Numpy array and normalize them
+# First split: 70% train, 30% temp (val + test)
+x_train, x_temp, y_train, y_temp = train_test_split(X, y_cat, test_size=0.3, random_state=42, stratify=y_cat)
 
-# %%
-# Converting Images to array 
+# Second split: 15% validation, 15% test from the temp set
+x_val, x_test, y_val, y_test = train_test_split(x_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp)
 
-def convert_image_to_array(image_dir):
-    try:
-        image = cv2.imread(image_dir)
-        if image is not None :
-            image = cv2.resize(image, (256, 256))  
-            return img_to_array(image)
-        else :
-            return np.array([])
-    except Exception as e:
-        print(f"Error : {e}")
-        return None
+print(f'Training data shape: {x_train.shape}')
+print(f'Validation data shape: {x_val.shape}')
+print(f'Testing data shape: {x_test.shape}')
 
-# %%
-dataset_path = r"C:\Users\mbuto\Agri-sol\Dataset"
+train_datagen = ImageDataGenerator(
+    rotation_range=40,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    fill_mode='nearest'
+)
 
-if os.path.exists(dataset_path):
-	labels = os.listdir(dataset_path)
-	print(labels)
-else:
-	print(f"Error: Directory '{dataset_path}' does not exist!")
+train_generator = train_datagen.flow(x_train, y_train, batch_size=32)
 
-# %%
-dataset_path = r"C:\Users\mbuto\Agri-sol\Dataset"
-root_dir = listdir(dataset_path)
-image_list, label_list = [], []
+# Load the VGG16 base model without the top classifier
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(IMAGE_SIZE[0], IMAGE_SIZE[1], 3))
 
-# Updated to match actual directory names
-all_labels = ['Corn_(maize)___Common_rust_', 'Potato___Early_blight', 'Tomato___Bacterial_spot']
-binary_labels = [0, 1, 2]
-
-# Filter directories to only include expected ones
-expected_dirs = [d for d in root_dir if d in all_labels]
-temp = -1
-
-# Reading and converting image to numpy array
-for directory in expected_dirs:
-    plant_image_list = listdir(f"{dataset_path}/{directory}")
-    temp += 1
-    for files in plant_image_list:
-        image_path = f"{dataset_path}/{directory}/{files}"
-        image_list.append(convert_image_to_array(image_path))
-        label_list.append(binary_labels[temp])
-
-print(f"Images loaded: {len(image_list)}")
-print(f"Labels created: {len(label_list)}")
-
-# %% [markdown]
-# ### Visualize the class count and Check for class imbalance
-
-# %%
-print("Length of label_list:", len(label_list))
-print("Length of image_list:", len(image_list))
-print("First few items in label_list:", label_list[:5])
-
-# %%
-# Visualize the number of classes count
-
-label_counts = Counter(label_list)
-print(label_counts)
-
-# %% [markdown]
-# ### it is a balanced dataset as we can see
-
-# %%
-# Next we will observe the shape of the image.
-
-image_list[0].shape
-
-# %%
-# Checking the total number of the images which is the length of the labels list.
-
-label_list = np.array(label_list)
-label_list.shape
-
-# %% [markdown]
-# ### Splitting the dataset into train, validate and test sets
-
-# %%
-x_train, x_test, y_train, y_test = train_test_split(image_list, label_list, test_size=0.2, random_state = 10) 
-
-# %%
-# Now we will normalize the dataset of our images. As pixel values ranges from 0 to 255 so we will divide each image pixel with 255 to normalize the dataset.
-
-x_train = np.array(x_train, dtype=np.float16) / 225.0
-x_test = np.array(x_test, dtype=np.float16) / 225.0
-x_train = x_train.reshape(-1, 256, 256, 3)
-x_test = x_test.reshape(-1, 256, 256, 3)
-
-# %% [markdown]
-# ### Performing one-hot encoding on target variable
-
-# %%
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
-
-# %% [markdown]
-# ### Creating the model architecture, compile the model and then fit it using the training data
-
-# %%
-# Importing VGG16 model from Keras
-
-# Load pre-trained VGG16
-base_model = VGG16(weights='imagenet', include_top=False, input_shape=(256, 256, 3))
-
-# Freeze base model layers
+# Freeze the convolutional base
 base_model.trainable = False
 
-# Add custom classifier
-model = Sequential([
-    base_model,
-    GlobalAveragePooling2D(),
-    Dense(512, activation='relu'),
-    Dropout(0.5),
-    Dense(256, activation='relu'),
-    Dropout(0.3),
-    Dense(3, activation='softmax')
-])
+# Create the new model on top
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+x = Dense(512, activation='relu')(x)
+x = Dropout(0.5)(x) # Regularization
+predictions = Dense(NUM_CLASSES, activation='softmax')(x)
 
-model.summary()
+model = Model(inputs=base_model.input, outputs=predictions)
 
-# %%
-# 1. Check and convert labels if needed
-print("Original label shape:", y_train.shape)
-print("Sample labels before conversion:", y_train[:5])
-
-# Convert to one-hot encoding if labels are integers [0,1,2]
-if len(y_train.shape) == 1:
-    y_train = to_categorical(y_train, num_classes=3)
-    y_test = to_categorical(y_test, num_classes=3)
-    print("✅ Converted labels to one-hot encoding")
-    print("New label shape:", y_train.shape)
-    print("Sample one-hot labels:", y_train[:2])
-
-# 2. Model compilation
+# Compile the model
 model.compile(
-    loss='categorical_crossentropy', 
-    optimizer=Adam(0.001),  # Increased from 0.0001 for better convergence
+    optimizer=Adam(learning_rate=0.001),
+    loss='categorical_crossentropy',
     metrics=['accuracy']
 )
 
-# 3. Split training data into training and validation sets
-x_train, x_val, y_train, y_val = train_test_split(
-    x_train, y_train, 
-    test_size=0.2, 
-    random_state=10,
-    stratify=y_train  # Ensures balanced split across classes
-)
+model.summary()
 
-print(f"Training set: {x_train.shape[0]} samples")
-print(f"Validation set: {x_val.shape[0]} samples")
+EPOCHS = 50
+BATCH_SIZE = 32
 
-# 4. Setup callbacks for better training
 callbacks = [
-    # Stop training if validation loss doesn't improve for 15 epochs
-    EarlyStopping(
-        patience=15, 
-        restore_best_weights=True, 
-        monitor='val_loss',
-        verbose=1
-    ),
-    
-    # Reduce learning rate when validation loss plateaus
-    ReduceLROnPlateau(
-        factor=0.3, 
-        patience=5, 
-        min_lr=1e-7, 
-        monitor='val_loss',
-        verbose=1
-    ),
-    
-    # Save the best model
-    ModelCheckpoint(
-        'best_plant_disease_model.h5', 
-        save_best_only=True, 
-        monitor='val_accuracy',
-        verbose=1
-    )
+    EarlyStopping(monitor='val_loss', patience=10, verbose=1, restore_best_weights=True),
+    ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=1e-6, verbose=1),
+    ModelCheckpoint(filepath='bean_disease_model_best.h5', monitor='val_accuracy', save_best_only=True, verbose=1)
 ]
 
-# 5. Training parameters
-epochs = 50
-batch_size = 32  # Reduced from 128 for potentially better results
-
-print("🚀 Starting model training...")
-print(f"Epochs: {epochs}")
-print(f"Batch size: {batch_size}")
-print(f"Learning rate: 0.001")
-
-# 6. Train the model
 history = model.fit(
-    x_train, y_train,
-    batch_size=batch_size,
-    epochs=epochs,
+    train_generator,
+    steps_per_epoch=len(x_train) // BATCH_SIZE,
+    epochs=EPOCHS,
     validation_data=(x_val, y_val),
-    callbacks=callbacks,
-    verbose=1
+    callbacks=callbacks
 )
 
-print("✅ Training completed!")
-
-# 7. Training results summary
-final_train_acc = history.history['accuracy'][-1]
-final_val_acc = history.history['val_accuracy'][-1]
-final_train_loss = history.history['loss'][-1]
-final_val_loss = history.history['val_loss'][-1]
-
-print(f"\n📊 Final Results:")
-print(f"Training Accuracy: {final_train_acc:.4f}")
-print(f"Validation Accuracy: {final_val_acc:.4f}")
-print(f"Training Loss: {final_train_loss:.4f}")
-print(f"Validation Loss: {final_val_loss:.4f}")
-
-
-def plot_training_history(history):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-    
+def plot_history(history):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
     # Plot accuracy
-    ax1.plot(history.history['accuracy'], label='Training Accuracy', color='blue')
-    ax1.plot(history.history['val_accuracy'], label='Validation Accuracy', color='red')
+    ax1.plot(history.history['accuracy'], label='train_accuracy')
+    ax1.plot(history.history['val_accuracy'], label='val_accuracy')
     ax1.set_title('Model Accuracy')
     ax1.set_xlabel('Epoch')
     ax1.set_ylabel('Accuracy')
     ax1.legend()
-    ax1.grid(True, alpha=0.3)
-    
     # Plot loss
-    ax2.plot(history.history['loss'], label='Training Loss', color='blue')
-    ax2.plot(history.history['val_loss'], label='Validation Loss', color='red')
+    ax2.plot(history.history['loss'], label='train_loss')
+    ax2.plot(history.history['val_loss'], label='val_loss')
     ax2.set_title('Model Loss')
     ax2.set_xlabel('Epoch')
     ax2.set_ylabel('Loss')
     ax2.legend()
-    ax2.grid(True, alpha=0.3)
-    
-    plt.tight_layout()
     plt.show()
 
-# Plot the training history
-plot_training_history(history)
+plot_history(history)
 
-# %%
-model.compile(loss = 'categorical_crossentropy', optimizer = Adam(0.0001), metrics = ['accuracy'])
+# Evaluate on test data
+loss, accuracy = model.evaluate(x_test, y_test, verbose=0)
+print(f'\nTest Accuracy: {accuracy*100:.2f}%')
+print(f'Test Loss: {loss:.4f}')
 
-# %%
-# Splitting the training data set into training and validation data sets
+# Get predictions
+y_pred_probs = model.predict(x_test)
+y_pred_classes = np.argmax(y_pred_probs, axis=1)
+y_true_classes = np.argmax(y_test, axis=1)
 
-x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size = 0.2, random_state = 10)
+# Classification Report
+print('Classification Report:')
+print(classification_report(y_true_classes, y_pred_classes, target_names=CLASSES))
 
-# %%
-# Training the model
-
-epochs = 50
-batch_size = 128
-history = model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs, validation_data = (x_val, y_val))
-
-# %%
-model.save("C:\Plant-Disease-Detection\Model\plant_disease_model.h5")
-
-# %% [markdown]
-# ### Plot the accuracy and loss against each epoch
-
-# %%
-# Plot the training history
-
-plt.figure(figsize = (12, 5))
-plt.plot(history.history['accuracy'], color = 'r')
-plt.plot(history.history['val_accuracy'], color = 'b')
-plt.title('Model Accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epochs')
-plt.legend(['train', 'val'])
-
+# Confusion Matrix
+cm = confusion_matrix(y_true_classes, y_pred_classes)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=CLASSES, yticklabels=CLASSES)
+plt.title('Confusion Matrix')
+plt.ylabel('Actual Class')
+plt.xlabel('Predicted Class')
 plt.show()
-
-# %%
-print("Calculating model accuracy")
-
-scores = model.evaluate(x_test, y_test)
-print(f"Test Accuracy: {scores[1] * 100}")
-
-# %% [markdown]
-# ### Make predictions on testing data
-
-# %%
-y_pred = model.predict(x_test)
-
-# %% [markdown]
-# ### Visualizing the original and predicted labels for the test images
-
-# %%
-# Plotting image to compare
-
-img = array_to_img(x_test[11])
-img
-
-# %%
-# Finding max value from predition list and comaparing original value vs predicted
-
-print("Originally : ", all_labels[np.argmax(y_test[11])])
-print("Predicted : ", all_labels[np.argmax(y_pred[4])])
-print(y_pred[2])
-
-# %%
-for i in range(50):
-    print (all_labels[np.argmax(y_test[i])], " ", all_labels[np.argmax(y_pred [1])])
 
 
