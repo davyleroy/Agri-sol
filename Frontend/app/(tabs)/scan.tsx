@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,18 @@ import {
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Camera, Image as ImageIcon, FlipHorizontal, X, CircleCheck as CheckCircle, Zap } from 'lucide-react-native';
+import {
+  Camera,
+  Image as ImageIcon,
+  FlipHorizontal,
+  X,
+  CircleCheck as CheckCircle,
+  Zap,
+} from 'lucide-react-native';
+import { ThemedView } from '@/components/ThemedView';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useLocalSearchParams, router } from 'expo-router';
+import { mlService, SUPPORTED_CROPS, CropType } from '@/services/mlService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,21 +31,58 @@ export default function ScanScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [isCapturing, setIsCapturing] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const { colors } = useTheme();
+  const { cropId, cropChosen } = useLocalSearchParams<{
+    cropId?: string;
+    cropChosen?: string;
+  }>();
+  const selectedCrop: CropType =
+    SUPPORTED_CROPS.find((c) => c.id === cropId) || SUPPORTED_CROPS[0];
+
+  // Redirect to crop selection right after permission is granted (if crop not chosen)
+  useEffect(() => {
+    if (permission?.granted && !cropChosen) {
+      router.replace('/crop-selection' as any);
+    }
+  }, [permission?.granted, cropChosen]);
+
+  // Auto-reset after 5 minutes of inactivity
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout> | undefined;
+    if (permission?.granted) {
+      t = setTimeout(
+        () => {
+          router.replace('/scan' as any);
+        },
+        5 * 60 * 1000,
+      );
+    }
+    return () => {
+      if (t) clearTimeout(t as ReturnType<typeof setTimeout>);
+    };
+  }, [permission?.granted]);
 
   if (!permission) {
-    return <View style={styles.container} />;
+    return <ThemedView style={{ flex: 1 }} />;
   }
 
   if (!permission.granted) {
     return (
-      <View style={styles.permissionContainer}>
+      <ThemedView
+        style={[
+          styles.permissionContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
         <LinearGradient
           colors={['#059669', '#10b981']}
           style={styles.permissionGradient}
         >
           <Camera size={64} color="#ffffff" strokeWidth={1.5} />
-          <Text style={styles.permissionTitle}>Camera Access Required</Text>
-          <Text style={styles.permissionText}>
+          <Text style={[styles.permissionTitle, { color: '#ffffff' }]}>
+            Camera Access Required
+          </Text>
+          <Text style={[styles.permissionText, { color: '#ffffff' }]}>
             We need camera access to capture images of your crops for analysis.
           </Text>
           <TouchableOpacity
@@ -44,24 +92,29 @@ export default function ScanScreen() {
             <Text style={styles.permissionButtonText}>Grant Permission</Text>
           </TouchableOpacity>
         </LinearGradient>
-      </View>
+      </ThemedView>
     );
   }
 
   const toggleCameraFacing = () => {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
+    setFacing((current) => (current === 'back' ? 'front' : 'back'));
   };
 
   const captureImage = async () => {
     if (isCapturing) return;
-    
+
     setIsCapturing(true);
-    
-    // Simulate capture and processing
-    setTimeout(() => {
-      Alert.alert('Success', 'Image captured successfully!');
-      setIsCapturing(false);
-    }, 1000);
+
+    // Navigate to results after mock prediction
+    const result = await mlService.analyzeImage(
+      'file://dummy.jpg',
+      selectedCrop,
+    );
+    router.push({
+      pathname: '/results',
+      params: { data: JSON.stringify(result), cropId: selectedCrop.id },
+    } as any);
+    setIsCapturing(false);
   };
 
   const pickImage = async () => {
@@ -74,7 +127,16 @@ export default function ScanScreen() {
       });
 
       if (!result.canceled && result.assets[0]) {
-        Alert.alert('Success', 'Image selected successfully!');
+        const uri = result.assets[0].uri;
+        const analysis = await mlService.analyzeImage(uri, selectedCrop);
+        router.push({
+          pathname: '/results',
+          params: {
+            data: JSON.stringify(analysis),
+            cropId: selectedCrop.id,
+            imageUri: uri,
+          },
+        } as any);
       }
     } catch (error) {
       console.error('Error picking image:', error);
@@ -84,14 +146,16 @@ export default function ScanScreen() {
 
   if (!showCamera) {
     return (
-      <View style={styles.container}>
+      <ThemedView style={{ flex: 1 }}>
         <LinearGradient
-          colors={['#f8fafc', '#e2e8f0']}
+          colors={[colors.background, colors.background]}
           style={styles.choiceContainer}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>Scan Your Crop</Text>
-            <Text style={styles.subtitle}>
+            <Text style={[styles.title, { color: colors.text }]}>
+              Scan Your Crop
+            </Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               Choose how you'd like to capture or select your crop image
             </Text>
           </View>
@@ -99,7 +163,13 @@ export default function ScanScreen() {
           <View style={styles.optionsContainer}>
             <TouchableOpacity
               style={styles.optionCard}
-              onPress={() => setShowCamera(true)}
+              onPress={() => {
+                if (permission?.granted) {
+                  setShowCamera(true);
+                } else {
+                  requestPermission();
+                }
+              }}
               activeOpacity={0.8}
             >
               <LinearGradient
@@ -132,28 +202,38 @@ export default function ScanScreen() {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.tipsContainer}>
-            <Text style={styles.tipsTitle}>Tips for Better Results</Text>
+          <View
+            style={[styles.tipsContainer, { backgroundColor: colors.surface }]}
+          >
+            <Text style={[styles.tipsTitle, { color: colors.text }]}>
+              Tips for Better Results
+            </Text>
             <View style={styles.tip}>
               <CheckCircle size={16} color="#059669" strokeWidth={2} />
-              <Text style={styles.tipText}>Ensure good lighting</Text>
+              <Text style={[styles.tipText, { color: colors.textSecondary }]}>
+                Ensure good lighting
+              </Text>
             </View>
             <View style={styles.tip}>
               <CheckCircle size={16} color="#059669" strokeWidth={2} />
-              <Text style={styles.tipText}>Focus on affected areas</Text>
+              <Text style={[styles.tipText, { color: colors.textSecondary }]}>
+                Focus on affected areas
+              </Text>
             </View>
             <View style={styles.tip}>
               <CheckCircle size={16} color="#059669" strokeWidth={2} />
-              <Text style={styles.tipText}>Keep camera steady</Text>
+              <Text style={[styles.tipText, { color: colors.textSecondary }]}>
+                Keep camera steady
+              </Text>
             </View>
           </View>
         </LinearGradient>
-      </View>
+      </ThemedView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <CameraView style={styles.camera} facing={facing}>
         {/* Header */}
         <View style={styles.cameraHeader}>
@@ -163,7 +243,7 @@ export default function ScanScreen() {
           >
             <X size={24} color="#ffffff" strokeWidth={2} />
           </TouchableOpacity>
-          
+
           <TouchableOpacity
             style={styles.flipButton}
             onPress={toggleCameraFacing}
@@ -182,10 +262,7 @@ export default function ScanScreen() {
 
         {/* Bottom Controls */}
         <View style={styles.controls}>
-          <TouchableOpacity
-            style={styles.galleryButton}
-            onPress={pickImage}
-          >
+          <TouchableOpacity style={styles.galleryButton} onPress={pickImage}>
             <ImageIcon size={24} color="#ffffff" strokeWidth={2} />
           </TouchableOpacity>
 
@@ -216,7 +293,6 @@ export default function ScanScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
   },
   permissionContainer: {
     flex: 1,
@@ -233,13 +309,11 @@ const styles = StyleSheet.create({
   permissionTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffff',
     marginTop: 20,
     marginBottom: 12,
   },
   permissionText: {
     fontSize: 16,
-    color: '#ffffff',
     textAlign: 'center',
     opacity: 0.9,
     lineHeight: 22,
@@ -268,12 +342,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1f2937',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#6b7280',
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -308,7 +380,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tipsContainer: {
-    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
     elevation: 4,
@@ -320,7 +391,6 @@ const styles = StyleSheet.create({
   tipsTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1f2937',
     marginBottom: 12,
   },
   tip: {
@@ -330,7 +400,6 @@ const styles = StyleSheet.create({
   },
   tipText: {
     fontSize: 14,
-    color: '#6b7280',
     marginLeft: 8,
   },
   camera: {

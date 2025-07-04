@@ -37,7 +37,7 @@ interface LanguageContextType {
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
-  undefined
+  undefined,
 );
 
 const STORAGE_KEY = '@agrisol_language';
@@ -266,7 +266,7 @@ const translations = {
     quickScan: 'Gusuzuma Byihuse',
     takePhoto: 'Fata Ifoto',
     captureImage: "Fata ifoto y'igihingwa",
-    fromGallery: 'Kuva mu Bafoto',
+    fromGallery: 'Kuva mu Mafoto',
     selectExisting: 'Hitamo ifoto isanzwe',
     todaysOverview: "Incamake y'Uyu Munsi",
     scansToday: "Isuzuma ry'Uyu Munsi",
@@ -308,7 +308,8 @@ const translations = {
     signInError: 'Ikosa ryo Kwinjira',
     fillAllFields: 'Nyamuneka uzuza amashami yose akenewe',
     passwordsDoNotMatch: "Amagambo y'ibanga ntabwo asa",
-    passwordTooShort: "Ijambo ry'ibanga rigomba kuba rifite byibuze inyuguti 6",
+    passwordTooShort:
+      "Ijambo ry'ibanga rigomba kuba rifite byibuze inyuguti ivanze n'imibare 8",
 
     // Location fields
     location: {
@@ -345,8 +346,8 @@ const translations = {
     scanYourCrop: 'Suzuma Igihingwa Cyawe',
     scanSubtitle:
       "Hitamo uburyo ushaka gufata cyangwa guhitamo ifoto y'igihingwa cyawe",
-    chooseFromGallery: 'Hitamo mu Bafoto',
-    selectFromGallery: 'Hitamo ifoto isanzwe mu bafoto',
+    chooseFromGallery: 'Hitamo mu Mafoto',
+    selectFromGallery: 'Hitamo ifoto isanzwe mu Mafoto',
     tipsForBetter: 'Amabwiriza yo Kubona Ibisubizo Byiza',
     ensureGoodLighting: 'Menya ko hari urumuri rwiza',
     focusOnAffected: 'Yibanze ku bice byangiritse',
@@ -406,7 +407,7 @@ const translations = {
     // Settings Screen
     language: 'Ururimi',
     selectLanguage: 'Hitamo Ururimi',
-    darkMode: 'Kugaragara mumwumwijima<',
+    darkMode: 'Kugaragara mumwumwijima',
     lightMode: 'Kugaragara Mumucyo',
     switchToDark: 'Hindura mumwumwijima',
     switchToLight: 'Hindura mumucyo',
@@ -673,7 +674,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(
-    SUPPORTED_LANGUAGES[0]
+    SUPPORTED_LANGUAGES[0],
   );
   const [isLoading, setIsLoading] = useState(true);
 
@@ -686,7 +687,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
       const savedLanguageCode = await AsyncStorage.getItem(STORAGE_KEY);
       if (savedLanguageCode) {
         const savedLanguage = SUPPORTED_LANGUAGES.find(
-          (lang) => lang.code === savedLanguageCode
+          (lang) => lang.code === savedLanguageCode,
         );
         if (savedLanguage) {
           setCurrentLanguage(savedLanguage);

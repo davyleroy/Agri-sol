@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Dimensions,
   Image,
@@ -28,6 +27,8 @@ import {
 } from 'lucide-react-native';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemedScrollView } from '@/components/ThemedView';
+import { useTheme } from '@/contexts/ThemeContext';
 
 // Import admin dashboard component
 import AdminDashboard from '@/components/AdminDashboard';
@@ -37,6 +38,7 @@ const { width } = Dimensions.get('window');
 export default function HomeScreen() {
   const { t } = useLanguage();
   const { user, signOut, isAdmin, loading } = useAuth();
+  const { colors } = useTheme();
 
   const handleSignOut = async () => {
     try {
@@ -62,10 +64,12 @@ export default function HomeScreen() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#f8fafc',
+          backgroundColor: colors.background,
         }}
       >
-        <Text style={{ fontSize: 16, color: '#6b7280' }}>Loading...</Text>
+        <Text style={{ fontSize: 16, color: colors.textSecondary }}>
+          Loading...
+        </Text>
       </View>
     );
   }
@@ -82,7 +86,7 @@ export default function HomeScreen() {
   // Show admin dashboard if user is admin
   if (isAdmin) {
     console.log('👑 Showing admin dashboard');
-    return <AdminDashboard onSignOut={handleSignOut} />;
+    return <AdminDashboard />;
   }
 
   console.log('👤 Showing regular user home screen');
@@ -96,7 +100,7 @@ export default function HomeScreen() {
       icon: Camera,
       color: '#059669',
       gradient: ['#059669', '#10b981'] as const,
-      onPress: () => router.push('/scan'),
+      onPress: () => router.push('/scan' as any),
     },
     {
       id: 'gallery',
@@ -105,7 +109,7 @@ export default function HomeScreen() {
       icon: ImageIcon,
       color: '#2563eb',
       gradient: ['#2563eb', '#3b82f6'] as const,
-      onPress: () => router.push('/scan'),
+      onPress: () => router.push('/scan' as any),
     },
   ];
 
@@ -121,6 +125,7 @@ export default function HomeScreen() {
       title: t('instantAnalysis'),
       description: t('instantAnalysisDesc'),
       color: '#2563eb',
+      onPress: () => router.push('/scan' as any),
     },
     {
       icon: TrendingUp,
@@ -142,7 +147,10 @@ export default function HomeScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ThemedScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header with Gradient */}
       <LinearGradient
         colors={['#059669', '#10b981', '#34d399']}
@@ -170,7 +178,9 @@ export default function HomeScreen() {
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('quickScan')}</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('quickScan')}
+        </Text>
         <View style={styles.actionsContainer}>
           {quickActions.map((action) => (
             <TouchableOpacity
@@ -197,10 +207,15 @@ export default function HomeScreen() {
 
       {/* Stats Cards */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('todaysOverview')}</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('todaysOverview')}
+        </Text>
         <View style={styles.statsContainer}>
           {stats.map((stat, index) => (
-            <View key={index} style={styles.statCard}>
+            <View
+              key={index}
+              style={[styles.statCard, { backgroundColor: colors.surface }]}
+            >
               <View
                 style={[
                   styles.statIconContainer,
@@ -209,8 +224,12 @@ export default function HomeScreen() {
               >
                 <stat.icon size={24} color={stat.color} strokeWidth={2} />
               </View>
-              <Text style={styles.statValue}>{stat.value}</Text>
-              <Text style={styles.statLabel}>{stat.label}</Text>
+              <Text style={[styles.statValue, { color: colors.text }]}>
+                {stat.value}
+              </Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+                {stat.label}
+              </Text>
             </View>
           ))}
         </View>
@@ -218,9 +237,16 @@ export default function HomeScreen() {
 
       {/* Features */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('howItWorks')}</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('howItWorks')}
+        </Text>
         {features.map((feature, index) => (
-          <View key={index} style={styles.featureCard}>
+          <TouchableOpacity
+            key={index}
+            style={[styles.featureCard, { backgroundColor: colors.surface }]}
+            activeOpacity={0.8}
+            onPress={feature.onPress}
+          >
             <View
               style={[
                 styles.featureIconContainer,
@@ -230,19 +256,28 @@ export default function HomeScreen() {
               <feature.icon size={24} color={feature.color} strokeWidth={2} />
             </View>
             <View style={styles.featureContent}>
-              <Text style={styles.featureTitle}>{feature.title}</Text>
-              <Text style={styles.featureDescription}>
+              <Text style={[styles.featureTitle, { color: colors.text }]}>
+                {feature.title}
+              </Text>
+              <Text
+                style={[
+                  styles.featureDescription,
+                  { color: colors.textSecondary },
+                ]}
+              >
                 {feature.description}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
 
       {/* Sample Detection */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('sampleDetection')}</Text>
-        <View style={styles.sampleCard}>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('sampleDetection')}
+        </Text>
+        <View style={[styles.sampleCard, { backgroundColor: colors.surface }]}>
           <Image
             source={{
               uri: 'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -251,13 +286,20 @@ export default function HomeScreen() {
           />
           <View style={styles.sampleContent}>
             <View style={styles.sampleHeader}>
-              <Text style={styles.sampleTitle}>{t('healthyTomatoPlant')}</Text>
+              <Text style={[styles.sampleTitle, { color: colors.text }]}>
+                {t('healthyTomatoPlant')}
+              </Text>
               <View style={styles.confidenceBadge}>
                 <Award size={12} color="#ffffff" strokeWidth={2} />
                 <Text style={styles.confidenceText}>94%</Text>
               </View>
             </View>
-            <Text style={styles.sampleDescription}>
+            <Text
+              style={[
+                styles.sampleDescription,
+                { color: colors.textSecondary },
+              ]}
+            >
               {t('healthyPlantDesc')}
             </Text>
           </View>
@@ -265,14 +307,13 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.bottomSpacing} />
-    </ScrollView>
+    </ThemedScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
   },
   header: {
     paddingTop: 60,
@@ -326,7 +367,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1f2937',
     marginBottom: 16,
   },
   actionsContainer: {
@@ -385,16 +425,13 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1f2937',
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
-    color: '#6b7280',
     textAlign: 'center',
   },
   featureCard: {
-    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,
@@ -417,16 +454,13 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1f2937',
     marginBottom: 4,
   },
   featureDescription: {
     fontSize: 14,
-    color: '#6b7280',
     lineHeight: 20,
   },
   sampleCard: {
-    backgroundColor: '#ffffff',
     borderRadius: 16,
     overflow: 'hidden',
     elevation: 2,
@@ -452,7 +486,6 @@ const styles = StyleSheet.create({
   sampleTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1f2937',
   },
   confidenceBadge: {
     backgroundColor: '#059669',
@@ -470,7 +503,6 @@ const styles = StyleSheet.create({
   },
   sampleDescription: {
     fontSize: 14,
-    color: '#6b7280',
     lineHeight: 20,
   },
   bottomSpacing: {

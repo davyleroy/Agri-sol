@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {
   Trophy,
@@ -16,7 +18,10 @@ import {
   Award,
   Star,
   ChevronRight,
+  AlertCircle,
 } from 'lucide-react-native';
+import { adminService } from '../../services/adminService';
+import { LocationAnalyticsData } from '../../services/locationTrackingService';
 
 const { width } = Dimensions.get('window');
 
@@ -26,40 +31,89 @@ interface LocationData {
 }
 
 interface LocationLeaderboardProps {
-  locations: LocationData[];
+  locations?: LocationData[]; // Made optional as we'll fetch data internally
 }
 
 export default function LocationLeaderboard({
-  locations,
+  locations: propLocations,
 }: LocationLeaderboardProps) {
-  const [sortBy, setSortBy] = useState<'scans' | 'activity' | 'growth'>(
-    'scans',
-  );
+  const [sortBy, setSortBy] = useState<
+    'total_scans' | 'total_users' | 'growth_rate'
+  >('total_scans');
+  const [locations, setLocations] = useState<LocationAnalyticsData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Fetch location leaderboard data
+  const fetchLocationData = async (showRefreshing = false) => {
+    try {
+      if (showRefreshing) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+      setError(null);
+
+      console.log('🔄 Fetching location leaderboard data...');
+      const result = await adminService.getLocationLeaderboard(sortBy, 50);
+
+      if (result.success) {
+        setLocations(result.data);
+        console.log(`✅ Loaded ${result.data.length} locations`);
+      } else {
+        setError(result.error || 'Failed to fetch location data');
+        console.error('❌ Failed to fetch locations:', result.error);
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      console.error('❌ Error fetching location data:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  // Load data on component mount and when sort changes
+  useEffect(() => {
+    fetchLocationData();
+  }, [sortBy]);
 
   // Enhanced location data with additional metrics
   const enhancedLocations = locations.map((location, index) => ({
     ...location,
     rank: index + 1,
-    users: Math.floor(Math.random() * 50) + 10,
-    avgScansPerUser: Math.floor(Math.random() * 10) + 3,
-    growth: Math.floor(Math.random() * 30) + 5,
-    healthyRate: Math.floor(Math.random() * 40) + 60,
-    lastActivity: Math.floor(Math.random() * 7) + 1,
+    users: location.total_users,
+    avgScansPerUser:
+      location.total_users > 0
+        ? Math.round(location.total_scans / location.total_users)
+        : 0,
+    growth: location.growth_rate_7_days,
+    healthyRate: location.healthy_percentage,
+    lastActivity: location.last_scan_at
+      ? Math.floor(
+          (Date.now() - new Date(location.last_scan_at).getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      : 0,
+    location: location.location_string, // Map to expected property name
+    count: location.total_scans, // Map to expected property name
   }));
 
   const sortOptions = [
-    { id: 'scans', label: 'Total Scans', icon: Trophy },
-    { id: 'activity', label: 'User Activity', icon: Users },
-    { id: 'growth', label: 'Growth Rate', icon: TrendingUp },
+    { id: 'total_scans', label: 'Total Scans', icon: Trophy },
+    { id: 'total_users', label: 'User Activity', icon: Users },
+    { id: 'growth_rate', label: 'Growth Rate', icon: TrendingUp },
   ];
 
   const sortedLocations = [...enhancedLocations].sort((a, b) => {
     switch (sortBy) {
-      case 'scans':
+      case 'total_scans':
         return b.count - a.count;
-      case 'activity':
+      case 'total_users':
         return b.users - a.users;
-      case 'growth':
+      case 'growth_rate':
         return b.growth - a.growth;
       default:
         return b.count - a.count;
@@ -98,6 +152,46 @@ export default function LocationLeaderboard({
     if (rate >= 40) return '#f59e0b';
     return '#dc2626';
   };
+
+  // Handle loading state
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <ActivityIndicator size="large" color="#059669" />
+        <Text style={styles.loadingText}>Loading location data...</Text>
+      </View>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <AlertCircle size={48} color="#dc2626" strokeWidth={2} />
+        <Text style={styles.errorText}>Failed to load location data</Text>
+        <Text style={styles.errorSubtext}>{error}</Text>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={() => fetchLocationData()}
+        >
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // Handle empty state
+  if (locations.length === 0) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <MapPin size={48} color="#6b7280" strokeWidth={2} />
+        <Text style={styles.emptyText}>No location data available</Text>
+        <Text style={styles.emptySubtext}>
+          Scan some plants to see location analytics
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -167,9 +261,9 @@ export default function LocationLeaderboard({
                       {location.location.split(',')[0]}
                     </Text>
                     <Text style={styles.podiumValue}>
-                      {sortBy === 'scans'
+                      {sortBy === 'total_scans'
                         ? `${location.count} scans`
-                        : sortBy === 'activity'
+                        : sortBy === 'total_users'
                           ? `${location.users} users`
                           : `+${location.growth}%`}
                     </Text>
@@ -187,6 +281,14 @@ export default function LocationLeaderboard({
         <ScrollView
           style={styles.leaderboardList}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => fetchLocationData(true)}
+              colors={['#059669']}
+              tintColor="#059669"
+            />
+          }
         >
           {sortedLocations.map((location, index) => (
             <View key={index} style={styles.leaderboardItem}>
@@ -591,5 +693,58 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: 12,
     color: '#6b7280',
+  },
+  // Loading, error, and empty state styles
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#6b7280',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  errorText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#dc2626',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  errorSubtext: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginTop: 8,
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  retryButton: {
+    backgroundColor: '#059669',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  retryButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#6b7280',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: '#9ca3af',
+    marginTop: 8,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });

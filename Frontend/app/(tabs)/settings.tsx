@@ -27,6 +27,7 @@ import {
   X,
   Moon,
   Sun,
+  LogOut,
 } from 'lucide-react-native';
 import {
   useLanguage,
@@ -34,10 +35,12 @@ import {
   Language,
 } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SettingsScreen() {
   const { t, currentLanguage, setLanguage } = useLanguage();
   const { colors, isDarkMode, toggleDarkMode } = useTheme();
+  const { signOut } = useAuth();
   const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   const handleLanguageSelect = async (language: Language) => {
@@ -49,7 +52,7 @@ export default function SettingsScreen() {
     Alert.alert(
       'Rate App',
       'Thank you for using Agrisol! Please rate us on the app store.',
-      [{ text: 'OK' }]
+      [{ text: 'OK' }],
     );
   };
 
@@ -70,7 +73,7 @@ export default function SettingsScreen() {
     const body = 'Hello Agrisol Team,\n\nI need help with...';
 
     const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(
-      subject
+      subject,
     )}&body=${encodeURIComponent(body)}`;
 
     Linking.openURL(mailtoUrl).catch(() => {
@@ -84,7 +87,7 @@ export default function SettingsScreen() {
     Alert.alert(
       'Privacy Policy',
       'Privacy policy will be available on our website soon.',
-      [{ text: 'OK' }]
+      [{ text: 'OK' }],
     );
   };
 
@@ -92,7 +95,7 @@ export default function SettingsScreen() {
     Alert.alert(
       'Terms of Service',
       'Terms of service will be available on our website soon.',
-      [{ text: 'OK' }]
+      [{ text: 'OK' }],
     );
   };
 
@@ -123,7 +126,7 @@ export default function SettingsScreen() {
         Alert.alert(
           t('about'),
           'Agrisol - AI-Powered Precision Agriculture System for Sustainable Crop Management in Rwanda\n\nDeveloped by: Davy Mbuto Nkurunziza\nVersion: 1.0.0 (MVP)',
-          [{ text: t('close') }]
+          [{ text: t('close') }],
         ),
       showChevron: true,
     },
@@ -136,7 +139,7 @@ export default function SettingsScreen() {
         Alert.alert(
           t('developer'),
           'Davy Mbuto Nkurunziza\nSoftware Engineer & AI Enthusiast\n\nSpecializing in precision agriculture and sustainable farming solutions.',
-          [{ text: t('close') }]
+          [{ text: t('close') }],
         ),
       showChevron: true,
     },
@@ -179,6 +182,20 @@ export default function SettingsScreen() {
       icon: Share2,
       onPress: handleShareApp,
       showChevron: true,
+    },
+    {
+      id: 'logout',
+      title: t('logout') || 'Logout',
+      subtitle: '',
+      icon: LogOut,
+      onPress: async () => {
+        try {
+          await signOut();
+        } catch (err) {
+          Alert.alert('Error', 'Failed to log out');
+        }
+      },
+      showChevron: false,
     },
   ];
 

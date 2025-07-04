@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Search,
@@ -15,9 +8,12 @@ import {
   Clock,
   Filter,
 } from 'lucide-react-native';
+import { ThemedScrollView } from '@/components/ThemedView';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function HistoryScreen() {
   const [filter, setFilter] = useState('all');
+  const { colors } = useTheme();
 
   const historyData = [
     {
@@ -121,7 +117,10 @@ export default function HistoryScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ThemedScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <LinearGradient colors={['#1f2937', '#374151']} style={styles.header}>
         <Text style={styles.title}>Scan History</Text>
@@ -131,14 +130,21 @@ export default function HistoryScreen() {
       {/* Stats */}
       <View style={styles.statsContainer}>
         {stats.map((stat, index) => (
-          <View key={index} style={styles.statCard}>
+          <View
+            key={index}
+            style={[styles.statCard, { backgroundColor: colors.surface }]}
+          >
             <View
               style={[styles.statIcon, { backgroundColor: `${stat.color}20` }]}
             >
               <stat.icon size={24} color={stat.color} strokeWidth={2} />
             </View>
-            <Text style={styles.statValue}>{stat.value}</Text>
-            <Text style={styles.statLabel}>{stat.label}</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>
+              {stat.value}
+            </Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              {stat.label}
+            </Text>
           </View>
         ))}
       </View>
@@ -152,13 +158,15 @@ export default function HistoryScreen() {
               style={[
                 styles.filterButton,
                 filter === filterItem.id && styles.activeFilterButton,
+                filter === filterItem.id && { backgroundColor: colors.primary },
               ]}
               onPress={() => setFilter(filterItem.id)}
             >
               <Text
                 style={[
                   styles.filterText,
-                  filter === filterItem.id && styles.activeFilterText,
+                  { color: colors.textSecondary },
+                  filter === filterItem.id && { color: colors.surface },
                 ]}
               >
                 {filterItem.label} ({filterItem.count})
@@ -173,12 +181,17 @@ export default function HistoryScreen() {
         {filteredData.map((item) => {
           const StatusIcon = getStatusIcon(item.status);
           return (
-            <TouchableOpacity key={item.id} style={styles.historyCard}>
+            <TouchableOpacity
+              key={item.id}
+              style={[styles.historyCard, { backgroundColor: colors.surface }]}
+            >
               <Image source={{ uri: item.image }} style={styles.historyImage} />
 
               <View style={styles.historyContent}>
                 <View style={styles.historyHeader}>
-                  <Text style={styles.historyTitle}>{item.crop}</Text>
+                  <Text style={[styles.historyTitle, { color: colors.text }]}>
+                    {item.crop}
+                  </Text>
                   <View style={styles.timeContainer}>
                     <Clock size={12} color="#6b7280" strokeWidth={2} />
                     <Text style={styles.timeText}>{item.time}</Text>
@@ -191,11 +204,22 @@ export default function HistoryScreen() {
                     color={getStatusColor(item.status)}
                     strokeWidth={2}
                   />
-                  <Text style={styles.diseaseText}>{item.disease}</Text>
+                  <Text
+                    style={[
+                      styles.diseaseText,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
+                    {item.disease}
+                  </Text>
                 </View>
 
                 <View style={styles.historyFooter}>
-                  <Text style={styles.dateText}>{item.date}</Text>
+                  <Text
+                    style={[styles.dateText, { color: colors.textSecondary }]}
+                  >
+                    {item.date}
+                  </Text>
                   <View style={styles.confidenceContainer}>
                     <Text style={styles.confidenceText}>
                       {item.confidence}% confidence
@@ -221,14 +245,13 @@ export default function HistoryScreen() {
       )}
 
       <View style={styles.bottomSpacing} />
-    </ScrollView>
+    </ThemedScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
   },
   header: {
     paddingTop: 60,

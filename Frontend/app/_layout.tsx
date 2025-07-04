@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import * as SplashScreen from 'expo-splash-screen';
+import { ThemedView } from '@/components/ThemedView';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,6 +41,7 @@ function RootLayoutNav() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="crop-selection" options={{ headerShown: false }} />
       <Stack.Screen name="results" options={{ headerShown: false }} />
+      <Stack.Screen name="scan-guide" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
@@ -52,7 +54,9 @@ export default function RootLayout() {
     <ThemeProvider>
       <AuthProvider>
         <LanguageProvider>
-          <RootLayoutNav />
+          <ThemedView style={{ flex: 1 }}>
+            <RootLayoutNav />
+          </ThemedView>
           <StatusBar style="auto" />
         </LanguageProvider>
       </AuthProvider>

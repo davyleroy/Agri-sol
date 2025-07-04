@@ -1,3 +1,8 @@
+import {
+  locationTrackingService,
+  LocationData,
+} from './locationTrackingService';
+
 export interface CropType {
   id: string;
   name: string;
@@ -73,6 +78,7 @@ export interface MLAnalysisResult {
   prediction?: MLPrediction;
   error?: string;
   processingTime?: number;
+  scanId?: string; // Added to track saved scans
 }
 
 class MLService {
@@ -94,7 +100,7 @@ class MLService {
       process.env.EXPO_PUBLIC_ML_API_URL === 'your_ml_api_url_here'
     ) {
       console.warn(
-        '⚠️  EXPO_PUBLIC_ML_API_URL is not properly configured. Using default localhost.'
+        '⚠️  EXPO_PUBLIC_ML_API_URL is not properly configured. Using default localhost.',
       );
     }
 
@@ -103,14 +109,14 @@ class MLService {
       process.env.EXPO_PUBLIC_ML_API_KEY === 'your_ml_api_key_here'
     ) {
       console.warn(
-        '⚠️  EXPO_PUBLIC_ML_API_KEY is not properly configured. Using default key.'
+        '⚠️  EXPO_PUBLIC_ML_API_KEY is not properly configured. Using default key.',
       );
     }
   }
 
   async analyzeImage(
     imageUri: string,
-    cropType: CropType
+    cropType: CropType,
   ): Promise<MLAnalysisResult> {
     try {
       // For development, always try the real API first, fallback to mock if it fails
@@ -127,7 +133,7 @@ class MLService {
       } as any);
 
       console.log(
-        `📡 Making request to: ${this.baseUrl}${cropType.modelEndpoint}`
+        `📡 Making request to: ${this.baseUrl}${cropType.modelEndpoint}`,
       );
 
       const response = await fetch(`${this.baseUrl}${cropType.modelEndpoint}`, {
@@ -159,13 +165,98 @@ class MLService {
     }
   }
 
+  /**
+   * Analyze image with location tracking
+   * This method combines image analysis with location data saving
+   */
+  async analyzeImageWithLocation(
+    imageUri: string,
+    cropType: CropType,
+    userId: string,
+    location: LocationData,
+  ): Promise<MLAnalysisResult> {
+    try {
+      console.log('🚀 Analyzing image with location tracking...');
+
+      // First perform the image analysis
+      const analysisResult = await this.analyzeImage(imageUri, cropType);
+
+      if (!analysisResult.success || !analysisResult.prediction) {
+        console.warn('⚠️ Image analysis failed, skipping location tracking');
+        return analysisResult;
+      }
+
+      // Save scan history with location data
+      console.log('💾 Saving scan history with location data...');
+      const saveResult = await locationTrackingService.saveScanHistory(
+        userId,
+        cropType,
+        analysisResult.prediction,
+        location,
+        imageUri, // Pass image URI as path for now
+      );
+
+      if (saveResult.success) {
+        console.log('✅ Scan history saved successfully');
+        return {
+          ...analysisResult,
+          scanId: saveResult.scanId,
+        };
+      } else {
+        console.warn('⚠️ Failed to save scan history:', saveResult.error);
+        // Return analysis result even if saving failed
+        return analysisResult;
+      }
+    } catch (error) {
+      console.error('❌ Error in analyzeImageWithLocation:', error);
+
+      // Fallback to regular analysis if location tracking fails
+      return this.analyzeImage(imageUri, cropType);
+    }
+  }
+
+  /**
+   * Get user's scan history
+   */
+  async getUserScanHistory(userId: string, limit: number = 50) {
+    try {
+      console.log('🔄 Fetching user scan history...');
+      return await locationTrackingService.getUserScanHistory(userId, limit);
+    } catch (error) {
+      console.error('❌ Error fetching scan history:', error);
+      return {
+        success: false,
+        data: [],
+        user_id: userId,
+        total_scans: 0,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  /**
+   * Save user location
+   */
+  async saveUserLocation(userId: string, location: LocationData) {
+    try {
+      console.log('🔄 Saving user location...');
+      return await locationTrackingService.saveUserLocation(userId, location);
+    } catch (error) {
+      console.error('❌ Error saving user location:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
   private formatPrediction(apiResult: any, cropType: CropType): MLPrediction {
     console.log('🔄 Formatting API result:', apiResult);
 
     return {
       disease: apiResult.predicted_class || 'Unknown',
       confidence: Math.round(
-        apiResult.confidence_percentage || apiResult.confidence || 85
+        apiResult.confidence_percentage || apiResult.confidence || 85,
       ),
       severity: this.determineSeverity(apiResult.confidence),
       recommendations:
@@ -187,7 +278,7 @@ class MLService {
   }
 
   private determineTreatmentUrgency(
-    disease: string
+    disease: string,
   ): 'None' | 'Low' | 'Medium' | 'High' {
     const urgentDiseases = ['late blight', 'bacterial blight', 'fusarium wilt'];
     const moderateDiseases = ['early blight', 'rust', 'leaf spot'];
@@ -213,7 +304,7 @@ class MLService {
 
   private generateRecommendations(
     disease: string,
-    cropType: CropType
+    cropType: CropType,
   ): string[] {
     const diseaseLower = disease.toLowerCase();
     const baseRecommendations = [

@@ -14,6 +14,9 @@ import logging
 from datetime import datetime
 import json
 
+# Import location API
+from location_api import setup_location_api
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -422,10 +425,10 @@ TEST_INTERFACE_HTML = """
         <form id="uploadForm" enctype="multipart/form-data">
             <label for="cropType"><strong>Select Crop Type:</strong></label>
             <select id="cropType" name="crop_type" required>
-                <option value="tomatoes">🍅 Tomatoes (10 diseases)</option>
-                <option value="potatoes">🥔 Potatoes (3 diseases)</option>
-                <option value="maize">🌽 Maize/Corn (4 diseases)</option>
                 <option value="beans">🫘 Beans (3 diseases)</option>
+                <option value="maize">🌽 Maize/Corn (4 diseases)</option>
+                <option value="potatoes">🥔 Potatoes (3 diseases)</option>
+                <option value="tomatoes">🍅 Tomatoes (10 diseases)</option>
             </select>
             
             <label for="imageFile"><strong>Upload Plant Image:</strong></label>
@@ -570,6 +573,14 @@ if __name__ == '__main__':
     logger.info("🚀 Starting AgriSol Plant Disease Detection API...")
     logger.info("📚 Documentation: http://localhost:5000/docs")
     logger.info("🧪 Test Interface: http://localhost:5000/test")
+    
+    # Setup location API
+    try:
+        setup_location_api(app, api)
+        logger.info("✅ Location API routes registered")
+    except Exception as e:
+        logger.warning(f"⚠️ Location API setup failed: {str(e)}")
+        logger.warning("Location tracking will not be available")
     
     # Load all models
     load_models()

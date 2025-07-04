@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -19,11 +18,14 @@ import {
   Leaf,
   Bug,
 } from 'lucide-react-native';
+import { ThemedScrollView } from '@/components/ThemedView';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function GuideScreen() {
   const [activeTab, setActiveTab] = useState<'diseases' | 'tips' | 'calendar'>(
     'diseases',
   );
+  const { colors } = useTheme();
 
   const diseases = [
     {
@@ -131,12 +133,17 @@ export default function GuideScreen() {
   const renderDiseases = () => (
     <View style={styles.contentContainer}>
       {diseases.map((disease) => (
-        <View key={disease.id} style={styles.diseaseCard}>
+        <View
+          key={disease.id}
+          style={[styles.diseaseCard, { backgroundColor: colors.surface }]}
+        >
           <Image source={{ uri: disease.image }} style={styles.diseaseImage} />
 
           <View style={styles.diseaseContent}>
             <View style={styles.diseaseHeader}>
-              <Text style={styles.diseaseName}>{disease.name}</Text>
+              <Text style={[styles.diseaseName, { color: colors.text }]}>
+                {disease.name}
+              </Text>
               <View
                 style={[
                   styles.severityBadge,
@@ -147,26 +154,49 @@ export default function GuideScreen() {
               </View>
             </View>
 
-            <Text style={styles.diseaseCrop}>Affects: {disease.crop}</Text>
+            <Text style={[styles.diseaseCrop, { color: colors.textSecondary }]}>
+              Affects: {disease.crop}
+            </Text>
 
             <View style={styles.diseaseSection}>
-              <Text style={styles.sectionTitle}>Symptoms:</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Symptoms:
+              </Text>
               {disease.symptoms.map((symptom, index) => (
                 <View key={index} style={styles.symptomItem}>
                   <AlertCircle size={12} color="#dc2626" strokeWidth={2} />
-                  <Text style={styles.symptomText}>{symptom}</Text>
+                  <Text
+                    style={[
+                      styles.symptomText,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
+                    {symptom}
+                  </Text>
                 </View>
               ))}
             </View>
 
             <View style={styles.diseaseSection}>
-              <Text style={styles.sectionTitle}>Treatment:</Text>
-              <Text style={styles.treatmentText}>{disease.treatment}</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Treatment:
+              </Text>
+              <Text
+                style={[styles.treatmentText, { color: colors.textSecondary }]}
+              >
+                {disease.treatment}
+              </Text>
             </View>
 
             <View style={styles.diseaseSection}>
-              <Text style={styles.sectionTitle}>Prevention:</Text>
-              <Text style={styles.preventionText}>{disease.prevention}</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                Prevention:
+              </Text>
+              <Text
+                style={[styles.preventionText, { color: colors.textSecondary }]}
+              >
+                {disease.prevention}
+              </Text>
             </View>
           </View>
         </View>
@@ -177,7 +207,10 @@ export default function GuideScreen() {
   const renderCareTips = () => (
     <View style={styles.contentContainer}>
       {careTips.map((tip) => (
-        <View key={tip.id} style={styles.tipCard}>
+        <View
+          key={tip.id}
+          style={[styles.tipCard, { backgroundColor: colors.surface }]}
+        >
           <View style={styles.tipHeader}>
             <View
               style={[
@@ -187,14 +220,18 @@ export default function GuideScreen() {
             >
               <tip.icon size={24} color={tip.color} strokeWidth={2} />
             </View>
-            <Text style={styles.tipTitle}>{tip.title}</Text>
+            <Text style={[styles.tipTitle, { color: colors.text }]}>
+              {tip.title}
+            </Text>
           </View>
 
           <View style={styles.tipsList}>
             {tip.tips.map((tipText, index) => (
               <View key={index} style={styles.tipItem}>
                 <CheckCircle size={14} color={tip.color} strokeWidth={2} />
-                <Text style={styles.tipText}>{tipText}</Text>
+                <Text style={[styles.tipText, { color: colors.textSecondary }]}>
+                  {tipText}
+                </Text>
               </View>
             ))}
           </View>
@@ -206,29 +243,44 @@ export default function GuideScreen() {
   const renderCalendar = () => (
     <View style={styles.contentContainer}>
       {plantingCalendar.map((month, index) => (
-        <View key={index} style={styles.calendarCard}>
+        <View
+          key={index}
+          style={[styles.calendarCard, { backgroundColor: colors.surface }]}
+        >
           <View style={styles.calendarHeader}>
-            <Calendar size={20} color="#059669" strokeWidth={2} />
-            <Text style={styles.calendarMonth}>{month.month}</Text>
+            <Calendar size={20} color={colors.primary} strokeWidth={2} />
+            <Text style={[styles.calendarMonth, { color: colors.text }]}>
+              {month.month}
+            </Text>
           </View>
 
           <View style={styles.calendarSection}>
-            <Text style={styles.calendarSectionTitle}>Recommended Crops:</Text>
+            <Text style={[styles.calendarSectionTitle, { color: colors.text }]}>
+              Recommended Crops:
+            </Text>
             <View style={styles.cropsContainer}>
               {month.crops.map((crop, cropIndex) => (
                 <View key={cropIndex} style={styles.cropTag}>
-                  <Text style={styles.cropText}>{crop}</Text>
+                  <Text style={[styles.cropText, { color: colors.primary }]}>
+                    {crop}
+                  </Text>
                 </View>
               ))}
             </View>
           </View>
 
           <View style={styles.calendarSection}>
-            <Text style={styles.calendarSectionTitle}>Activities:</Text>
+            <Text style={[styles.calendarSectionTitle, { color: colors.text }]}>
+              Activities:
+            </Text>
             {month.activities.map((activity, actIndex) => (
               <View key={actIndex} style={styles.activityItem}>
                 <CheckCircle size={12} color="#059669" strokeWidth={2} />
-                <Text style={styles.activityText}>{activity}</Text>
+                <Text
+                  style={[styles.activityText, { color: colors.textSecondary }]}
+                >
+                  {activity}
+                </Text>
               </View>
             ))}
           </View>
@@ -257,7 +309,10 @@ export default function GuideScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ThemedScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <LinearGradient colors={['#059669', '#10b981']} style={styles.header}>
         <BookOpen size={32} color="#ffffff" strokeWidth={2} />
@@ -268,24 +323,30 @@ export default function GuideScreen() {
       </LinearGradient>
 
       {/* Tab Navigation */}
-      <View style={styles.tabContainer}>
+      <View style={[styles.tabContainer, { backgroundColor: colors.surface }]}>
         {tabs.map((tab) => (
           <TouchableOpacity
             key={tab.id}
-            style={[styles.tab, activeTab === tab.id && styles.activeTab]}
+            style={[
+              styles.tab,
+              activeTab === tab.id && { backgroundColor: colors.primary },
+            ]}
             onPress={() =>
               setActiveTab(tab.id as 'diseases' | 'tips' | 'calendar')
             }
           >
             <tab.icon
               size={20}
-              color={activeTab === tab.id ? '#ffffff' : '#6b7280'}
+              color={
+                activeTab === tab.id ? colors.surface : colors.textSecondary
+              }
               strokeWidth={2}
             />
             <Text
               style={[
                 styles.tabText,
-                activeTab === tab.id && styles.activeTabText,
+                { color: colors.textSecondary },
+                activeTab === tab.id && { color: colors.surface },
               ]}
             >
               {tab.label}
@@ -302,14 +363,14 @@ export default function GuideScreen() {
         {renderContent()}
         <View style={styles.bottomSpacing} />
       </ScrollView>
-    </SafeAreaView>
+    </ThemedScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    // backgroundColor moved to ThemedScrollView
   },
   header: {
     alignItems: 'center',

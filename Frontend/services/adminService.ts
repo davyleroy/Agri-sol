@@ -1,4 +1,10 @@
 import { supabase } from '../contexts/AuthContext';
+import {
+  locationTrackingService,
+  LocationAnalyticsData,
+  LeaderboardResponse,
+  ScanHistoryData,
+} from './locationTrackingService';
 
 export const adminService = {
   // User management
@@ -151,6 +157,225 @@ export const adminService = {
     } catch (err) {
       console.error('Error in getScanAnalytics:', err);
       return { data: [], error: err };
+    }
+  },
+
+  // Location Analytics
+  async getLocationLeaderboard(
+    sortBy: 'total_scans' | 'total_users' | 'growth_rate' = 'total_scans',
+    limit: number = 50,
+  ): Promise<LeaderboardResponse> {
+    try {
+      console.log('🔄 Admin: Fetching location leaderboard...');
+
+      const result = await locationTrackingService.getLocationLeaderboard(
+        sortBy,
+        limit,
+      );
+
+      if (!result.success) {
+        console.warn(
+          '⚠️ Location leaderboard fetch failed, returning mock data',
+        );
+        return {
+          success: true,
+          data: locationTrackingService.getMockLeaderboardData(),
+          total_locations: 3,
+          sorted_by: sortBy,
+        };
+      }
+
+      return result;
+    } catch (error) {
+      console.error('❌ Error fetching location leaderboard:', error);
+      return {
+        success: false,
+        data: [],
+        total_locations: 0,
+        sorted_by: sortBy,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  },
+
+  async getLocationAnalytics(locationString: string) {
+    try {
+      console.log('🔄 Admin: Fetching location analytics for:', locationString);
+
+      const result =
+        await locationTrackingService.getLocationAnalytics(locationString);
+
+      if (!result.success) {
+        console.warn('⚠️ Location analytics fetch failed');
+        return {
+          success: false,
+          error: result.error || 'Failed to fetch location analytics',
+        };
+      }
+
+      return result;
+    } catch (error) {
+      console.error('❌ Error fetching location analytics:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  },
+
+  async getDiseaseTracking(
+    locationString?: string,
+    cropType?: string,
+    days: number = 30,
+  ) {
+    try {
+      console.log('🔄 Admin: Fetching disease tracking data...');
+
+      const result = await locationTrackingService.getDiseaseTracking(
+        locationString,
+        cropType,
+        days,
+      );
+
+      if (!result.success) {
+        console.warn('⚠️ Disease tracking fetch failed');
+        return {
+          success: false,
+          data: [],
+          error: result.error || 'Failed to fetch disease tracking data',
+        };
+      }
+
+      return result;
+    } catch (error) {
+      console.error('❌ Error fetching disease tracking:', error);
+      return {
+        success: false,
+        data: [],
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  },
+
+  async getLocationSummary() {
+    try {
+      console.log('🔄 Admin: Fetching location summary...');
+
+      const leaderboard = await this.getLocationLeaderboard('total_scans', 100);
+
+      if (!leaderboard.success) {
+        return {
+          success: false,
+          error: 'Failed to fetch location summary',
+        };
+      }
+
+      // Calculate summary statistics
+      const totalLocations = leaderboard.data.length;
+      const totalScans = leaderboard.data.reduce(
+        (sum, loc) => sum + loc.total_scans,
+        0,
+      );
+      const totalUsers = leaderboard.data.reduce(
+        (sum, loc) => sum + loc.total_users,
+        0,
+      );
+      const averageHealthy =
+        leaderboard.data.reduce((sum, loc) => sum + loc.healthy_percentage, 0) /
+        totalLocations;
+      const averageGrowth =
+        leaderboard.data.reduce((sum, loc) => sum + loc.growth_rate_7_days, 0) /
+        totalLocations;
+
+      // Find top performing location
+      const topLocation = leaderboard.data[0];
+
+      // Find most common diseases
+      const diseaseCount: { [key: string]: number } = {};
+      leaderboard.data.forEach((loc) => {
+        if (loc.most_common_disease) {
+          diseaseCount[loc.most_common_disease] =
+            (diseaseCount[loc.most_common_disease] || 0) + 1;
+        }
+      });
+
+      const mostCommonDisease = Object.keys(diseaseCount).reduce((a, b) =>
+        diseaseCount[a] > diseaseCount[b] ? a : b,
+      );
+
+      return {
+        success: true,
+        summary: {
+          totalLocations,
+          totalScans,
+          totalUsers,
+          averageHealthyPercentage: Math.round(averageHealthy * 100) / 100,
+          averageGrowthRate: Math.round(averageGrowth * 100) / 100,
+          topLocation: topLocation
+            ? {
+                name: topLocation.location_string,
+                scans: topLocation.total_scans,
+                users: topLocation.total_users,
+                healthyPercentage: topLocation.healthy_percentage,
+              }
+            : null,
+          mostCommonDisease,
+          lastUpdated: new Date().toISOString(),
+        },
+      };
+    } catch (error) {
+      console.error('❌ Error fetching location summary:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  },
+
+  async getRecentScans(limit: number = 50) {
+    try {
+      console.log('🔄 Admin: Fetching recent scans...');
+
+      const { data, error } = await supabase
+        .from('scan_history')
+        .select(
+          `
+          id,
+          crop_type,
+          predicted_disease,
+          confidence_score,
+          severity,
+          location_string,
+          country,
+          province,
+          district,
+          created_at,
+          profiles!inner(full_name, email)
+        `,
+        )
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        console.warn('⚠️ Recent scans fetch failed:', error);
+        return {
+          success: false,
+          data: [],
+          error: error.message,
+        };
+      }
+
+      return {
+        success: true,
+        data: data || [],
+      };
+    } catch (error) {
+      console.error('❌ Error fetching recent scans:', error);
+      return {
+        success: false,
+        data: [],
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   },
 
