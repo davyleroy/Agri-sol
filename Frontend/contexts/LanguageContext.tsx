@@ -406,13 +406,13 @@ const translations = {
     // Settings Screen
     language: 'Ururimi',
     selectLanguage: 'Hitamo Ururimi',
-    darkMode: 'Ubushyuhe Bwumwijima',
-    lightMode: 'Ubushyuhe Bwumucyo',
-    switchToDark: 'Hindura kuri umwijima',
-    switchToLight: 'Hindura kuri umucyo',
+    darkMode: 'Kugaragara mumwumwijima<',
+    lightMode: 'Kugaragara Mumucyo',
+    switchToDark: 'Hindura mumwumwijima',
+    switchToLight: 'Hindura mumucyo',
     about: 'Ibyerekeye',
     version: 'Verisiyo',
-    developer: 'Uwateje',
+    developer: 'Uwayikoze',
     contact: 'Kuvugana',
     privacyPolicy: "Politiki y'Ibanga",
     termsOfService: 'Amabwiriza yo Gukoresha',
@@ -456,6 +456,7 @@ const translations = {
     potatoes: 'ibirayi',
     squash: 'Igikoma',
     corn: 'Ibigori',
+    maize: 'Ibigori',
   },
 
   fr: {

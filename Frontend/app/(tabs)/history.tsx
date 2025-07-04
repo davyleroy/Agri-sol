@@ -8,7 +8,13 @@ import {
   Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Calendar, TrendingUp, Leaf, TriangleAlert as AlertTriangle, Clock, Filter, Search } from 'lucide-react-native';
+import {
+  Search,
+  Leaf,
+  AlertTriangle,
+  Clock,
+  Filter,
+} from 'lucide-react-native';
 
 export default function HistoryScreen() {
   const [filter, setFilter] = useState('all');
@@ -20,9 +26,9 @@ export default function HistoryScreen() {
       time: '14:30',
       image:
         'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
-      disease: 'Healthy Plant',
-      confidence: 94,
-      status: 'healthy',
+      disease: 'Early Blight',
+      confidence: 89,
+      status: 'disease',
       crop: 'Tomato',
     },
     {
@@ -30,10 +36,10 @@ export default function HistoryScreen() {
       date: '2024-01-14',
       time: '09:15',
       image:
-        'https://images.pexels.com/photos/1153655/pexels-photo-1153655.jpeg?auto=compress&cs=tinysrgb&w=300',
-      disease: 'Early Blight',
-      confidence: 87,
-      status: 'disease',
+        'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
+      disease: 'Healthy Plant',
+      confidence: 95,
+      status: 'healthy',
       crop: 'Potato',
     },
     {
@@ -47,7 +53,6 @@ export default function HistoryScreen() {
       status: 'healthy',
       crop: 'Bean',
     },
-<<<<<<< HEAD
     {
       id: '4',
       date: '2024-01-12',
@@ -59,8 +64,6 @@ export default function HistoryScreen() {
       status: 'disease',
       crop: 'Tomato',
     },
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
   ];
 
   const stats = [
@@ -205,7 +208,6 @@ export default function HistoryScreen() {
         })}
       </View>
 
-<<<<<<< HEAD
       {/* Empty State */}
       {filteredData.length === 0 && (
         <View style={styles.emptyContainer}>
@@ -218,8 +220,6 @@ export default function HistoryScreen() {
         </View>
       )}
 
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
       <View style={styles.bottomSpacing} />
     </ScrollView>
   );
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
-    marginTop: -20,
+    marginTop: 20,
     gap: 12,
   },
   statCard: {
@@ -260,11 +260,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
-    elevation: 4,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 4,
   },
   statIcon: {
     borderRadius: 12,
@@ -275,16 +275,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1f2937',
+    marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
     color: '#6b7280',
-    marginTop: 2,
     textAlign: 'center',
   },
   filtersContainer: {
     paddingHorizontal: 20,
-    marginTop: 24,
+    marginTop: 20,
   },
   filtersRow: {
     flexDirection: 'row',
@@ -294,7 +294,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: '#ffffff',
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   activeFilterButton: {
     backgroundColor: '#059669',
@@ -312,31 +317,29 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   historyCard: {
-    flexDirection: 'row',
     backgroundColor: '#ffffff',
     borderRadius: 16,
-    padding: 12,
     marginBottom: 12,
+    overflow: 'hidden',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   historyImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 12,
+    width: '100%',
+    height: 120,
+    resizeMode: 'cover',
   },
   historyContent: {
-    flex: 1,
-    marginLeft: 12,
-    justifyContent: 'space-between',
+    padding: 16,
   },
   historyHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 8,
   },
   historyTitle: {
     fontSize: 16,
@@ -355,13 +358,13 @@ const styles = StyleSheet.create({
   diseaseContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginVertical: 4,
+    marginBottom: 8,
+    gap: 8,
   },
   diseaseText: {
     fontSize: 14,
     color: '#374151',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   historyFooter: {
     flexDirection: 'row',
@@ -373,15 +376,33 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   confidenceContainer: {
-    backgroundColor: '#f3f4f6',
-    borderRadius: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+    backgroundColor: '#f0fdf4',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   confidenceText: {
-    fontSize: 10,
-    color: '#374151',
-    fontWeight: '500',
+    fontSize: 12,
+    color: '#059669',
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
+    lineHeight: 20,
   },
   bottomSpacing: {
     height: 20,

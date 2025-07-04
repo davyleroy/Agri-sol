@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-<<<<<<< HEAD
 import {
   Camera,
   Image as ImageIcon,
@@ -22,93 +21,124 @@ import {
   Sun,
   Droplets,
   LogOut,
+  BarChart3,
+  MapPin,
+  Users,
+  Activity,
 } from 'lucide-react-native';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-=======
-import { 
-  Camera, 
-  Image as ImageIcon, 
-  Leaf, 
-  TrendingUp, 
-  Shield, 
-  ArrowRight, 
-  Sun, 
-  Droplets,
-  Zap,
-  Award
-} from 'lucide-react-native';
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
+
+// Import admin dashboard component
+import AdminDashboard from '@/components/AdminDashboard';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
-<<<<<<< HEAD
   const { t } = useLanguage();
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.replace('/(auth)/sign-in');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  // Debug logging
+  console.log('🏠 HomeScreen render:', {
+    hasUser: !!user,
+    isAdmin,
+    loading,
+    userEmail: user?.email,
+  });
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#f8fafc',
+        }}
+      >
+        <Text style={{ fontSize: 16, color: '#6b7280' }}>Loading...</Text>
+      </View>
+    );
+  }
 
   if (!user) {
+    console.log('❌ No user found, redirecting to sign-in');
+    // Use setTimeout to avoid state update during render
+    setTimeout(() => {
+      router.replace('/(auth)/sign-in');
+    }, 0);
     return null; // Keep this to avoid rendering the screen while redirecting
   }
 
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
+  // Show admin dashboard if user is admin
+  if (isAdmin) {
+    console.log('👑 Showing admin dashboard');
+    return <AdminDashboard onSignOut={handleSignOut} />;
+  }
+
+  console.log('👤 Showing regular user home screen');
+
+  // Regular user home screen
   const quickActions = [
     {
       id: 'camera',
-      title: 'Take Photo',
-      subtitle: 'Capture crop image',
+      title: t('takePhoto'),
+      subtitle: t('captureImage'),
       icon: Camera,
       color: '#059669',
-<<<<<<< HEAD
       gradient: ['#059669', '#10b981'] as const,
-      onPress: () => router.push('/crop-selection?imageSource=camera'),
-=======
-      gradient: ['#059669', '#10b981'],
       onPress: () => router.push('/scan'),
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
     },
     {
       id: 'gallery',
-      title: 'From Gallery',
-      subtitle: 'Select existing photo',
+      title: t('fromGallery'),
+      subtitle: t('selectExisting'),
       icon: ImageIcon,
       color: '#2563eb',
-<<<<<<< HEAD
       gradient: ['#2563eb', '#3b82f6'] as const,
-      onPress: () => router.push('/crop-selection?imageSource=gallery'),
-=======
-      gradient: ['#2563eb', '#3b82f6'],
       onPress: () => router.push('/scan'),
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
     },
   ];
 
   const features = [
     {
       icon: Leaf,
-      title: 'Disease Detection',
-      description: 'AI-powered identification of crop diseases and pests with 95% accuracy',
+      title: t('diseaseDetection'),
+      description: t('diseaseDetectionDesc'),
       color: '#059669',
     },
     {
       icon: Shield,
-      title: 'Instant Analysis',
-      description: 'Get results in seconds with detailed treatment recommendations',
+      title: t('instantAnalysis'),
+      description: t('instantAnalysisDesc'),
       color: '#2563eb',
     },
     {
       icon: TrendingUp,
-      title: 'Smart Insights',
-      description: 'Track crop health trends and receive personalized care tips',
+      title: t('treatmentRecommendations'),
+      description: t('treatmentRecommendationsDesc'),
       color: '#7c3aed',
     },
   ];
 
   const stats = [
-    { label: 'Scans Today', value: '12', icon: Sun, color: '#f59e0b' },
-    { label: 'Healthy Plants', value: '89%', icon: Leaf, color: '#059669' },
-    { label: 'Success Rate', value: '95%', icon: Award, color: '#dc2626' },
+    { label: t('scansToday'), value: '12', icon: Sun, color: '#f59e0b' },
+    { label: t('healthyPlants'), value: '89%', icon: Leaf, color: '#059669' },
+    {
+      label: t('waterLevel'),
+      value: t('good'),
+      icon: Droplets,
+      color: '#2563eb',
+    },
   ];
 
   return (
@@ -120,11 +150,10 @@ export default function HomeScreen() {
       >
         <View style={styles.headerContent}>
           <View>
-            <Text style={styles.welcomeText}>Welcome to</Text>
-            <Text style={styles.appTitle}>Agrisol</Text>
-            <Text style={styles.subtitle}>AI-Powered Crop Health Monitor</Text>
+            <Text style={styles.welcomeText}>{t('welcomeToAgrisol')}</Text>
+            <Text style={styles.appTitle}>{t('appTitle')}</Text>
+            <Text style={styles.subtitle}>{t('appSubtitle')}</Text>
           </View>
-<<<<<<< HEAD
           <View style={styles.headerActions}>
             <View style={styles.logoContainer}>
               <Leaf size={40} color="#ffffff" strokeWidth={2} />
@@ -135,17 +164,13 @@ export default function HomeScreen() {
             >
               <LogOut size={20} color="#ffffff" strokeWidth={2} />
             </TouchableOpacity>
-=======
-          <View style={styles.logoContainer}>
-            <Leaf size={40} color="#ffffff" strokeWidth={2} />
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
           </View>
         </View>
       </LinearGradient>
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Scan</Text>
+        <Text style={styles.sectionTitle}>{t('quickScan')}</Text>
         <View style={styles.actionsContainer}>
           {quickActions.map((action) => (
             <TouchableOpacity
@@ -172,11 +197,16 @@ export default function HomeScreen() {
 
       {/* Stats Cards */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Today's Overview</Text>
+        <Text style={styles.sectionTitle}>{t('todaysOverview')}</Text>
         <View style={styles.statsContainer}>
           {stats.map((stat, index) => (
             <View key={index} style={styles.statCard}>
-              <View style={[styles.statIconContainer, { backgroundColor: `${stat.color}20` }]}>
+              <View
+                style={[
+                  styles.statIconContainer,
+                  { backgroundColor: `${stat.color}20` },
+                ]}
+              >
                 <stat.icon size={24} color={stat.color} strokeWidth={2} />
               </View>
               <Text style={styles.statValue}>{stat.value}</Text>
@@ -188,10 +218,15 @@ export default function HomeScreen() {
 
       {/* Features */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>How It Works</Text>
+        <Text style={styles.sectionTitle}>{t('howItWorks')}</Text>
         {features.map((feature, index) => (
           <View key={index} style={styles.featureCard}>
-            <View style={[styles.featureIconContainer, { backgroundColor: `${feature.color}20` }]}>
+            <View
+              style={[
+                styles.featureIconContainer,
+                { backgroundColor: `${feature.color}20` },
+              ]}
+            >
               <feature.icon size={24} color={feature.color} strokeWidth={2} />
             </View>
             <View style={styles.featureContent}>
@@ -206,7 +241,7 @@ export default function HomeScreen() {
 
       {/* Sample Detection */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Sample Detection</Text>
+        <Text style={styles.sectionTitle}>{t('sampleDetection')}</Text>
         <View style={styles.sampleCard}>
           <Image
             source={{
@@ -216,14 +251,14 @@ export default function HomeScreen() {
           />
           <View style={styles.sampleContent}>
             <View style={styles.sampleHeader}>
-              <Text style={styles.sampleTitle}>Healthy Tomato Plant</Text>
+              <Text style={styles.sampleTitle}>{t('healthyTomatoPlant')}</Text>
               <View style={styles.confidenceBadge}>
-                <Zap size={12} color="#ffffff" strokeWidth={2} />
+                <Award size={12} color="#ffffff" strokeWidth={2} />
                 <Text style={styles.confidenceText}>94%</Text>
               </View>
             </View>
             <Text style={styles.sampleDescription}>
-              Your plant appears healthy. Continue with regular maintenance and monitoring for optimal growth.
+              {t('healthyPlantDesc')}
             </Text>
           </View>
         </View>
@@ -269,10 +304,20 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginTop: 4,
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   logoContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 20,
     padding: 12,
+  },
+  signOutButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 16,
+    padding: 8,
   },
   section: {
     paddingHorizontal: 20,
@@ -323,7 +368,7 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     backgroundColor: '#ffffff',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     alignItems: 'center',
     elevation: 2,
@@ -341,20 +386,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1f2937',
-    marginTop: 4,
+    marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
     color: '#6b7280',
-    marginTop: 4,
     textAlign: 'center',
   },
   featureCard: {
-    flexDirection: 'row',
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 20,
     marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -362,10 +407,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   featureIconContainer: {
-    borderRadius: 10,
-    padding: 8,
+    borderRadius: 12,
+    padding: 12,
     marginRight: 16,
-    alignSelf: 'flex-start',
   },
   featureContent: {
     flex: 1,
@@ -385,18 +429,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 16,
     overflow: 'hidden',
-    elevation: 4,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
   },
   sampleImage: {
     width: '100%',
-    height: 200,
+    height: 180,
+    resizeMode: 'cover',
   },
   sampleContent: {
-    padding: 16,
+    padding: 20,
   },
   sampleHeader: {
     flexDirection: 'row',
@@ -405,13 +450,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   sampleTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#1f2937',
   },
   confidenceBadge: {
     backgroundColor: '#059669',
-    borderRadius: 8,
+    borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
     flexDirection: 'row',

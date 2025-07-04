@@ -9,6 +9,7 @@ import {
   Linking,
   Share,
   Switch,
+  Modal,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -22,7 +23,6 @@ import {
   Star,
   Share2,
   ChevronRight,
-<<<<<<< HEAD
   Check,
   X,
   Moon,
@@ -45,11 +45,6 @@ export default function SettingsScreen() {
     setShowLanguageModal(false);
   };
 
-=======
-} from 'lucide-react-native';
-
-export default function SettingsScreen() {
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
   const handleRateApp = () => {
     Alert.alert(
       'Rate App',
@@ -79,17 +74,9 @@ export default function SettingsScreen() {
     )}&body=${encodeURIComponent(body)}`;
 
     Linking.openURL(mailtoUrl).catch(() => {
-<<<<<<< HEAD
       Alert.alert(t('contact'), `Please send an email to: ${email}`, [
         { text: t('ok') },
       ]);
-=======
-      Alert.alert(
-        'Contact',
-        `Please send an email to: ${email}`,
-        [{ text: 'OK' }]
-      );
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
     });
   };
 
@@ -121,57 +108,41 @@ export default function SettingsScreen() {
     },
     {
       id: 'language',
-      title: 'Language',
-      subtitle: 'English',
+      title: t('language'),
+      subtitle: currentLanguage.name,
       icon: Globe,
-      onPress: () => Alert.alert('Language', 'Language selection coming soon!'),
+      onPress: () => setShowLanguageModal(true),
       showChevron: true,
     },
     {
       id: 'about',
-      title: 'About',
+      title: t('about'),
       subtitle: 'Version 1.0.0',
       icon: Info,
-<<<<<<< HEAD
       onPress: () =>
         Alert.alert(
           t('about'),
           'Agrisol - AI-Powered Precision Agriculture System for Sustainable Crop Management in Rwanda\n\nDeveloped by: Davy Mbuto Nkurunziza\nVersion: 1.0.0 (MVP)',
           [{ text: t('close') }]
         ),
-=======
-      onPress: () => Alert.alert(
-        'About',
-        'Agrisol - AI-Powered Precision Agriculture System for Sustainable Crop Management\n\nDeveloped by: Davy Mbuto Nkurunziza\nVersion: 1.0.0 (MVP)',
-        [{ text: 'Close' }]
-      ),
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
       showChevron: true,
     },
     {
       id: 'developer',
-      title: 'Developer',
+      title: t('developer'),
       subtitle: 'Davy Mbuto Nkurunziza',
       icon: User,
-<<<<<<< HEAD
       onPress: () =>
         Alert.alert(
           t('developer'),
           'Davy Mbuto Nkurunziza\nSoftware Engineer & AI Enthusiast\n\nSpecializing in precision agriculture and sustainable farming solutions.',
           [{ text: t('close') }]
         ),
-=======
-      onPress: () => Alert.alert(
-        'Developer',
-        'Davy Mbuto Nkurunziza\nSoftware Engineer & AI Enthusiast\n\nSpecializing in precision agriculture and sustainable farming solutions.',
-        [{ text: 'Close' }]
-      ),
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
       showChevron: true,
     },
     {
       id: 'contact',
-      title: 'Contact',
+      title: t('contact'),
       subtitle: 'support@agrisol.app',
       icon: Mail,
       onPress: handleContact,
@@ -179,32 +150,32 @@ export default function SettingsScreen() {
     },
     {
       id: 'privacy',
-      title: 'Privacy Policy',
-      subtitle: 'Data protection & privacy',
+      title: t('privacy'),
+      subtitle: t('privacySubtitle'),
       icon: Shield,
       onPress: handlePrivacyPolicy,
       showChevron: true,
     },
     {
       id: 'terms',
-      title: 'Terms of Service',
-      subtitle: 'Terms & conditions',
+      title: t('terms'),
+      subtitle: t('termsSubtitle'),
       icon: FileText,
       onPress: handleTermsOfService,
       showChevron: true,
     },
     {
       id: 'rate',
-      title: 'Rate App',
-      subtitle: 'Help us improve',
+      title: t('rateApp'),
+      subtitle: t('rateAppSubtitle'),
       icon: Star,
       onPress: handleRateApp,
       showChevron: true,
     },
     {
       id: 'share',
-      title: 'Share App',
-      subtitle: 'Tell your friends',
+      title: t('shareApp'),
+      subtitle: t('shareAppSubtitle'),
       icon: Share2,
       onPress: handleShareApp,
       showChevron: true,
@@ -219,8 +190,8 @@ export default function SettingsScreen() {
       {/* Header */}
       <LinearGradient colors={['#374151', '#4b5563']} style={styles.header}>
         <SettingsIcon size={32} color="#ffffff" strokeWidth={2} />
-        <Text style={styles.title}>Settings</Text>
-        <Text style={styles.subtitle}>Customize your Agrisol experience</Text>
+        <Text style={styles.title}>{t('settings')}</Text>
+        <Text style={styles.subtitle}>{t('settingsSubtitle')}</Text>
       </LinearGradient>
 
       {/* Settings Options */}
@@ -285,17 +256,16 @@ export default function SettingsScreen() {
           Agrisol
         </Text>
         <Text style={[styles.appInfoSubtitle, { color: colors.textSecondary }]}>
-          AI-Powered Crop Health Monitor
+          {t('appSubtitle')}
         </Text>
         <Text style={[styles.appInfoVersion, { color: colors.textMuted }]}>
           Version 1.0.0 (MVP)
         </Text>
         <Text style={[styles.appInfoCopyright, { color: colors.textMuted }]}>
-          © 2024 Davy Mbuto Nkurunziza. All rights reserved.
+          © 2025 Davy Mbuto Nkurunziza. All rights reserved.
         </Text>
       </View>
 
-<<<<<<< HEAD
       {/* Language Selection Modal */}
       <Modal
         visible={showLanguageModal}
@@ -360,8 +330,6 @@ export default function SettingsScreen() {
         </View>
       </Modal>
 
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
       <View style={styles.bottomSpacing} />
     </ScrollView>
   );
@@ -446,7 +414,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
   },
-<<<<<<< HEAD
   modalOverlay: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -497,8 +464,6 @@ const styles = StyleSheet.create({
   languageNativeName: {
     fontSize: 14,
   },
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
   bottomSpacing: {
     height: 20,
   },

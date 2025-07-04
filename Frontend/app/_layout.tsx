@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Stack, router, useRootNavigationState } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
-<<<<<<< HEAD
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -45,14 +44,11 @@ function RootLayoutNav() {
     </Stack>
   );
 }
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
 
 export default function RootLayout() {
   useFrameworkReady();
 
   return (
-<<<<<<< HEAD
     <ThemeProvider>
       <AuthProvider>
         <LanguageProvider>
@@ -61,14 +57,5 @@ export default function RootLayout() {
         </LanguageProvider>
       </AuthProvider>
     </ThemeProvider>
-=======
-    <>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </>
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
   );
 }

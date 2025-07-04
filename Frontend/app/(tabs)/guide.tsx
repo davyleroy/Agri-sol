@@ -6,18 +6,24 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BookOpen, Leaf, Droplets, Sun, Bug, Shield, Calendar, CircleAlert as AlertCircle, CircleCheck as CheckCircle } from 'lucide-react-native';
+import {
+  BookOpen,
+  AlertCircle,
+  CheckCircle,
+  Calendar,
+  Droplets,
+  Sun,
+  Leaf,
+  Bug,
+} from 'lucide-react-native';
 
 export default function GuideScreen() {
-  const [selectedCategory, setSelectedCategory] = useState('diseases');
-
-  const categories = [
-    { id: 'diseases', label: 'Diseases', icon: AlertCircle },
-    { id: 'care', label: 'Care Tips', icon: Leaf },
-    { id: 'calendar', label: 'Planting', icon: Calendar },
-  ];
+  const [activeTab, setActiveTab] = useState<'diseases' | 'tips' | 'calendar'>(
+    'diseases',
+  );
 
   const diseases = [
     {
@@ -26,15 +32,19 @@ export default function GuideScreen() {
       crop: 'Tomato, Potato',
       severity: 'High',
       image:
-        'https://images.pexels.com/photos/1153655/pexels-photo-1153655.jpeg?auto=compress&cs=tinysrgb&w=300',
-      symptoms: ['Dark spots on leaves', 'Yellowing around spots', 'Leaf drop'],
+        'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
+      symptoms: [
+        'Brown spots with concentric rings',
+        'Yellowing leaves',
+        'Fruit rot',
+      ],
       treatment: 'Apply copper-based fungicide, remove affected leaves',
-      prevention: 'Ensure good air circulation, avoid overhead watering',
+      prevention: 'Crop rotation, proper spacing, avoid overhead watering',
     },
     {
       id: '2',
       name: 'Powdery Mildew',
-      crop: 'Various crops',
+      crop: 'Cucumber, Squash',
       severity: 'Medium',
       image:
         'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
@@ -42,7 +52,6 @@ export default function GuideScreen() {
       treatment: 'Apply sulfur-based fungicide, improve ventilation',
       prevention: 'Plant resistant varieties, maintain proper spacing',
     },
-<<<<<<< HEAD
     {
       id: '3',
       name: 'Bacterial Spot',
@@ -54,8 +63,6 @@ export default function GuideScreen() {
       treatment: 'Use copper sprays, remove infected plants',
       prevention: 'Use certified seeds, practice crop rotation',
     },
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
   ];
 
   const careTips = [
@@ -96,7 +103,6 @@ export default function GuideScreen() {
       crops: ['Peas', 'Onions', 'Carrots'],
       activities: ['Start seeds indoors', 'Prune fruit trees'],
     },
-<<<<<<< HEAD
     {
       month: 'March',
       crops: ['Tomatoes', 'Peppers', 'Herbs'],
@@ -107,8 +113,6 @@ export default function GuideScreen() {
       crops: ['Beans', 'Potatoes', 'Squash', 'Corn'],
       activities: ['Direct sow warm crops', 'Install supports'],
     },
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
   ];
 
   const getSeverityColor = (severity: string) => {
@@ -159,14 +163,11 @@ export default function GuideScreen() {
               <Text style={styles.sectionTitle}>Treatment:</Text>
               <Text style={styles.treatmentText}>{disease.treatment}</Text>
             </View>
-<<<<<<< HEAD
 
             <View style={styles.diseaseSection}>
               <Text style={styles.sectionTitle}>Prevention:</Text>
               <Text style={styles.preventionText}>{disease.prevention}</Text>
             </View>
-=======
->>>>>>> a0a198d86a51ddfc6a3508925e25759d5eefef86
           </View>
         </View>
       ))}
@@ -237,10 +238,10 @@ export default function GuideScreen() {
   );
 
   const renderContent = () => {
-    switch (selectedCategory) {
+    switch (activeTab) {
       case 'diseases':
         return renderDiseases();
-      case 'care':
+      case 'tips':
         return renderCareTips();
       case 'calendar':
         return renderCalendar();
@@ -249,8 +250,14 @@ export default function GuideScreen() {
     }
   };
 
+  const tabs = [
+    { id: 'diseases', label: 'Diseases', icon: Bug },
+    { id: 'tips', label: 'Care Tips', icon: Leaf },
+    { id: 'calendar', label: 'Planting', icon: Calendar },
+  ];
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <LinearGradient colors={['#059669', '#10b981']} style={styles.header}>
         <BookOpen size={32} color="#ffffff" strokeWidth={2} />
@@ -260,39 +267,42 @@ export default function GuideScreen() {
         </Text>
       </LinearGradient>
 
-      {/* Category Tabs */}
-      <View style={styles.tabsContainer}>
-        {categories.map((category) => (
+      {/* Tab Navigation */}
+      <View style={styles.tabContainer}>
+        {tabs.map((tab) => (
           <TouchableOpacity
-            key={category.id}
-            style={[
-              styles.tab,
-              selectedCategory === category.id && styles.activeTab,
-            ]}
-            onPress={() => setSelectedCategory(category.id)}
+            key={tab.id}
+            style={[styles.tab, activeTab === tab.id && styles.activeTab]}
+            onPress={() =>
+              setActiveTab(tab.id as 'diseases' | 'tips' | 'calendar')
+            }
           >
-            <category.icon
+            <tab.icon
               size={20}
-              color={selectedCategory === category.id ? '#ffffff' : '#6b7280'}
+              color={activeTab === tab.id ? '#ffffff' : '#6b7280'}
               strokeWidth={2}
             />
             <Text
               style={[
                 styles.tabText,
-                selectedCategory === category.id && styles.activeTabText,
+                activeTab === tab.id && styles.activeTabText,
               ]}
             >
-              {category.label}
+              {tab.label}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
       {/* Content */}
-      {renderContent()}
-
-      <View style={styles.bottomSpacing} />
-    </ScrollView>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        {renderContent()}
+        <View style={styles.bottomSpacing} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -302,10 +312,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
   },
   header: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 30,
     alignItems: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 20,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
@@ -314,18 +323,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     marginTop: 12,
-    marginBottom: 4,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     color: '#ffffff',
-    opacity: 0.8,
+    opacity: 0.9,
+    marginTop: 8,
+    textAlign: 'center',
   },
-  tabsContainer: {
+  tabContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    backgroundColor: '#ffffff',
+    marginHorizontal: 20,
     marginTop: 20,
-    gap: 8,
+    borderRadius: 12,
+    padding: 4,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   tab: {
     flex: 1,
@@ -333,9 +351,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: '#ffffff',
-    gap: 6,
+    borderRadius: 8,
+    gap: 8,
   },
   activeTab: {
     backgroundColor: '#059669',
@@ -348,24 +365,27 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: '#ffffff',
   },
+  scrollView: {
+    flex: 1,
+  },
   contentContainer: {
-    paddingHorizontal: 20,
-    marginTop: 20,
+    padding: 20,
   },
   diseaseCard: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
     marginBottom: 16,
     overflow: 'hidden',
-    elevation: 4,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 4,
   },
   diseaseImage: {
     width: '100%',
-    height: 120,
+    height: 150,
+    resizeMode: 'cover',
   },
   diseaseContent: {
     padding: 16,
@@ -380,9 +400,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#1f2937',
+    flex: 1,
   },
   severityBadge: {
-    borderRadius: 8,
+    borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
@@ -400,24 +421,30 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#374151',
-    marginBottom: 6,
+    color: '#1f2937',
+    marginBottom: 8,
   },
   symptomItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 4,
-    gap: 6,
+    gap: 8,
   },
   symptomText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#374151',
+    flex: 1,
   },
   treatmentText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#374151',
+    lineHeight: 20,
+  },
+  preventionText: {
+    fontSize: 14,
+    color: '#374151',
     lineHeight: 20,
   },
   tipCard: {
@@ -428,21 +455,21 @@ const styles = StyleSheet.create({
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   tipHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 12,
   },
   tipIconContainer: {
     borderRadius: 12,
     padding: 8,
+    marginRight: 12,
   },
   tipTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#1f2937',
   },
@@ -456,7 +483,7 @@ const styles = StyleSheet.create({
   },
   tipText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#374151',
     flex: 1,
   },
   calendarCard: {
@@ -467,36 +494,36 @@ const styles = StyleSheet.create({
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   calendarHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 8,
   },
   calendarMonth: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#1f2937',
+    marginLeft: 8,
   },
   calendarSection: {
     marginBottom: 12,
   },
   calendarSectionTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#374151',
+    color: '#1f2937',
     marginBottom: 8,
   },
   cropsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
+    gap: 8,
   },
   cropTag: {
-    backgroundColor: '#ecfdf5',
+    backgroundColor: '#f0fdf4',
     borderRadius: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -504,17 +531,18 @@ const styles = StyleSheet.create({
   cropText: {
     fontSize: 12,
     color: '#059669',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   activityItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 4,
-    gap: 6,
+    gap: 8,
   },
   activityText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#374151',
+    flex: 1,
   },
   bottomSpacing: {
     height: 20,
