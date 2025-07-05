@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/mbuto/Agri-sol/agrisol",
-      "program": "c:/Users/mbuto/Agri-sol/agrisol/build/Debug/outDebug",
+      "cwd": "c:/Users/mbuto/Agri-sol/Backend",
+      "program": "c:/Users/mbuto/Agri-sol/Backend/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

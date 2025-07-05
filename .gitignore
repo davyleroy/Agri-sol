@@ -3,3 +3,4 @@ Dataset/
 Dataset/*.jpg
 Notebook/*.h5
 Notebook/*.pkl
+.venv/

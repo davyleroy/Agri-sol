@@ -1,0 +1,395 @@
+{
+  "timestamp": "2025-07-05T01:55:45.282087",
+  "tensorflow_info": {
+    "version": "2.19.0",
+    "gpu_available": false,
+    "gpu_devices": [],
+    "cpu_devices": [
+      "/physical_device:CPU:0"
+    ],
+    "memory_growth_enabled": false
+  },
+  "model_status": {
+    "tomatoes": {
+      "primary_model": {
+        "path": "..\\Notebook\\tomato_disease_best_model_fixed.h5",
+        "size_mb": 0.5652542114257812,
+        "exists": true,
+        "success": true,
+        "load_time": 0.37006664276123047,
+        "load_method": "h5_standard",
+        "input_shape": [
+          null,
+          256,
+          256,
+          3
+        ],
+        "output_shape": [
+          null,
+          10
+        ],
+        "total_params": 41770,
+        "trainable_params": "41290",
+        "layers": 19,
+        "optimizer": "Adam",
+        "prediction_time": 0.5125081539154053,
+        "prediction_shape": [
+          1,
+          10
+        ],
+        "max_prediction": 1.0,
+        "predicted_class": 9,
+        "class_count_valid": true
+      },
+      "alternative_models": [
+        {
+          "path": "..\\Notebook\\tomato_disease_best_model.h5",
+          "size_mb": 16.677597045898438,
+          "exists": true,
+          "success": true,
+          "load_time": 0.6405327320098877,
+          "load_method": "h5_standard",
+          "input_shape": [
+            null,
+            256,
+            256,
+            3
+          ],
+          "output_shape": [
+            null,
+            10
+          ],
+          "total_params": 1444650,
+          "trainable_params": "1441194",
+          "layers": 30,
+          "optimizer": "Adam",
+          "prediction_time": 0.5015528202056885,
+          "prediction_shape": [
+            1,
+            10
+          ],
+          "max_prediction": 0.9999996423721313,
+          "predicted_class": 5,
+          "class_count_valid": true
+        },
+        {
+          "path": "..\\Notebook\\tomato_transfer_best.h5",
+          "size_mb": 20.12127685546875,
+          "exists": true,
+          "success": true,
+          "load_time": 1.650418758392334,
+          "load_method": "h5_standard",
+          "input_shape": [
+            null,
+            256,
+            256,
+            3
+          ],
+          "output_shape": [
+            null,
+            10
+          ],
+          "total_params": 4417837,
+          "trainable_params": "365194",
+          "layers": 14,
+          "optimizer": "Adam",
+          "prediction_time": 2.9638421535491943,
+          "prediction_shape": [
+            1,
+            10
+          ],
+          "max_prediction": 0.10164017975330353,
+          "predicted_class": 3,
+          "class_count_valid": true
+        }
+      ],
+      "working_model": {
+        "path": "..\\Notebook\\tomato_disease_best_model_fixed.h5",
+        "size_mb": 0.5652542114257812,
+        "exists": true,
+        "success": true,
+        "load_time": 0.37006664276123047,
+        "load_method": "h5_standard",
+        "input_shape": [
+          null,
+          256,
+          256,
+          3
+        ],
+        "output_shape": [
+          null,
+          10
+        ],
+        "total_params": 41770,
+        "trainable_params": "41290",
+        "layers": 19,
+        "optimizer": "Adam",
+        "prediction_time": 0.5125081539154053,
+        "prediction_shape": [
+          1,
+          10
+        ],
+        "max_prediction": 1.0,
+        "predicted_class": 9,
+        "class_count_valid": true
+      },
+      "error": null
+    },
+    "potatoes": {
+      "primary_model": {
+        "path": "..\\Notebook\\potato_disease_model_best.keras",
+        "size_mb": 59.2426872253418,
+        "exists": true
+      },
+      "alternative_models": [
+        {
+          "path": "..\\Notebook\\nuclear_potato_model.keras",
+          "size_mb": 0.09848976135253906,
+          "exists": true,
+          "success": true,
+          "load_time": 0.1251354217529297,
+          "load_method": "keras_no_compile",
+          "input_shape": [
+            null,
+            224,
+            224,
+            3
+          ],
+          "output_shape": [
+            null,
+            3
+          ],
+          "total_params": 4723,
+          "trainable_params": "4723",
+          "layers": 11,
+          "optimizer": "Unknown",
+          "prediction_time": 0.1612541675567627,
+          "prediction_shape": [
+            1,
+            3
+          ],
+          "max_prediction": 0.4284956455230713,
+          "predicted_class": 0,
+          "class_count_valid": true
+        },
+        {
+          "path": "..\\Notebook\\agrisol_potato_model.keras",
+          "size_mb": 0.5334367752075195,
+          "exists": true,
+          "success": true,
+          "load_time": 0.16696691513061523,
+          "load_method": "keras_no_compile",
+          "input_shape": [
+            null,
+            256,
+            256,
+            3
+          ],
+          "output_shape": [
+            null,
+            3
+          ],
+          "total_params": 127507,
+          "trainable_params": "127507",
+          "layers": 14,
+          "optimizer": "Unknown",
+          "prediction_time": 0.20235300064086914,
+          "prediction_shape": [
+            1,
+            3
+          ],
+          "max_prediction": 0.44497403502464294,
+          "predicted_class": 2,
+          "class_count_valid": true
+        },
+        {
+          "path": "..\\Notebook\\sweet_spot_potato_model.keras",
+          "size_mb": 0.35736846923828125,
+          "exists": true,
+          "success": true,
+          "load_time": 0.1663649082183838,
+          "load_method": "keras_no_compile",
+          "input_shape": [
+            null,
+            224,
+            224,
+            3
+          ],
+          "output_shape": [
+            null,
+            3
+          ],
+          "total_params": 26531,
+          "trainable_params": "26531",
+          "layers": 14,
+          "optimizer": "Unknown",
+          "prediction_time": 0.22396540641784668,
+          "prediction_shape": [
+            1,
+            3
+          ],
+          "max_prediction": 0.37268370389938354,
+          "predicted_class": 0,
+          "class_count_valid": true
+        }
+      ],
+      "working_model": {
+        "path": "..\\Notebook\\nuclear_potato_model.keras",
+        "size_mb": 0.09848976135253906,
+        "exists": true,
+        "success": true,
+        "load_time": 0.1251354217529297,
+        "load_method": "keras_no_compile",
+        "input_shape": [
+          null,
+          224,
+          224,
+          3
+        ],
+        "output_shape": [
+          null,
+          3
+        ],
+        "total_params": 4723,
+        "trainable_params": "4723",
+        "layers": 11,
+        "optimizer": "Unknown",
+        "prediction_time": 0.1612541675567627,
+        "prediction_shape": [
+          1,
+          3
+        ],
+        "max_prediction": 0.4284956455230713,
+        "predicted_class": 0,
+        "class_count_valid": true
+      },
+      "error": "Input 0 of layer \"functional_2\" is incompatible with the layer: expected shape=(None, 224, 224, 3), found shape=(1, 256, 256, 3)"
+    },
+    "maize": {
+      "primary_model": {
+        "path": "..\\Notebook\\corn_gentle_v3.h5",
+        "size_mb": 0.26569366455078125,
+        "exists": true
+      },
+      "alternative_models": [
+        {
+          "path": "..\\Notebook\\corn_antibias_v2.h5",
+          "size_mb": 0.33358001708984375,
+          "exists": true,
+          "success": false,
+          "error": "string indices must be integers, not 'str'",
+          "error_type": "TypeError"
+        },
+        {
+          "path": "..\\Notebook\\corn_disease_balanced_model.h5",
+          "exists": false
+        },
+        {
+          "path": "..\\Notebook\\best_plant_disease_model.h5",
+          "exists": false
+        }
+      ],
+      "working_model": null,
+      "error": "string indices must be integers, not 'str'"
+    },
+    "beans": {
+      "primary_model": {
+        "path": "..\\Notebook\\bean_disease_model_best.keras",
+        "size_mb": 59.236820220947266,
+        "exists": true
+      },
+      "alternative_models": [
+        {
+          "path": "..\\Notebook\\bean_disease_model_best.h5",
+          "size_mb": 59.2489013671875,
+          "exists": true,
+          "success": false,
+          "error": "Input 0 of layer \"functional\" is incompatible with the layer: expected shape=(None, 224, 224, 3), found shape=(1, 256, 256, 3)",
+          "error_type": "ValueError"
+        },
+        {
+          "path": "..\\Notebook\\tomato_disease_best_model_fixed.h5",
+          "size_mb": 0.5652542114257812,
+          "exists": true,
+          "success": true,
+          "load_time": 0.2572958469390869,
+          "load_method": "h5_standard",
+          "input_shape": [
+            null,
+            256,
+            256,
+            3
+          ],
+          "output_shape": [
+            null,
+            10
+          ],
+          "total_params": 41770,
+          "trainable_params": "41290",
+          "layers": 19,
+          "optimizer": "Adam",
+          "prediction_time": 0.2435777187347412,
+          "prediction_shape": [
+            1,
+            10
+          ],
+          "max_prediction": 1.0,
+          "predicted_class": 9,
+          "class_count_valid": false,
+          "class_count_mismatch": "Expected 3, got 10"
+        }
+      ],
+      "working_model": {
+        "path": "..\\Notebook\\tomato_disease_best_model_fixed.h5",
+        "size_mb": 0.5652542114257812,
+        "exists": true,
+        "success": true,
+        "load_time": 0.2572958469390869,
+        "load_method": "h5_standard",
+        "input_shape": [
+          null,
+          256,
+          256,
+          3
+        ],
+        "output_shape": [
+          null,
+          10
+        ],
+        "total_params": 41770,
+        "trainable_params": "41290",
+        "layers": 19,
+        "optimizer": "Adam",
+        "prediction_time": 0.2435777187347412,
+        "prediction_shape": [
+          1,
+          10
+        ],
+        "max_prediction": 1.0,
+        "predicted_class": 9,
+        "class_count_valid": false,
+        "class_count_mismatch": "Expected 3, got 10"
+      },
+      "error": "Input 0 of layer \"functional\" is incompatible with the layer: expected shape=(None, 224, 224, 3), found shape=(1, 256, 256, 3)"
+    }
+  },
+  "suggestions": {
+    "tomatoes": [],
+    "potatoes": [],
+    "maize": [
+      "Temporarily use tomatoes model as fallback"
+    ],
+    "beans": [
+      "Verify model was trained for correct number of classes",
+      "Check disease class mappings in config"
+    ]
+  },
+  "summary": {
+    "total_crops": 4,
+    "working_models": 3,
+    "failed_models": 1,
+    "gpu_available": false,
+    "tensorflow_version": "2.19.0",
+    "health_score": 75.0
+  }
+}
