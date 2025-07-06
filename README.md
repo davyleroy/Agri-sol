@@ -158,6 +158,20 @@ npx expo start
 - **API Documentation**: `http://localhost:5000/docs`
 - **API Testing**: `http://localhost:5000/test`
 
+### Try AgriSol Now!
+
+Want to test AgriSol immediately? Use the Expo Go app on your mobile device:
+
+[![Expo Go](https://img.shields.io/badge/📱_Try_AgriSol-Expo_Go-blue?style=for-the-badge&logo=expo)](https://expo.dev/preview/update?message=Revert%20tensorflow%20version%20to%202.15.0%20in%20requirements.txt&updateRuntimeVersion=1.0.0&createdAt=2025-07-06T19%3A48%3A35.065Z&slug=exp&projectId=0f83e1d2-ed15-4dd4-8fb7-87f7ea7e0f25&group=f3a90702-e0c2-4e7d-898d-c1b5a5ab7c8b)
+
+**How to use:**
+
+1. Install [Expo Go](https://expo.dev/client) on your mobile device
+2. Tap the link above or scan the QR code
+3. 🌱 Start detecting plant diseases immediately!
+
+_Note: The app requires the backend server to be running for full functionality. For a complete demo, follow the setup instructions above._
+
 ## 📱 Frontend Setup
 
 ### Installation
