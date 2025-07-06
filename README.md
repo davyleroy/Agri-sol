@@ -21,6 +21,56 @@ Watch AgriSol in action! See how farmers can easily detect plant diseases and ge
 - 💼 Admin dashboard features
 - 🌍 Multi-language support (English/Kinyarwanda)
 
+## 📱 App Screenshots
+
+### 🌱 Home & Navigation
+
+![AgriSol Home Screen](Video%20mockup/Pictures/Regualr%20home.jpg)
+_Main home screen with navigation and quick access to key features_
+
+### 🔐 Authentication
+
+![Login Screen](Video%20mockup/Pictures/Login%20place.jpg)
+_User login interface with secure authentication_
+
+![Sign-up Screen](Video%20mockup/Pictures/Full%20sign-up.jpg)
+_User registration with comprehensive form_
+
+![Kinyarwanda Sign-up](Video%20mockup/Pictures/Sign-up%20Kinyarwanda.jpg)
+_Multi-language support - Sign-up in Kinyarwanda_
+
+### 🌱 Plant Disease Detection
+
+![Crop Selection](Video%20mockup/Pictures/Crop%20selection%20before%20scan.jpg)
+_Crop type selection before scanning_
+
+![Scan Interface](Video%20mockup/Pictures/Scan%20page.jpg)
+_Camera interface for capturing plant images_
+
+![Plant Analysis Results](Video%20mockup/Pictures/Plant%20view.jpg)
+_Disease detection results with treatment recommendations_
+
+### 📊 History & Analytics
+
+![Scan History](Video%20mockup/Pictures/Scan%20history.jpg)
+_Complete history of all plant scans and results_
+
+### 🤖 User Experience
+
+![Dark Mode](Video%20mockup/Pictures/Dark%20mode%20toggle.jpg)
+_Dark mode toggle for better user experience_
+
+![Settings](Video%20mockup/Pictures/settings.jpg)
+_User settings and preferences_
+
+![Crop Care Guide](Video%20mockup/Pictures/crop%20Carring%20guide.jpg)
+_Comprehensive crop care and treatment guide_
+
+### 🤖 Admin Dashboard
+
+![Admin Panel](Video%20mockup/Pictures/Admin%20Info.jpg)
+_Administrative dashboard with analytics and user management_
+
 ## 📋 Table of Contents
 
 - [🎯 Project Overview](#-project-overview)
