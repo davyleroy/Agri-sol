@@ -7,6 +7,20 @@
 
 **AgriSol** is a comprehensive mobile application designed for agricultural disease detection and monitoring, specifically tailored for farmers in Rwanda. The system combines AI-powered plant disease detection with advanced location analytics and administrative dashboard capabilities.
 
+## 🎬 Demo Video
+
+Watch AgriSol in action! See how farmers can easily detect plant diseases and get treatment recommendations:
+
+[![AgriSol Demo](https://img.shields.io/badge/📹_Watch_Demo-Video-blue?style=for-the-badge&logo=youtube)](https://drive.google.com/file/d/11l0kAVQWxtTgfcdfy6jIcC517kcvxMWl/view?usp=sharing)
+
+**Demo Highlights:**
+
+- 📱 Mobile app interface walkthrough
+- 🔍 Real-time plant disease detection
+- 📍 Location-based analytics
+- 💼 Admin dashboard features
+- 🌍 Multi-language support (English/Kinyarwanda)
+
 ## 📋 Table of Contents
 
 - [🎯 Project Overview](#-project-overview)

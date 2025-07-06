@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AgriSol",
-    "slug": "agrisol-crop-health",
+    "slug": "agri-sol",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -22,7 +22,13 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.agrisol.crophealth"
+      "package": "com.agrisol.crophealth",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -40,7 +46,18 @@
       "typedRoutes": true
     },
     "extra": {
-      "adminEmail": "d.nkurunziz@alustudent.com"
+      "adminEmail": "d.nkurunziz@alustudent.com",
+      "router": {},
+      "eas": {
+        "projectId": "0f83e1d2-ed15-4dd4-8fb7-87f7ea7e0f25"
+      }
+    },
+    "owner": "davyleroy",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/0f83e1d2-ed15-4dd4-8fb7-87f7ea7e0f25"
     }
   }
 }
