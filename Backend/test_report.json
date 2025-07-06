@@ -1,0 +1,89 @@
+{
+  "test_run": {
+    "start_time": "2025-07-05T23:23:21.245175",
+    "end_time": "2025-07-05T23:24:06.487350",
+    "duration_seconds": 45.242175,
+    "agrisol_version": "2.0",
+    "python_version": "3.11.9"
+  },
+  "summary": {
+    "total_tests": 16,
+    "passed_tests": 5,
+    "failed_tests": 11,
+    "success_rate": 31.25
+  },
+  "results": {
+    "environment": {
+      "python_version": {
+        "success": true,
+        "details": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]"
+      },
+      "virtual_environment": {
+        "success": false,
+        "details": "In virtual env: False"
+      },
+      "dependencies": {
+        "success": true,
+        "details": "All dependencies available"
+      },
+      "configuration": {
+        "success": true,
+        "details": "Configuration valid"
+      }
+    },
+    "models": {
+      "model_directory": {
+        "success": true,
+        "details": "Directory exists: True"
+      },
+      "model_files": {
+        "success": true,
+        "details": "Found 23 model files"
+      },
+      "model_tomatoes": {
+        "success": false,
+        "details": "Model loaded: False"
+      },
+      "model_potatoes": {
+        "success": false,
+        "details": "Model loaded: False"
+      },
+      "model_beans": {
+        "success": false,
+        "details": "Model loaded: False"
+      },
+      "model_maize": {
+        "success": false,
+        "details": "Model loaded: False"
+      },
+      "models_summary": {
+        "success": false,
+        "details": "0/4 models loaded"
+      }
+    },
+    "database": {
+      "env_variables": {
+        "success": false,
+        "details": "URL: missing, Key: missing"
+      },
+      "database_connection": {
+        "success": false,
+        "details": "Database credentials not configured"
+      }
+    },
+    "existing_tests": {
+      "consolidated_test": {
+        "success": false,
+        "details": "Traceback (most recent call last):\n  File \"C:\\Users\\mbuto\\Agri-sol\\Backend\\test_consolidated.py\", line 156, in <module>\n    success = main()\n              ^^^^^^\n  File \"C:\\Users\\mbuto\\Agri-sol\\Backend\\test_consolidated.py\", line 116, in main\n    print(\"\\U0001f680 Testing Consolidated AgriSol Backend\")\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f680' in position 0: character maps to <undefined>\n"
+      },
+      "api_test": {
+        "success": false,
+        "details": "Traceback (most recent call last):\n  File \"C:\\Users\\mbuto\\Agri-sol\\Backend\\test_api.py\", line 193, in <module>\n    main() \n    ^^^^^^\n  File \"C:\\Users\\mbuto\\Agri-sol\\Backend\\test_api.py\", line 155, in main\n    print(\"\\U0001f680 Starting AgriSol API Tests\")\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f680' in position 0: character maps to <undefined>\n"
+      },
+      "bean_api_test": {
+        "success": false,
+        "details": "Traceback (most recent call last):\n  File \"C:\\Users\\mbuto\\Agri-sol\\Backend\\test_beans_api.py\", line 78, in <module>\n    print(\"\\U0001f9ea Testing Beans API Integration...\")\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f9ea' in position 0: character maps to <undefined>\n"
+      }
+    }
+  }
+}

@@ -3,15 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemedScrollView } from '@/components/ThemedView';
 import { SUPPORTED_CROPS, CropType } from '@/services/mlService';
 import { useTheme } from '@/contexts/ThemeContext';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 export default function CropSelectionScreen() {
   const { colors } = useTheme();
+  const { action } = useLocalSearchParams<{
+    action?: 'camera' | 'gallery';
+  }>();
 
   const handleSelect = (crop: CropType) => {
     router.push({
       pathname: '/scan',
-      params: { cropId: crop.id, cropChosen: '1' },
+      params: { cropId: crop.id, cropChosen: '1', action: action || 'camera' },
     } as any);
   };
 
@@ -19,6 +22,9 @@ export default function CropSelectionScreen() {
     <ThemedScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={[styles.title, { color: colors.text }]}>Select Crop</Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          Choose the crop you want to analyze
+        </Text>
         {SUPPORTED_CROPS.map((crop) => (
           <TouchableOpacity
             key={crop.id}
@@ -32,7 +38,6 @@ export default function CropSelectionScreen() {
                 {crop.name}
               </Text>
               <Text style={[styles.cardDesc, { color: colors.textSecondary }]}>
-                {' '}
                 {crop.description}
               </Text>
             </View>
@@ -51,6 +56,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
     marginBottom: 20,
   },
   card: {

@@ -31,27 +31,34 @@ export default function ScanScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [isCapturing, setIsCapturing] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [hasUsedReset, setHasUsedReset] = useState(false);
   const { colors } = useTheme();
-  const { cropId, cropChosen } = useLocalSearchParams<{
+  const { cropId, cropChosen, action } = useLocalSearchParams<{
     cropId?: string;
     cropChosen?: string;
+    action?: 'camera' | 'gallery';
   }>();
   const selectedCrop: CropType =
     SUPPORTED_CROPS.find((c) => c.id === cropId) || SUPPORTED_CROPS[0];
 
-  // Redirect to crop selection right after permission is granted (if crop not chosen)
+  // Handle return from crop selection with chosen action
   useEffect(() => {
-    if (permission?.granted && !cropChosen) {
-      router.replace('/crop-selection' as any);
+    if (cropChosen && action) {
+      if (action === 'camera') {
+        setShowCamera(true);
+      } else if (action === 'gallery') {
+        pickImage();
+      }
     }
-  }, [permission?.granted, cropChosen]);
+  }, [cropChosen, action]);
 
-  // Auto-reset after 5 minutes of inactivity
+  // Auto-reset after 5 minutes of inactivity (only once)
   useEffect(() => {
     let t: ReturnType<typeof setTimeout> | undefined;
-    if (permission?.granted) {
+    if (permission?.granted && !hasUsedReset) {
       t = setTimeout(
         () => {
+          setHasUsedReset(true);
           router.replace('/scan' as any);
         },
         5 * 60 * 1000,
@@ -60,7 +67,7 @@ export default function ScanScreen() {
     return () => {
       if (t) clearTimeout(t as ReturnType<typeof setTimeout>);
     };
-  }, [permission?.granted]);
+  }, [permission?.granted, hasUsedReset]);
 
   if (!permission) {
     return <ThemedView style={{ flex: 1 }} />;
@@ -144,6 +151,26 @@ export default function ScanScreen() {
     }
   };
 
+  const handleTakePhoto = () => {
+    if (permission?.granted) {
+      // Navigate to crop selection with camera action
+      router.push({
+        pathname: '/crop-selection',
+        params: { action: 'camera' },
+      } as any);
+    } else {
+      requestPermission();
+    }
+  };
+
+  const handleChooseFromGallery = () => {
+    // Navigate to crop selection with gallery action
+    router.push({
+      pathname: '/crop-selection',
+      params: { action: 'gallery' },
+    } as any);
+  };
+
   if (!showCamera) {
     return (
       <ThemedView style={{ flex: 1 }}>
@@ -163,13 +190,7 @@ export default function ScanScreen() {
           <View style={styles.optionsContainer}>
             <TouchableOpacity
               style={styles.optionCard}
-              onPress={() => {
-                if (permission?.granted) {
-                  setShowCamera(true);
-                } else {
-                  requestPermission();
-                }
-              }}
+              onPress={handleTakePhoto}
               activeOpacity={0.8}
             >
               <LinearGradient
@@ -186,7 +207,7 @@ export default function ScanScreen() {
 
             <TouchableOpacity
               style={styles.optionCard}
-              onPress={pickImage}
+              onPress={handleChooseFromGallery}
               activeOpacity={0.8}
             >
               <LinearGradient
