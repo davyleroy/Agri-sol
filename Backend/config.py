@@ -14,11 +14,12 @@ class Config:
     
     # Model paths configuration
     NOTEBOOK_DIR = Path("../Notebook")
+    MODELS_DIR = Path("models")
     MODEL_PATHS = {
         'tomatoes': NOTEBOOK_DIR / 'tomato_disease_best_model_fixed.h5',
-        'potatoes': NOTEBOOK_DIR / 'potato_disease_model_best.keras',
+        'potatoes': MODELS_DIR / 'optimized_potatoes_model.h5',  # Use optimized model
         'maize': NOTEBOOK_DIR / 'tomato_disease_best_model_fixed.h5',  # Use working model temporarily
-        'beans': NOTEBOOK_DIR / 'bean_disease_model_best.keras'
+        'beans': MODELS_DIR / 'optimized_beans_model.h5'  # Use optimized model
     }
     
     # Alternative model paths for fallback
@@ -28,6 +29,7 @@ class Config:
             NOTEBOOK_DIR / 'tomato_transfer_best.h5'
         ],
         'potatoes': [
+            NOTEBOOK_DIR / 'potato_disease_model_best.keras',  # Original as fallback
             NOTEBOOK_DIR / 'nuclear_potato_model.keras',
             NOTEBOOK_DIR / 'agrisol_potato_model.keras',
             NOTEBOOK_DIR / 'sweet_spot_potato_model.keras'
@@ -40,6 +42,7 @@ class Config:
             NOTEBOOK_DIR / 'best_plant_disease_model.h5'  # General model fallback
         ],
         'beans': [
+            NOTEBOOK_DIR / 'bean_disease_model_best.keras',  # Original as fallback
             NOTEBOOK_DIR / 'bean_disease_model_best.h5',
             NOTEBOOK_DIR / 'tomato_disease_best_model_fixed.h5'  # Cross-crop fallback
         ]
@@ -106,7 +109,12 @@ class DevelopmentConfig(Config):
         'http://localhost:8081',
         'http://127.0.0.1:8081',
         'http://10.0.2.2:5000',  # Android emulator
-        'http://192.168.1.1:5000'  # Common local network
+        'http://192.168.1.1:5000',  # Common local network
+        'http://192.168.1.67:8081',  # Host machine IP for Expo
+        'http://192.168.1.67:3000',  # Host machine IP for React
+        'exp://192.168.1.67:8081',  # Expo protocol
+        'exp://localhost:8081',  # Expo protocol localhost
+        '*'  # Allow all origins for development (remove in production)
     ]
     
     # Development-specific settings

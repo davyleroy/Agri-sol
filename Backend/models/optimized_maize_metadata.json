@@ -1,0 +1,23 @@
+{
+  "crop_type": "MAIZE",
+  "model_name": "optimized_maize_model",
+  "original_size_mb": 0.26569366455078125,
+  "optimized_size_mb": 0.03391265869140625,
+  "tflite_size_mb": 0.0063934326171875,
+  "size_reduction_percent": 87.23618090452261,
+  "input_shape": [
+    224,
+    224,
+    3
+  ],
+  "target_classes": [
+    "Common_Rust",
+    "Gray_Leaf_Spot",
+    "Healthy",
+    "Northern_Corn_Leaf_Blight"
+  ],
+  "optimization_version": "1.0",
+  "created_at": "2025-07-06T16:59:19.809064",
+  "tensorflow_version": "2.15.0",
+  "keras_version": "Built-in"
+}

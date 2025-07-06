@@ -166,15 +166,27 @@ def main():
         # Display API information
         display_api_info()
         
+        # Get configuration
+        config_obj = get_config()
+        
+        # For production deployment (like Render), use PORT from environment
+        port = int(os.environ.get('PORT', config_obj.PORT))
+        host = os.environ.get('HOST', config_obj.HOST)
+        debug = os.environ.get('FLASK_ENV', 'development') == 'development'
+        
+        print(f"🚀 Starting AgriSol Backend on {host}:{port}")
+        print(f"🔧 Environment: {os.environ.get('FLASK_ENV', 'development')}")
+        print(f"🐛 Debug mode: {debug}")
+        
         # Start the application
         logger.info("🌐 Starting Flask application...")
         logger.info("Press Ctrl+C to stop the server")
         
         app.run(
-            host=config_obj.HOST,
-            port=config_obj.PORT,
-            debug=config_obj.DEBUG,
-            use_reloader=False  # Disable reloader to prevent double model loading
+            host=host,
+            port=port,
+            debug=debug,
+            threaded=True
         )
         
     except KeyboardInterrupt:

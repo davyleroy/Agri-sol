@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: agrisol-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python run.py"
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHONPATH
+        value: "/opt/render/project/src"
+    scaling:
+      minInstances: 1
+      maxInstances: 1
