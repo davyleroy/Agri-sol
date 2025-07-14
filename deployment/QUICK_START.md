@@ -3,6 +3,7 @@
 ## 1. Test Locally First
 
 ### Test Flask API Locally
+
 ```powershell
 # Navigate to deployment folder
 cd deployment
@@ -19,6 +20,7 @@ python flask_api.py
 ```
 
 ### Test Hugging Face App Locally
+
 ```powershell
 # Copy model files
 Copy-Item "..\Notebook\*.h5" . -ErrorAction SilentlyContinue
@@ -31,10 +33,12 @@ python huggingface_app.py
 ## 2. Deploy to Hugging Face Spaces (Recommended for Beginners)
 
 ### Step 1: Create Hugging Face Account
+
 1. Go to [huggingface.co](https://huggingface.co)
 2. Create account and verify email
 
 ### Step 2: Create New Space
+
 1. Go to [huggingface.co/spaces](https://huggingface.co/spaces)
 2. Click "Create new Space"
 3. Name: `agri-sol-detector`
@@ -42,6 +46,7 @@ python huggingface_app.py
 5. Make it Public (free)
 
 ### Step 3: Upload Files
+
 ```powershell
 # Install git-lfs if not already installed
 git lfs install
@@ -63,11 +68,13 @@ git push
 ```
 
 ### Step 4: Access Your App
+
 - Your app will be available at: `https://YOUR_USERNAME-agri-sol-detector.hf.space`
 
 ## 3. Deploy to Render.com
 
 ### Step 1: Prepare Repository
+
 ```powershell
 # Create new git repository
 git init
@@ -81,6 +88,7 @@ git push -u origin main
 ```
 
 ### Step 2: Deploy on Render
+
 1. Go to [render.com](https://render.com)
 2. Connect GitHub account
 3. Click "New +" → "Web Service"
@@ -93,17 +101,20 @@ git push -u origin main
    - **Instance Type**: `Free`
 
 ### Step 3: Environment Variables (if needed)
+
 - `DEBUG=False`
 - `PORT=5000`
 
 ## 4. Deploy to Railway
 
 ### Step 1: Install Railway CLI
+
 ```powershell
 npm install -g @railway/cli
 ```
 
 ### Step 2: Deploy
+
 ```powershell
 # Login
 railway login
@@ -121,6 +132,7 @@ railway run python flask_api.py
 ## 5. Quick Test Your API
 
 ### Test Health Endpoint
+
 ```powershell
 # Replace URL with your deployed API
 curl https://your-api-url.com/
@@ -130,39 +142,42 @@ Invoke-RestMethod -Uri "https://your-api-url.com/" -Method GET
 ```
 
 ### Test Prediction Endpoint
+
 ```javascript
 // Test in browser console or Postman
 const testImage = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD..."; // Base64 image
 
-fetch('https://your-api-url.com/predict', {
-  method: 'POST',
+fetch("https://your-api-url.com/predict", {
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   body: JSON.stringify({
     image: testImage,
-    crop_type: 'tomato'
-  })
+    crop_type: "tomato",
+  }),
 })
-.then(response => response.json())
-.then(data => console.log(data));
+  .then((response) => response.json())
+  .then((data) => console.log(data));
 ```
 
 ## 6. Update Your React App
 
 ### Update API Endpoint
+
 ```javascript
 // In your React app, update the API endpoint
-const API_ENDPOINT = 'https://your-deployed-api-url.com/predict';
+const API_ENDPOINT = "https://your-deployed-api-url.com/predict";
 ```
 
 ### Use the Hook
+
 ```javascript
-import { useDiseaseDetection } from './path/to/react-integration';
+import { useDiseaseDetection } from "./path/to/react-integration";
 
 function MyComponent() {
   const { predictDisease, loading, result, error } = useDiseaseDetection();
-  
+
   // Your component logic here
 }
 ```
@@ -172,11 +187,12 @@ function MyComponent() {
 ### Common Issues:
 
 1. **Model Loading Errors**
+
    ```powershell
    # Check if model files exist
    ls *.h5
    ls *.keras
-   
+
    # Check file sizes (should be reasonable)
    dir *.h5
    ```
@@ -194,6 +210,7 @@ function MyComponent() {
    - Consider paid tiers for production
 
 ### Model Size Optimization
+
 ```python
 # Convert to TensorFlow Lite for smaller size
 import tensorflow as tf
@@ -212,6 +229,7 @@ with open('model.tflite', 'wb') as f:
 3. **Consider Railway or Google Cloud Run** - More advanced features
 
 Choose based on your needs:
+
 - **Demo/Prototype**: Hugging Face Spaces
 - **Production API**: Render.com or Railway
 - **High Traffic**: Google Cloud Run or AWS

@@ -3,6 +3,7 @@
 This guide provides multiple free deployment options for your Agri-Sol machine learning models with step-by-step instructions.
 
 ## 📋 Table of Contents
+
 1. [Hugging Face Spaces (Recommended)](#1-hugging-face-spaces)
 2. [Render.com](#2-rendercom)
 3. [Railway](#3-railway)
@@ -21,6 +22,7 @@ This guide provides multiple free deployment options for your Agri-Sol machine l
 ### Steps:
 
 #### A. Prepare Your Model
+
 ```bash
 # 1. Create a requirements.txt
 pip freeze > requirements.txt
@@ -34,12 +36,14 @@ model.save('model_saved', save_format='tf')
 ```
 
 #### B. Create Hugging Face Space
+
 1. Go to [huggingface.co/spaces](https://huggingface.co/spaces)
 2. Click "Create new Space"
 3. Choose "Gradio" or "Streamlit" as SDK
 4. Make it public for free tier
 
 #### C. Create app.py for Gradio
+
 ```python
 import gradio as gr
 import tensorflow as tf
@@ -55,7 +59,7 @@ models = {
 }
 
 class_names = {
-    'tomato': ['Bacterial Spot', 'Early Blight', 'Healthy', 'Late Blight', 'Leaf Mold', 
+    'tomato': ['Bacterial Spot', 'Early Blight', 'Healthy', 'Late Blight', 'Leaf Mold',
                'Septoria Leaf Spot', 'Spider Mites', 'Target Spot', 'Mosaic Virus', 'Yellow Leaf Curl'],
     'potato': ['Early Blight', 'Healthy', 'Late Blight'],
     'beans': ['Angular Leaf Spot', 'Bean Rust', 'Healthy']
@@ -66,15 +70,15 @@ def predict_disease(image, crop_type):
     img = Image.fromarray(image).resize((256, 256))
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
-    
+
     # Get prediction
     model = models[crop_type.lower()]
     predictions = model.predict(img_array)
     predicted_class = np.argmax(predictions[0])
     confidence = np.max(predictions[0])
-    
+
     disease = class_names[crop_type.lower()][predicted_class]
-    
+
     return f"Disease: {disease}, Confidence: {confidence:.2%}"
 
 # Create Gradio interface
@@ -94,6 +98,7 @@ if __name__ == "__main__":
 ```
 
 #### D. Deploy to Hugging Face
+
 ```bash
 # 1. Install Hugging Face CLI
 pip install huggingface_hub
@@ -117,17 +122,21 @@ git push
 ```
 
 #### E. Integrate with React
+
 ```javascript
 // In your React app
 const predictDisease = async (imageFile, cropType) => {
   const formData = new FormData();
-  formData.append('data', JSON.stringify([imageFile, cropType]));
-  
-  const response = await fetch('https://YOUR_USERNAME-agri-sol-detector.hf.space/api/predict', {
-    method: 'POST',
-    body: formData
-  });
-  
+  formData.append("data", JSON.stringify([imageFile, cropType]));
+
+  const response = await fetch(
+    "https://YOUR_USERNAME-agri-sol-detector.hf.space/api/predict",
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
   return await response.json();
 };
 ```
@@ -142,6 +151,7 @@ const predictDisease = async (imageFile, cropType) => {
 ### Steps:
 
 #### A. Prepare Flask API
+
 ```python
 # app.py
 from flask import Flask, request, jsonify
@@ -170,25 +180,25 @@ def predict():
         data = request.get_json()
         image_data = data['image']  # base64 encoded
         crop_type = data['crop_type'].lower()
-        
+
         # Decode image
         image_bytes = base64.b64decode(image_data.split(',')[1])
         image = Image.open(io.BytesIO(image_bytes)).resize((256, 256))
         img_array = np.array(image) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
-        
+
         # Predict
         model = models[crop_type]
         predictions = model.predict(img_array)
         predicted_class = int(np.argmax(predictions[0]))
         confidence = float(np.max(predictions[0]))
-        
+
         return jsonify({
             'predicted_class': predicted_class,
             'confidence': confidence,
             'success': True
         })
-    
+
     except Exception as e:
         return jsonify({'error': str(e), 'success': False}), 500
 
@@ -197,6 +207,7 @@ if __name__ == '__main__':
 ```
 
 #### B. Create Dockerfile
+
 ```dockerfile
 FROM python:3.9-slim
 
@@ -213,6 +224,7 @@ CMD ["python", "app.py"]
 ```
 
 #### C. Deploy to Render
+
 1. Push your code to GitHub
 2. Go to [render.com](https://render.com)
 3. Connect GitHub repository
@@ -230,6 +242,7 @@ CMD ["python", "app.py"]
 ### Steps:
 
 #### A. Prepare Your App
+
 ```bash
 # Create railway.json
 {
@@ -243,6 +256,7 @@ CMD ["python", "app.py"]
 ```
 
 #### B. Deploy
+
 ```bash
 # 1. Install Railway CLI
 npm install -g @railway/cli
@@ -267,6 +281,7 @@ railway up
 ### Steps:
 
 #### A. Create Dockerfile
+
 ```dockerfile
 FROM python:3.9-slim
 
@@ -282,6 +297,7 @@ CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app
 ```
 
 #### B. Deploy to Cloud Run
+
 ```bash
 # 1. Install Google Cloud SDK
 # 2. Authenticate
@@ -308,6 +324,7 @@ gcloud run deploy agri-sol-api \
 ### Steps:
 
 #### A. Create API Route
+
 ```python
 # api/predict.py
 import tensorflow as tf
@@ -334,6 +351,7 @@ def handler(request):
 ```
 
 #### B. Configure vercel.json
+
 ```json
 {
   "functions": {
@@ -345,6 +363,7 @@ def handler(request):
 ```
 
 #### C. Deploy
+
 ```bash
 npm install -g vercel
 vercel --prod
@@ -360,6 +379,7 @@ vercel --prod
 ### Steps:
 
 #### A. Create Streamlit App
+
 ```python
 # streamlit_app.py
 import streamlit as st
@@ -375,13 +395,14 @@ crop_type = st.selectbox("Select crop type", ['Tomato', 'Potato', 'Beans'])
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption='Uploaded Image', use_column_width=True)
-    
+
     if st.button('Predict Disease'):
         # Your prediction logic here
         st.write("Prediction results...")
 ```
 
 #### B. Deploy
+
 1. Push to GitHub
 2. Go to [share.streamlit.io](https://share.streamlit.io)
 3. Connect GitHub repository
@@ -392,46 +413,48 @@ if uploaded_file is not None:
 ## 🔗 React Integration Examples
 
 ### For REST API (Render, Railway, Cloud Run)
+
 ```javascript
 const predictDisease = async (imageFile, cropType) => {
   const formData = new FormData();
-  formData.append('image', imageFile);
-  formData.append('crop_type', cropType);
-  
-  const response = await fetch('YOUR_API_ENDPOINT/predict', {
-    method: 'POST',
-    body: formData
+  formData.append("image", imageFile);
+  formData.append("crop_type", cropType);
+
+  const response = await fetch("YOUR_API_ENDPOINT/predict", {
+    method: "POST",
+    body: formData,
   });
-  
+
   return await response.json();
 };
 ```
 
 ### For Base64 Upload
+
 ```javascript
 const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 };
 
 const predictDisease = async (imageFile, cropType) => {
   const base64Image = await convertToBase64(imageFile);
-  
-  const response = await fetch('YOUR_API_ENDPOINT/predict', {
-    method: 'POST',
+
+  const response = await fetch("YOUR_API_ENDPOINT/predict", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       image: base64Image,
-      crop_type: cropType
-    })
+      crop_type: cropType,
+    }),
   });
-  
+
   return await response.json();
 };
 ```

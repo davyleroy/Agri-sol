@@ -1,192 +1,755 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Secure Login Link - Agrisol</title>
-</head>
-<body style="margin: 0; padding: 0; background-color: #f8fffe; font-family: Arial, sans-serif;">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f8fffe;">
-        <tr>
-            <td align="center" style="padding: 20px;">
-                <table cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                    
-                    <!-- Header -->
-                    <tr>
-                        <td style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 40px 30px; text-align: center; border-radius: 12px 12px 0 0;">
-                            <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: inline-block; line-height: 80px; font-size: 36px; color: white; margin-bottom: 20px; border: 2px solid rgba(255,255,255,0.3);">
-                                🔐
-                            </div>
-                            <h1 style="color: white; font-size: 28px; font-weight: 700; margin: 0 0 8px 0;">Secure Login</h1>
-                            <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 0;">Your magic link is ready</p>
-                        </td>
-                    </tr>
-                    
-                    <!-- Main Content -->
-                    <tr>
-                        <td style="padding: 40px 30px; text-align: center;">
-                            
-                            <!-- Welcome Message -->
-                            <h2 style="color: #1f2937; font-size: 24px; font-weight: 600; margin: 0 0 20px 0;">Ready to Access Agrisol? 🌱</h2>
-                            
-                            <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin: 0 0 15px 0;">
-                                Click the secure link below to instantly log in to your Agrisol account. No password needed!
-                            </p>
-                            
-                            <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
-                                This magic link will safely authenticate you and take you directly to your dashboard.
-                            </p>
-                            
-                            <!-- Magic Link Button -->
-                            <table cellpadding="0" cellspacing="0" border="0" style="margin: 30px auto;">
-                                <tr>
-                                    <td style="border-radius: 8px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); box-shadow: 0 4px 15px rgba(139,92,246,0.3);">
-                                        <a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 18px 36px; color: white; text-decoration: none; font-size: 18px; font-weight: 600; border-radius: 8px;">
-                                            🔗 Log In Securely
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <!-- Security Features -->
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f0f9ff; border-radius: 8px; margin: 30px 0; border: 1px solid #bae6fd;">
-                                <tr>
-                                    <td style="padding: 30px;">
-                                        <h3 style="color: #0c4a6e; font-size: 20px; font-weight: 600; margin: 0 0 20px 0; text-align: center;">
-                                            🛡️ Secure & Convenient Login
-                                        </h3>
-                                        
-                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                            <tr>
-                                                <td width="33%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); border-radius: 50%; display: inline-block; line-height: 50px; font-size: 24px; margin-bottom: 10px; color: white;">⚡</div>
-                                                    <h4 style="color: #0c4a6e; font-size: 14px; font-weight: 600; margin: 0 0 5px 0;">Instant Access</h4>
-                                                    <p style="color: #0369a1; font-size: 12px; margin: 0;">One-click login without passwords</p>
-                                                </td>
-                                                <td width="33%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); border-radius: 50%; display: inline-block; line-height: 50px; font-size: 24px; margin-bottom: 10px; color: white;">🔒</div>
-                                                    <h4 style="color: #0c4a6e; font-size: 14px; font-weight: 600; margin: 0 0 5px 0;">Bank-Level Security</h4>
-                                                    <p style="color: #0369a1; font-size: 12px; margin: 0;">Encrypted and time-limited links</p>
-                                                </td>
-                                                <td width="33%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); border-radius: 50%; display: inline-block; line-height: 50px; font-size: 24px; margin-bottom: 10px; color: white;">📱</div>
-                                                    <h4 style="color: #0c4a6e; font-size: 14px; font-weight: 600; margin: 0 0 5px 0;">Cross-Device</h4>
-                                                    <p style="color: #0369a1; font-size: 12px; margin: 0;">Works on any device or browser</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <!-- What's Next -->
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f0fdf4; border-radius: 8px; margin: 30px 0; border: 1px solid #bbf7d0;">
-                                <tr>
-                                    <td style="padding: 30px;">
-                                        <h3 style="color: #14532d; font-size: 18px; font-weight: 600; margin: 0 0 20px 0; text-align: center;">
-                                            🎯 What's Waiting for You
-                                        </h3>
-                                        
-                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                                            <tr>
-                                                <td width="25%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 40px; height: 40px; background: #22c55e; border-radius: 50%; display: inline-block; line-height: 40px; font-size: 18px; margin-bottom: 10px; color: white;">📊</div>
-                                                    <h4 style="color: #14532d; font-size: 13px; font-weight: 600; margin: 0 0 5px 0;">Dashboard</h4>
-                                                    <p style="color: #166534; font-size: 11px; margin: 0;">View your crop analytics</p>
-                                                </td>
-                                                <td width="25%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 40px; height: 40px; background: #22c55e; border-radius: 50%; display: inline-block; line-height: 40px; font-size: 18px; margin-bottom: 10px; color: white;">📸</div>
-                                                    <h4 style="color: #14532d; font-size: 13px; font-weight: 600; margin: 0 0 5px 0;">Scan Plants</h4>
-                                                    <p style="color: #166534; font-size: 11px; margin: 0;">AI-powered disease detection</p>
-                                                </td>
-                                                <td width="25%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 40px; height: 40px; background: #22c55e; border-radius: 50%; display: inline-block; line-height: 40px; font-size: 18px; margin-bottom: 10px; color: white;">💬</div>
-                                                    <h4 style="color: #14532d; font-size: 13px; font-weight: 600; margin: 0 0 5px 0;">Expert Chat</h4>
-                                                    <p style="color: #166534; font-size: 11px; margin: 0;">Get professional advice</p>
-                                                </td>
-                                                <td width="25%" style="text-align: center; padding: 15px; vertical-align: top;">
-                                                    <div style="width: 40px; height: 40px; background: #22c55e; border-radius: 50%; display: inline-block; line-height: 40px; font-size: 18px; margin-bottom: 10px; color: white;">📈</div>
-                                                    <h4 style="color: #14532d; font-size: 13px; font-weight: 600; margin: 0 0 5px 0;">Reports</h4>
-                                                    <p style="color: #166534; font-size: 11px; margin: 0;">Track crop health trends</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <!-- Security Notice -->
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; margin: 30px 0;">
-                                <tr>
-                                    <td style="padding: 20px; text-align: center;">
-                                        <h4 style="color: #92400e; font-size: 16px; font-weight: 600; margin: 0 0 10px 0;">⏰ Link Expires Soon</h4>
-                                        <p style="color: #92400e; font-size: 14px; margin: 0;">
-                                            For security, this magic link will expire in <strong>15 minutes</strong>. Use it soon to access your account.
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <!-- Alternative Link -->
-                            <p style="color: #6b7280; font-size: 14px; margin: 30px 0 0 0;">
-                                Having trouble with the button? Copy and paste this link into your browser:<br>
-                                <a href="{{ .ConfirmationURL }}" style="color: #8b5cf6; word-break: break-all; font-size: 12px;">{{ .ConfirmationURL }}</a>
-                            </p>
-                            
-                            <!-- Security Tip -->
-                            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin: 20px 0;">
-                                <tr>
-                                    <td style="padding: 20px; text-align: left;">
-                                        <h4 style="color: #475569; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">🔍 Security Tip</h4>
-                                        <p style="color: #64748b; font-size: 13px; margin: 0; line-height: 1.5;">
-                                            Always verify that the login link takes you to the official Agrisol domain. If you didn't request this login, please ignore this email.
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                        </td>
-                    </tr>
-                    
-                    <!-- Footer -->
-                    <tr>
-                        <td style="background-color: #1f2937; color: #9ca3af; padding: 30px; text-align: center; border-radius: 0 0 12px 12px;">
-                            <h4 style="color: white; font-size: 18px; font-weight: 600; margin: 0 0 15px 0;">Secure Access to Agrisol</h4>
-                            <p style="font-size: 14px; margin: 0 0 10px 0;">Passwordless login for modern agriculture</p>
-                            <p style="font-size: 14px; margin: 0 0 20px 0;">
-                                Need help? Contact us at <a href="mailto:support@agrisol.com" style="color: #8b5cf6; text-decoration: none;">support@agrisol.com</a>
-                            </p>
-                            
-                            <!-- Social Links -->
-                            <table cellpadding="0" cellspacing="0" border="0" style="margin: 20px auto 0 auto;">
-                                <tr>
-                                    <td style="padding: 0 5px;">
-                                        <a href="#" style="display: inline-block; padding: 8px; background-color: #374151; border-radius: 50%; color: #9ca3af; text-decoration: none; width: 32px; height: 32px; line-height: 16px; text-align: center;">📘</a>
-                                    </td>
-                                    <td style="padding: 0 5px;">
-                                        <a href="#" style="display: inline-block; padding: 8px; background-color: #374151; border-radius: 50%; color: #9ca3af; text-decoration: none; width: 32px; height: 32px; line-height: 16px; text-align: center;">🐦</a>
-                                    </td>
-                                    <td style="padding: 0 5px;">
-                                        <a href="#" style="display: inline-block; padding: 8px; background-color: #374151; border-radius: 50%; color: #9ca3af; text-decoration: none; width: 32px; height: 32px; line-height: 16px; text-align: center;">📷</a>
-                                    </td>
-                                    <td style="padding: 0 5px;">
-                                        <a href="#" style="display: inline-block; padding: 8px; background-color: #374151; border-radius: 50%; color: #9ca3af; text-decoration: none; width: 32px; height: 32px; line-height: 16px; text-align: center;">💼</a>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <p style="margin: 20px 0 0 0; font-size: 12px;">
-                                © 2025 Agrisol. All rights reserved.<br>
-                                <a href="#" style="color: #8b5cf6; text-decoration: none;">Privacy Policy</a> | 
-                                <a href="#" style="color: #8b5cf6; text-decoration: none;">Terms of Service</a> | 
-                                <a href="#" style="color: #8b5cf6; text-decoration: none;">Unsubscribe</a>
-                            </p>
-                        </td>
-                    </tr>
-                    
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f8fffe;
+      font-family: Arial, sans-serif;
+    "
+  >
+    <table
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #f8fffe"
+    >
+      <tr>
+        <td align="center" style="padding: 20px">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              max-width: 600px;
+              background-color: #ffffff;
+              border-radius: 12px;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                style="
+                  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+                  padding: 40px 30px;
+                  text-align: center;
+                  border-radius: 12px 12px 0 0;
+                "
+              >
+                <div
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 50%;
+                    display: inline-block;
+                    line-height: 80px;
+                    font-size: 36px;
+                    color: white;
+                    margin-bottom: 20px;
+                    border: 2px solid rgba(255, 255, 255, 0.3);
+                  "
+                >
+                  🔐
+                </div>
+                <h1
+                  style="
+                    color: white;
+                    font-size: 28px;
+                    font-weight: 700;
+                    margin: 0 0 8px 0;
+                  "
+                >
+                  Secure Login
+                </h1>
+                <p
+                  style="
+                    color: rgba(255, 255, 255, 0.9);
+                    font-size: 16px;
+                    margin: 0;
+                  "
+                >
+                  Your magic link is ready
+                </p>
+              </td>
+            </tr>
+
+            <!-- Main Content -->
+            <tr>
+              <td style="padding: 40px 30px; text-align: center">
+                <!-- Welcome Message -->
+                <h2
+                  style="
+                    color: #1f2937;
+                    font-size: 24px;
+                    font-weight: 600;
+                    margin: 0 0 20px 0;
+                  "
+                >
+                  Ready to Access Agrisol? 🌱
+                </h2>
+
+                <p
+                  style="
+                    color: #6b7280;
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin: 0 0 15px 0;
+                  "
+                >
+                  Click the secure link below to instantly log in to your
+                  Agrisol account. No password needed!
+                </p>
+
+                <p
+                  style="
+                    color: #6b7280;
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin: 0 0 30px 0;
+                  "
+                >
+                  This magic link will safely authenticate you and take you
+                  directly to your dashboard.
+                </p>
+
+                <!-- Magic Link Button -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  style="margin: 30px auto"
+                >
+                  <tr>
+                    <td
+                      style="
+                        border-radius: 8px;
+                        background: linear-gradient(
+                          135deg,
+                          #8b5cf6 0%,
+                          #7c3aed 100%
+                        );
+                        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+                      "
+                    >
+                      <a
+                        href="{{ .ConfirmationURL }}"
+                        style="
+                          display: inline-block;
+                          padding: 18px 36px;
+                          color: white;
+                          text-decoration: none;
+                          font-size: 18px;
+                          font-weight: 600;
+                          border-radius: 8px;
+                        "
+                      >
+                        🔗 Log In Securely
+                      </a>
+                    </td>
+                  </tr>
                 </table>
-            </td>
-        </tr>
+
+                <!-- Security Features -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #f0f9ff;
+                    border-radius: 8px;
+                    margin: 30px 0;
+                    border: 1px solid #bae6fd;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 30px">
+                      <h3
+                        style="
+                          color: #0c4a6e;
+                          font-size: 20px;
+                          font-weight: 600;
+                          margin: 0 0 20px 0;
+                          text-align: center;
+                        "
+                      >
+                        🛡️ Secure & Convenient Login
+                      </h3>
+
+                      <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        width="100%"
+                      >
+                        <tr>
+                          <td
+                            width="33%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 50px;
+                                height: 50px;
+                                background: linear-gradient(
+                                  135deg,
+                                  #0ea5e9 0%,
+                                  #0284c7 100%
+                                );
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 50px;
+                                font-size: 24px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              ⚡
+                            </div>
+                            <h4
+                              style="
+                                color: #0c4a6e;
+                                font-size: 14px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Instant Access
+                            </h4>
+                            <p
+                              style="color: #0369a1; font-size: 12px; margin: 0"
+                            >
+                              One-click login without passwords
+                            </p>
+                          </td>
+                          <td
+                            width="33%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 50px;
+                                height: 50px;
+                                background: linear-gradient(
+                                  135deg,
+                                  #0ea5e9 0%,
+                                  #0284c7 100%
+                                );
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 50px;
+                                font-size: 24px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              🔒
+                            </div>
+                            <h4
+                              style="
+                                color: #0c4a6e;
+                                font-size: 14px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Bank-Level Security
+                            </h4>
+                            <p
+                              style="color: #0369a1; font-size: 12px; margin: 0"
+                            >
+                              Encrypted and time-limited links
+                            </p>
+                          </td>
+                          <td
+                            width="33%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 50px;
+                                height: 50px;
+                                background: linear-gradient(
+                                  135deg,
+                                  #0ea5e9 0%,
+                                  #0284c7 100%
+                                );
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 50px;
+                                font-size: 24px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              📱
+                            </div>
+                            <h4
+                              style="
+                                color: #0c4a6e;
+                                font-size: 14px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Cross-Device
+                            </h4>
+                            <p
+                              style="color: #0369a1; font-size: 12px; margin: 0"
+                            >
+                              Works on any device or browser
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- What's Next -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #f0fdf4;
+                    border-radius: 8px;
+                    margin: 30px 0;
+                    border: 1px solid #bbf7d0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 30px">
+                      <h3
+                        style="
+                          color: #14532d;
+                          font-size: 18px;
+                          font-weight: 600;
+                          margin: 0 0 20px 0;
+                          text-align: center;
+                        "
+                      >
+                        🎯 What's Waiting for You
+                      </h3>
+
+                      <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        width="100%"
+                      >
+                        <tr>
+                          <td
+                            width="25%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 40px;
+                                height: 40px;
+                                background: #22c55e;
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 40px;
+                                font-size: 18px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              📊
+                            </div>
+                            <h4
+                              style="
+                                color: #14532d;
+                                font-size: 13px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Dashboard
+                            </h4>
+                            <p
+                              style="color: #166534; font-size: 11px; margin: 0"
+                            >
+                              View your crop analytics
+                            </p>
+                          </td>
+                          <td
+                            width="25%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 40px;
+                                height: 40px;
+                                background: #22c55e;
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 40px;
+                                font-size: 18px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              📸
+                            </div>
+                            <h4
+                              style="
+                                color: #14532d;
+                                font-size: 13px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Scan Plants
+                            </h4>
+                            <p
+                              style="color: #166534; font-size: 11px; margin: 0"
+                            >
+                              AI-powered disease detection
+                            </p>
+                          </td>
+                          <td
+                            width="25%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 40px;
+                                height: 40px;
+                                background: #22c55e;
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 40px;
+                                font-size: 18px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              💬
+                            </div>
+                            <h4
+                              style="
+                                color: #14532d;
+                                font-size: 13px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Expert Chat
+                            </h4>
+                            <p
+                              style="color: #166534; font-size: 11px; margin: 0"
+                            >
+                              Get professional advice
+                            </p>
+                          </td>
+                          <td
+                            width="25%"
+                            style="
+                              text-align: center;
+                              padding: 15px;
+                              vertical-align: top;
+                            "
+                          >
+                            <div
+                              style="
+                                width: 40px;
+                                height: 40px;
+                                background: #22c55e;
+                                border-radius: 50%;
+                                display: inline-block;
+                                line-height: 40px;
+                                font-size: 18px;
+                                margin-bottom: 10px;
+                                color: white;
+                              "
+                            >
+                              📈
+                            </div>
+                            <h4
+                              style="
+                                color: #14532d;
+                                font-size: 13px;
+                                font-weight: 600;
+                                margin: 0 0 5px 0;
+                              "
+                            >
+                              Reports
+                            </h4>
+                            <p
+                              style="color: #166534; font-size: 11px; margin: 0"
+                            >
+                              Track crop health trends
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Security Notice -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #fef3c7;
+                    border: 1px solid #fbbf24;
+                    border-radius: 8px;
+                    margin: 30px 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 20px; text-align: center">
+                      <h4
+                        style="
+                          color: #92400e;
+                          font-size: 16px;
+                          font-weight: 600;
+                          margin: 0 0 10px 0;
+                        "
+                      >
+                        ⏰ Link Expires Soon
+                      </h4>
+                      <p style="color: #92400e; font-size: 14px; margin: 0">
+                        For security, this magic link will expire in
+                        <strong>15 minutes</strong>. Use it soon to access your
+                        account.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Alternative Link -->
+                <p style="color: #6b7280; font-size: 14px; margin: 30px 0 0 0">
+                  Having trouble with the button? Copy and paste this link into
+                  your browser:<br />
+                  <a
+                    href="{{ .ConfirmationURL }}"
+                    style="
+                      color: #8b5cf6;
+                      word-break: break-all;
+                      font-size: 12px;
+                    "
+                    >{{ .ConfirmationURL }}</a
+                  >
+                </p>
+
+                <!-- Security Tip -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 20px; text-align: left">
+                      <h4
+                        style="
+                          color: #475569;
+                          font-size: 14px;
+                          font-weight: 600;
+                          margin: 0 0 8px 0;
+                        "
+                      >
+                        🔍 Security Tip
+                      </h4>
+                      <p
+                        style="
+                          color: #64748b;
+                          font-size: 13px;
+                          margin: 0;
+                          line-height: 1.5;
+                        "
+                      >
+                        Always verify that the login link takes you to the
+                        official Agrisol domain. If you didn't request this
+                        login, please ignore this email.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style="
+                  background-color: #1f2937;
+                  color: #9ca3af;
+                  padding: 30px;
+                  text-align: center;
+                  border-radius: 0 0 12px 12px;
+                "
+              >
+                <h4
+                  style="
+                    color: white;
+                    font-size: 18px;
+                    font-weight: 600;
+                    margin: 0 0 15px 0;
+                  "
+                >
+                  Secure Access to Agrisol
+                </h4>
+                <p style="font-size: 14px; margin: 0 0 10px 0">
+                  Passwordless login for modern agriculture
+                </p>
+                <p style="font-size: 14px; margin: 0 0 20px 0">
+                  Need help? Contact us at
+                  <a
+                    href="mailto:support@agrisol.com"
+                    style="color: #8b5cf6; text-decoration: none"
+                    >support@agrisol.com</a
+                  >
+                </p>
+
+                <!-- Social Links -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  style="margin: 20px auto 0 auto"
+                >
+                  <tr>
+                    <td style="padding: 0 5px">
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 8px;
+                          background-color: #374151;
+                          border-radius: 50%;
+                          color: #9ca3af;
+                          text-decoration: none;
+                          width: 32px;
+                          height: 32px;
+                          line-height: 16px;
+                          text-align: center;
+                        "
+                        >📘</a
+                      >
+                    </td>
+                    <td style="padding: 0 5px">
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 8px;
+                          background-color: #374151;
+                          border-radius: 50%;
+                          color: #9ca3af;
+                          text-decoration: none;
+                          width: 32px;
+                          height: 32px;
+                          line-height: 16px;
+                          text-align: center;
+                        "
+                        >🐦</a
+                      >
+                    </td>
+                    <td style="padding: 0 5px">
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 8px;
+                          background-color: #374151;
+                          border-radius: 50%;
+                          color: #9ca3af;
+                          text-decoration: none;
+                          width: 32px;
+                          height: 32px;
+                          line-height: 16px;
+                          text-align: center;
+                        "
+                        >📷</a
+                      >
+                    </td>
+                    <td style="padding: 0 5px">
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 8px;
+                          background-color: #374151;
+                          border-radius: 50%;
+                          color: #9ca3af;
+                          text-decoration: none;
+                          width: 32px;
+                          height: 32px;
+                          line-height: 16px;
+                          text-align: center;
+                        "
+                        >💼</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin: 20px 0 0 0; font-size: 12px">
+                  © 2025 Agrisol. All rights reserved.<br />
+                  <a href="#" style="color: #8b5cf6; text-decoration: none"
+                    >Privacy Policy</a
+                  >
+                  |
+                  <a href="#" style="color: #8b5cf6; text-decoration: none"
+                    >Terms of Service</a
+                  >
+                  |
+                  <a href="#" style="color: #8b5cf6; text-decoration: none"
+                    >Unsubscribe</a
+                  >
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
     </table>
-</body>
+  </body>
 </html>
