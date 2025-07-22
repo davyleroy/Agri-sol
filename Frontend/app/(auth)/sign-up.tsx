@@ -146,9 +146,11 @@ export default function SignUpScreen() {
     if (error) {
       Alert.alert(t('signUpError'), error.message);
     } else {
-      Alert.alert(t('success'), t('accountCreated'), [
-        { text: t('ok'), onPress: () => router.replace('/(tabs)') },
-      ]);
+      Alert.alert(
+        t('success'),
+        t('accountCreated check your email for verification'),
+        [{ text: t('ok'), onPress: () => router.replace('/(tabs)') }],
+      );
     }
   };
 

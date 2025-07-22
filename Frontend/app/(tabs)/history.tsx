@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Search,
@@ -7,92 +14,222 @@ import {
   AlertTriangle,
   Clock,
   Filter,
+  Users,
+  Eye,
+  Shield,
 } from 'lucide-react-native';
 import { ThemedScrollView } from '@/components/ThemedView';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { supabase } from '@/contexts/AuthContext';
+
+interface ScanHistory {
+  id: string;
+  user_id: string;
+  user_email: string;
+  date: string;
+  time: string;
+  image_url: string;
+  disease: string;
+  confidence: number;
+  status: 'healthy' | 'disease';
+  crop: string;
+  location?: string;
+  notes?: string;
+}
 
 export default function HistoryScreen() {
   const [filter, setFilter] = useState('all');
+  const [scanHistory, setScanHistory] = useState<ScanHistory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showAllUsers, setShowAllUsers] = useState(false);
   const { colors } = useTheme();
+  const { user } = useAuth();
+  const { t, currentLanguage } = useLanguage();
 
-  const historyData = [
-    {
-      id: '1',
-      date: '2024-01-15',
-      time: '14:30',
-      image:
-        'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
-      disease: 'Early Blight',
-      confidence: 89,
-      status: 'disease',
-      crop: 'Tomato',
-    },
-    {
-      id: '2',
-      date: '2024-01-14',
-      time: '09:15',
-      image:
-        'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
-      disease: 'Healthy Plant',
-      confidence: 95,
-      status: 'healthy',
-      crop: 'Potato',
-    },
-    {
-      id: '3',
-      date: '2024-01-13',
-      time: '16:45',
-      image:
-        'https://images.pexels.com/photos/1459534/pexels-photo-1459534.jpeg?auto=compress&cs=tinysrgb&w=300',
-      disease: 'Healthy Plant',
-      confidence: 92,
-      status: 'healthy',
-      crop: 'Bean',
-    },
-    {
-      id: '4',
-      date: '2024-01-12',
-      time: '11:20',
-      image:
-        'https://images.pexels.com/photos/1153655/pexels-photo-1153655.jpeg?auto=compress&cs=tinysrgb&w=300',
-      disease: 'Leaf Spot',
-      confidence: 79,
-      status: 'disease',
-      crop: 'Tomato',
-    },
-  ];
+  // Check if user is admin
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
 
+        setIsAdmin(profile?.role === 'admin');
+      }
+    };
+
+    checkAdminStatus();
+  }, [user]);
+
+  // Fetch scan history
+  useEffect(() => {
+    fetchScanHistory();
+  }, [user, showAllUsers]);
+
+  const fetchScanHistory = async () => {
+    try {
+      setLoading(true);
+
+      let query = supabase
+        .from('scan_history')
+        .select(
+          `
+          id,
+          user_id,
+          date,
+          time,
+          image_url,
+          disease,
+          confidence,
+          status,
+          crop,
+          location,
+          notes,
+          profiles!inner(email)
+        `,
+        )
+        .order('date', { ascending: false })
+        .order('time', { ascending: false });
+
+      // If not admin or not showing all users, filter by current user
+      if (!isAdmin || !showAllUsers) {
+        query = query.eq('user_id', user?.id);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.warn('Error fetching scan history with profiles:', error);
+
+        // Fallback: try without profiles relationship
+        let fallbackQuery = supabase
+          .from('scan_history')
+          .select(
+            `
+            id,
+            user_id,
+            date,
+            time,
+            image_url,
+            disease,
+            confidence,
+            status,
+            crop,
+            location,
+            notes
+          `,
+          )
+          .order('date', { ascending: false })
+          .order('time', { ascending: false });
+
+        // If not admin or not showing all users, filter by current user
+        if (!isAdmin || !showAllUsers) {
+          fallbackQuery = fallbackQuery.eq('user_id', user?.id);
+        }
+
+        const { data: fallbackData, error: fallbackError } =
+          await fallbackQuery;
+
+        if (fallbackError) {
+          console.error('Error fetching scan history:', fallbackError);
+          Alert.alert('Error', 'Failed to load scan history');
+          return;
+        }
+
+        const formattedData: ScanHistory[] =
+          fallbackData?.map((item: any) => ({
+            id: item.id,
+            user_id: item.user_id,
+            user_email: item.user_id || 'Unknown',
+            date: item.date,
+            time: item.time,
+            image_url: item.image_url,
+            disease: item.disease,
+            confidence: item.confidence,
+            status: item.status,
+            crop: item.crop,
+            location: item.location,
+            notes: item.notes,
+          })) || [];
+
+        setScanHistory(formattedData);
+        return;
+      }
+
+      const formattedData: ScanHistory[] =
+        data?.map((item: any) => ({
+          id: item.id,
+          user_id: item.user_id,
+          user_email: item.profiles?.email || item.user_id || 'Unknown',
+          date: item.date,
+          time: item.time,
+          image_url: item.image_url,
+          disease: item.disease,
+          confidence: item.confidence,
+          status: item.status,
+          crop: item.crop,
+          location: item.location,
+          notes: item.notes,
+        })) || [];
+
+      setScanHistory(formattedData);
+    } catch (error) {
+      console.error('Error fetching scan history:', error);
+      Alert.alert('Error', 'Failed to load scan history');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Calculate stats
   const stats = [
     {
-      label: 'Total Scans',
-      value: '24',
+      label: t('totalScans') || 'Total Scans',
+      value: scanHistory.length.toString(),
       icon: Search,
       color: '#2563eb',
     },
     {
-      label: 'Healthy Plants',
-      value: '18',
+      label: t('healthyPlants') || 'Healthy Plants',
+      value: scanHistory
+        .filter((item) => item.status === 'healthy')
+        .length.toString(),
       icon: Leaf,
       color: '#059669',
     },
     {
-      label: 'Issues Found',
-      value: '6',
+      label: t('issuesFound') || 'Issues Found',
+      value: scanHistory
+        .filter((item) => item.status === 'disease')
+        .length.toString(),
       icon: AlertTriangle,
       color: '#dc2626',
     },
   ];
 
   const filters = [
-    { id: 'all', label: 'All', count: 24 },
-    { id: 'healthy', label: 'Healthy', count: 18 },
-    { id: 'disease', label: 'Issues', count: 6 },
+    { id: 'all', label: t('all') || 'All', count: scanHistory.length },
+    {
+      id: 'healthy',
+      label: t('healthy') || 'Healthy',
+      count: scanHistory.filter((item) => item.status === 'healthy').length,
+    },
+    {
+      id: 'disease',
+      label: t('issues') || 'Issues',
+      count: scanHistory.filter((item) => item.status === 'disease').length,
+    },
   ];
 
   const filteredData =
     filter === 'all'
-      ? historyData
-      : historyData.filter((item) => item.status === filter);
+      ? scanHistory
+      : scanHistory.filter((item) => item.status === filter);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -116,6 +253,70 @@ export default function HistoryScreen() {
     }
   };
 
+  const getDiseaseTranslation = (disease: string) => {
+    const diseaseTranslations: { [key: string]: { [key: string]: string } } = {
+      'Early Blight': {
+        en: 'Early Blight',
+        rw: 'Ubutarumikazi bwo Mu ntangiriro',
+        fr: 'Mildiou précoce',
+      },
+      'Late Blight': {
+        en: 'Late Blight',
+        rw: 'Ubutarumikazi bwo Mu nyuma',
+        fr: 'Mildiou tardif',
+      },
+      'Healthy Plant': {
+        en: 'Healthy Plant',
+        rw: 'Ibihingwa Bikomeye',
+        fr: 'Plante saine',
+      },
+      'Leaf Spot': {
+        en: 'Leaf Spot',
+        rw: "Amaro y'Ibihingwa",
+        fr: 'Tache foliaire',
+      },
+      'Powdery Mildew': {
+        en: 'Powdery Mildew',
+        rw: "Ubutarumikazi bw'Umukungugu",
+        fr: 'Oïdium',
+      },
+      'Bacterial Spot': {
+        en: 'Bacterial Spot',
+        rw: "Amaro y'Ibihingwa by'Ubwoko",
+        fr: 'Tache bactérienne',
+      },
+    };
+
+    return diseaseTranslations[disease]?.[currentLanguage.code] || disease;
+  };
+
+  const getCropTranslation = (crop: string) => {
+    const cropTranslations: { [key: string]: { [key: string]: string } } = {
+      Tomato: {
+        en: 'Tomato',
+        rw: 'Inyanya',
+        fr: 'Tomate',
+      },
+      Potato: {
+        en: 'Potato',
+        rw: 'Ibirayi',
+        fr: 'Pomme de terre',
+      },
+      Bean: {
+        en: 'Bean',
+        rw: 'Ibishyimbo',
+        fr: 'Haricot',
+      },
+      Maize: {
+        en: 'Maize',
+        rw: 'Ibigori',
+        fr: 'Maïs',
+      },
+    };
+
+    return cropTranslations[crop]?.[currentLanguage.code] || crop;
+  };
+
   return (
     <ThemedScrollView
       style={styles.container}
@@ -123,8 +324,44 @@ export default function HistoryScreen() {
     >
       {/* Header */}
       <LinearGradient colors={['#1f2937', '#374151']} style={styles.header}>
-        <Text style={styles.title}>Scan History</Text>
-        <Text style={styles.subtitle}>Track your crop health over time</Text>
+        <Text style={styles.title}>{t('scanHistory') || 'Scan History'}</Text>
+        <Text style={styles.subtitle}>
+          {t('trackCropHealth') || 'Track your crop health over time'}
+        </Text>
+
+        {/* Admin Controls */}
+        {isAdmin && (
+          <View style={styles.adminControls}>
+            <TouchableOpacity
+              style={[
+                styles.adminButton,
+                {
+                  backgroundColor: showAllUsers
+                    ? colors.primary
+                    : colors.border,
+                },
+              ]}
+              onPress={() => setShowAllUsers(!showAllUsers)}
+            >
+              <Users
+                size={16}
+                color={showAllUsers ? colors.surface : colors.textSecondary}
+              />
+              <Text
+                style={[
+                  styles.adminButtonText,
+                  {
+                    color: showAllUsers ? colors.surface : colors.textSecondary,
+                  },
+                ]}
+              >
+                {showAllUsers
+                  ? t('myScans') || 'My Scans'
+                  : t('allUsers') || 'All Users'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </LinearGradient>
 
       {/* Stats */}
@@ -178,68 +415,99 @@ export default function HistoryScreen() {
 
       {/* History List */}
       <View style={styles.historyContainer}>
-        {filteredData.map((item) => {
-          const StatusIcon = getStatusIcon(item.status);
-          return (
-            <TouchableOpacity
-              key={item.id}
-              style={[styles.historyCard, { backgroundColor: colors.surface }]}
-            >
-              <Image source={{ uri: item.image }} style={styles.historyImage} />
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+              {t('loading') || 'Loading...'}
+            </Text>
+          </View>
+        ) : (
+          filteredData.map((item) => {
+            const StatusIcon = getStatusIcon(item.status);
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={[
+                  styles.historyCard,
+                  { backgroundColor: colors.surface },
+                ]}
+              >
+                <Image
+                  source={{ uri: item.image_url }}
+                  style={styles.historyImage}
+                />
 
-              <View style={styles.historyContent}>
-                <View style={styles.historyHeader}>
-                  <Text style={[styles.historyTitle, { color: colors.text }]}>
-                    {item.crop}
-                  </Text>
-                  <View style={styles.timeContainer}>
-                    <Clock size={12} color="#6b7280" strokeWidth={2} />
-                    <Text style={styles.timeText}>{item.time}</Text>
+                <View style={styles.historyContent}>
+                  <View style={styles.historyHeader}>
+                    <Text style={[styles.historyTitle, { color: colors.text }]}>
+                      {getCropTranslation(item.crop)}
+                    </Text>
+                    <View style={styles.timeContainer}>
+                      <Clock size={12} color="#6b7280" strokeWidth={2} />
+                      <Text style={styles.timeText}>{item.time}</Text>
+                    </View>
                   </View>
-                </View>
 
-                <View style={styles.diseaseContainer}>
-                  <StatusIcon
-                    size={16}
-                    color={getStatusColor(item.status)}
-                    strokeWidth={2}
-                  />
-                  <Text
-                    style={[
-                      styles.diseaseText,
-                      { color: colors.textSecondary },
-                    ]}
-                  >
-                    {item.disease}
-                  </Text>
-                </View>
-
-                <View style={styles.historyFooter}>
-                  <Text
-                    style={[styles.dateText, { color: colors.textSecondary }]}
-                  >
-                    {item.date}
-                  </Text>
-                  <View style={styles.confidenceContainer}>
-                    <Text style={styles.confidenceText}>
-                      {item.confidence}% confidence
+                  <View style={styles.diseaseContainer}>
+                    <StatusIcon
+                      size={16}
+                      color={getStatusColor(item.status)}
+                      strokeWidth={2}
+                    />
+                    <Text
+                      style={[
+                        styles.diseaseText,
+                        { color: colors.textSecondary },
+                      ]}
+                    >
+                      {getDiseaseTranslation(item.disease)}
                     </Text>
                   </View>
+
+                  {/* Admin: Show user email */}
+                  {isAdmin && showAllUsers && (
+                    <View style={styles.userContainer}>
+                      <Shield size={12} color="#6b7280" strokeWidth={2} />
+                      <Text
+                        style={[
+                          styles.userText,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        {item.user_email}
+                      </Text>
+                    </View>
+                  )}
+
+                  <View style={styles.historyFooter}>
+                    <Text
+                      style={[styles.dateText, { color: colors.textSecondary }]}
+                    >
+                      {item.date}
+                    </Text>
+                    <View style={styles.confidenceContainer}>
+                      <Text style={styles.confidenceText}>
+                        {item.confidence}% {t('confidence') || 'confidence'}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              </TouchableOpacity>
+            );
+          })
+        )}
       </View>
 
       {/* Empty State */}
-      {filteredData.length === 0 && (
+      {!loading && filteredData.length === 0 && (
         <View style={styles.emptyContainer}>
           <Search size={48} color="#6b7280" strokeWidth={1} />
-          <Text style={styles.emptyTitle}>No scans found</Text>
+          <Text style={styles.emptyTitle}>
+            {t('noScansFound') || 'No scans found'}
+          </Text>
           <Text style={styles.emptyText}>
-            No scans match your current filter. Try selecting a different
-            filter.
+            {t('noScansMatchFilter') ||
+              'No scans match your current filter. Try selecting a different filter.'}
           </Text>
         </View>
       )}
@@ -270,6 +538,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#ffffff',
     opacity: 0.8,
+  },
+  adminControls: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  adminButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 8,
+  },
+  adminButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   statsContainer: {
     flexDirection: 'row',
@@ -389,6 +673,16 @@ const styles = StyleSheet.create({
     color: '#374151',
     fontWeight: '600',
   },
+  userContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 4,
+  },
+  userText: {
+    fontSize: 12,
+    color: '#6b7280',
+  },
   historyFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -408,6 +702,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#059669',
     fontWeight: '600',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#6b7280',
   },
   emptyContainer: {
     alignItems: 'center',

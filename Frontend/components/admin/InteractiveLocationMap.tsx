@@ -1,317 +1,164 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Dimensions,
-  ActivityIndicator,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
-import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Supercluster from 'supercluster';
-import {
-  MapPin,
-  Eye,
-  Activity,
-  AlertTriangle,
-  Plus,
-  Minus,
-  RefreshCw,
-  Layers,
-} from 'lucide-react-native';
-import { adminService } from '../../services/adminService';
-import { LocationAnalyticsData } from '../../services/locationTrackingService';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import { useScanCountByLocation } from '../../hooks/useSupabaseRPC';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
-interface LocationWithCoordinates extends LocationAnalyticsData {
-  latitude: number;
-  longitude: number;
-}
-
-interface ClusterFeature {
-  geometry: {
-    coordinates: [number, number];
-  };
-  properties: LocationWithCoordinates & {
-    cluster?: boolean;
-    cluster_id?: number;
-    point_count?: number;
-  };
-}
-
-type ViewMode = 'scans' | 'health' | 'risk';
-
-interface InteractiveLocationMapProps {
-  onLocationSelect?: (location: LocationWithCoordinates) => void;
-  selectedLocation?: LocationWithCoordinates | null;
-  height?: number;
-}
-
-const RWANDA_BOUNDS = {
-  latitude: -1.9403,
-  longitude: 29.8739,
-  latitudeDelta: 2.5,
-  longitudeDelta: 2.5,
+// Rwanda coordinates and districts
+const RWANDA_COORDINATES = {
+  latitude: -1.9441,
+  longitude: 30.0619,
+  latitudeDelta: 1.5,
+  longitudeDelta: 1.5,
 };
 
-const CACHE_KEY = 'location_map_data';
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const DISTRICT_COORDINATES = {
+  'Kigali': { latitude: -1.9441, longitude: 30.0619 },
+  'Huye': { latitude: -2.5967, longitude: 29.7389 },
+  'Musanze': { latitude: -1.4998, longitude: 29.6344 },
+  'Rubavu': { latitude: -1.6734, longitude: 29.3489 },
+  'Rusizi': { latitude: -2.4608, longitude: 29.3267 },
+  'Karongi': { latitude: -2.0744, longitude: 29.3497 },
+  'Nyagatare': { latitude: -1.2976, longitude: 30.3216 },
+  'Gatsibo': { latitude: -1.4300, longitude: 30.3500 },
+  'Kayonza': { latitude: -1.7500, longitude: 30.5000 },
+  'Rwamagana': { latitude: -1.9486, longitude: 30.4347 },
+  'Bugesera': { latitude: -2.1667, longitude: 30.1667 },
+  'Kirehe': { latitude: -2.5000, longitude: 30.5000 },
+  'Ngoma': { latitude: -2.2500, longitude: 30.5000 },
+  'Gisagara': { latitude: -2.5833, longitude: 29.8500 },
+  'Nyanza': { latitude: -2.3500, longitude: 29.7500 },
+  'Muhanga': { latitude: -2.0833, longitude: 29.7500 },
+  'Kamonyi': { latitude: -2.0000, longitude: 29.9167 },
+  'Ruhango': { latitude: -2.1667, longitude: 29.8333 },
+  'Nyanza': { latitude: -2.3500, longitude: 29.7500 },
+  'Huye': { latitude: -2.5967, longitude: 29.7389 },
+  'Nyamagabe': { latitude: -2.5000, longitude: 29.5000 },
+  'Gisagara': { latitude: -2.5833, longitude: 29.8500 },
+  'Nyaruguru': { latitude: -2.7500, longitude: 29.5000 },
+  'Muhanga': { latitude: -2.0833, longitude: 29.7500 },
+  'Kamonyi': { latitude: -2.0000, longitude: 29.9167 },
+  'Ruhango': { latitude: -2.1667, longitude: 29.8333 },
+  'Nyanza': { latitude: -2.3500, longitude: 29.7500 },
+  'Rusizi': { latitude: -2.4608, longitude: 29.3267 },
+  'Nyamasheke': { latitude: -2.5000, longitude: 29.0000 },
+  'Karongi': { latitude: -2.0744, longitude: 29.3497 },
+  'Rubavu': { latitude: -1.6734, longitude: 29.3489 },
+  'Rutsiro': { latitude: -1.7500, longitude: 29.2500 },
+  'Nyabihu': { latitude: -1.5833, longitude: 29.5000 },
+  'Ngororero': { latitude: -1.8333, longitude: 29.5000 },
+  'Rusizi': { latitude: -2.4608, longitude: 29.3267 },
+  'Nyamasheke': { latitude: -2.5000, longitude: 29.0000 },
+  'Karongi': { latitude: -2.0744, longitude: 29.3497 },
+  'Rubavu': { latitude: -1.6734, longitude: 29.3489 },
+  'Rutsiro': { latitude: -1.7500, longitude: 29.2500 },
+  'Nyabihu': { latitude: -1.5833, longitude: 29.5000 },
+  'Ngororero': { latitude: -1.8333, longitude: 29.5000 },
+};
 
-export default function InteractiveLocationMap({
-  onLocationSelect,
-  selectedLocation,
-  height = 400,
-}: InteractiveLocationMapProps) {
-  const [locations, setLocations] = useState<LocationWithCoordinates[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<ViewMode>('scans');
-  const [zoom, setZoom] = useState(10);
-  const [clusteredPoints, setClusteredPoints] = useState<ClusterFeature[]>([]);
-  const [error, setError] = useState<string | null>(null);
+interface MapMarker {
+  id: string;
+  coordinate: {
+  latitude: number;
+  longitude: number;
+  };
+  title: string;
+  description: string;
+  scanCount: number;
+  healthyCount: number;
+  diseasedCount: number;
+  healthRate: number;
+}
 
-  const mapRef = useRef<MapView>(null);
-  const superclusterRef = useRef<Supercluster | null>(null);
+export default function InteractiveLocationMap() {
+  const [selectedMarker, setSelectedMarker] = useState<MapMarker | null>(null);
+  const [mapType, setMapType] = useState<'standard' | 'satellite'>('standard');
+  
+  const {
+    data: locationData,
+    loading,
+    error,
+    refetch,
+  } = useScanCountByLocation();
 
-  // Initialize supercluster
-  useEffect(() => {
-    superclusterRef.current = new Supercluster({
-      radius: 40,
-      maxZoom: 16,
-      minZoom: 3,
-      extent: 512,
-      nodeSize: 64,
-    });
-  }, []);
+  const markers: MapMarker[] = React.useMemo(() => {
+    if (!locationData) return [];
 
-  // Load cached data or fetch from API
-  const loadLocationData = async (forceRefresh = false) => {
-    try {
-      setLoading(true);
-      setError(null);
+    return locationData
+      .filter((location) => {
+        const coords = DISTRICT_COORDINATES[location.location_name as keyof typeof DISTRICT_COORDINATES];
+        return coords && location.scan_count > 0;
+      })
+      .map((location) => {
+        const coords = DISTRICT_COORDINATES[location.location_name as keyof typeof DISTRICT_COORDINATES];
+        const healthRate = location.scan_count > 0 
+          ? (location.healthy_count / location.scan_count) * 100 
+          : 0;
 
-      // Try to load from cache first
-      if (!forceRefresh) {
-        const cachedData = await AsyncStorage.getItem(CACHE_KEY);
-        if (cachedData) {
-          const { data, timestamp } = JSON.parse(cachedData);
-          if (Date.now() - timestamp < CACHE_DURATION) {
-            const locationsWithCoords = await addCoordinatesToLocations(data);
-            setLocations(locationsWithCoords);
-            updateClusters(locationsWithCoords);
-            setLoading(false);
-            return;
-          }
-        }
-      }
+        return {
+          id: location.location_name,
+          coordinate: coords!,
+          title: location.location_name,
+          description: `${location.scan_count} scans`,
+          scanCount: location.scan_count,
+          healthyCount: location.healthy_count,
+          diseasedCount: location.disease_count,
+          healthRate: healthRate,
+        };
+      });
+  }, [locationData]);
 
-      // Fetch fresh data from API
-      console.log('📍 Fetching fresh location data...');
-      const result = await adminService.getLocationLeaderboard(
-        'total_scans',
-        100,
-      );
-
-      if (result.success) {
-        const locationsWithCoords = await addCoordinatesToLocations(
-          result.data,
-        );
-        setLocations(locationsWithCoords);
-        updateClusters(locationsWithCoords);
-
-        // Cache the data
-        await AsyncStorage.setItem(
-          CACHE_KEY,
-          JSON.stringify({
-            data: result.data,
-            timestamp: Date.now(),
-          }),
-        );
-
-        console.log(
-          `✅ Loaded ${locationsWithCoords.length} locations with coordinates`,
-        );
-      } else {
-        setError(result.error || 'Failed to load location data');
-        console.error('❌ Error loading locations:', result.error);
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      setError(errorMessage);
-      console.error('❌ Error loading location data:', err);
-    } finally {
-      setLoading(false);
-    }
+  const getMarkerColor = (healthRate: number) => {
+    if (healthRate >= 80) return '#22c55e'; // Green - Healthy
+    if (healthRate >= 60) return '#f59e0b'; // Yellow - Moderate
+    return '#ef4444'; // Red - Diseased
   };
 
-  // Add coordinates to locations (mock implementation for demo)
-  const addCoordinatesToLocations = async (
-    locations: LocationAnalyticsData[],
-  ): Promise<LocationWithCoordinates[]> => {
-    const coordinateMap = getRwandaCoordinates();
-
-    return locations.map((location) => ({
-      ...location,
-      latitude:
-        coordinateMap[location.location_string]?.latitude ||
-        RWANDA_BOUNDS.latitude + (Math.random() - 0.5) * 0.5,
-      longitude:
-        coordinateMap[location.location_string]?.longitude ||
-        RWANDA_BOUNDS.longitude + (Math.random() - 0.5) * 0.5,
-    }));
+  const getMarkerSize = (scanCount: number) => {
+    if (scanCount >= 10) return 25;
+    if (scanCount >= 5) return 20;
+    return 15;
   };
 
-  // Update clusters based on current zoom and locations
-  const updateClusters = (locationData: LocationWithCoordinates[]) => {
-    if (!superclusterRef.current) return;
-
-    const features: ClusterFeature[] = locationData.map((location) => ({
-      geometry: {
-        coordinates: [location.longitude, location.latitude],
-      },
-      properties: location,
-    }));
-
-    superclusterRef.current.load(features);
-
-    const bounds = [
-      RWANDA_BOUNDS.longitude - RWANDA_BOUNDS.longitudeDelta / 2,
-      RWANDA_BOUNDS.latitude - RWANDA_BOUNDS.latitudeDelta / 2,
-      RWANDA_BOUNDS.longitude + RWANDA_BOUNDS.longitudeDelta / 2,
-      RWANDA_BOUNDS.latitude + RWANDA_BOUNDS.latitudeDelta / 2,
-    ];
-
-    const clusters = superclusterRef.current.getClusters(bounds, zoom);
-    setClusteredPoints(clusters);
+  const handleMarkerPress = (marker: MapMarker) => {
+    setSelectedMarker(marker);
   };
 
-  // Handle region change for clustering
-  const handleRegionChange = (region: any) => {
-    const newZoom = Math.round(
-      Math.log(360 / region.longitudeDelta) / Math.LN2,
-    );
-    setZoom(newZoom);
-
-    if (superclusterRef.current && locations.length > 0) {
-      const bounds = [
-        region.longitude - region.longitudeDelta / 2,
-        region.latitude - region.latitudeDelta / 2,
-        region.longitude + region.longitudeDelta / 2,
-        region.latitude + region.latitudeDelta / 2,
-      ];
-
-      const clusters = superclusterRef.current.getClusters(bounds, newZoom);
-      setClusteredPoints(clusters);
-    }
-  };
-
-  // Handle cluster tap
-  const handleClusterPress = (cluster: ClusterFeature) => {
-    if (cluster.properties.cluster && superclusterRef.current) {
-      const children = superclusterRef.current.getChildren(
-        cluster.properties.cluster_id!,
-      );
-      const bounds = children.reduce(
-        (acc, child) => {
-          const [lng, lat] = child.geometry.coordinates;
-          return [
-            Math.min(acc[0], lng),
-            Math.min(acc[1], lat),
-            Math.max(acc[2], lng),
-            Math.max(acc[3], lat),
-          ];
-        },
-        [Infinity, Infinity, -Infinity, -Infinity],
-      );
-
-      const padding = 0.01;
-      mapRef.current?.fitToCoordinates(
-        children.map((child) => ({
-          latitude: child.geometry.coordinates[1],
-          longitude: child.geometry.coordinates[0],
-        })),
-        {
-          edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-          animated: true,
-        },
+  const handleCalloutPress = () => {
+    if (selectedMarker) {
+      Alert.alert(
+        selectedMarker.title,
+        `Total Scans: ${selectedMarker.scanCount}\n` +
+        `Healthy: ${selectedMarker.healthyCount}\n` +
+        `Diseased: ${selectedMarker.diseasedCount}\n` +
+        `Health Rate: ${selectedMarker.healthRate.toFixed(1)}%`,
+        [{ text: 'OK' }]
       );
     }
   };
-
-  // Get marker color based on view mode
-  const getMarkerColor = (location: LocationWithCoordinates): string => {
-    switch (viewMode) {
-      case 'scans':
-        return location.total_scans > 50
-          ? '#dc2626'
-          : location.total_scans > 20
-            ? '#f59e0b'
-            : '#10b981';
-      case 'health':
-        return location.healthy_percentage > 80
-          ? '#10b981'
-          : location.healthy_percentage > 60
-            ? '#f59e0b'
-            : '#dc2626';
-      case 'risk':
-        const riskScore = (location.disease_scans / location.total_scans) * 100;
-        return riskScore > 30
-          ? '#dc2626'
-          : riskScore > 15
-            ? '#f59e0b'
-            : '#10b981';
-      default:
-        return '#6b7280';
-    }
-  };
-
-  // Get marker size based on total scans
-  const getMarkerSize = (location: LocationWithCoordinates): number => {
-    if (location.total_scans > 100) return 16;
-    if (location.total_scans > 50) return 12;
-    if (location.total_scans > 20) return 8;
-    return 6;
-  };
-
-  // Initialize data loading
-  useEffect(() => {
-    loadLocationData();
-  }, []);
-
-  // Update clusters when locations change
-  useEffect(() => {
-    if (locations.length > 0) {
-      updateClusters(locations);
-    }
-  }, [locations, zoom]);
-
-  const viewModeButtons = [
-    { mode: 'scans' as ViewMode, label: 'Total Scans', icon: Eye },
-    { mode: 'health' as ViewMode, label: 'Health Status', icon: Activity },
-    { mode: 'risk' as ViewMode, label: 'Disease Risk', icon: AlertTriangle },
-  ];
 
   if (loading) {
     return (
-      <View style={[styles.container, { height }, styles.centerContent]}>
-        <ActivityIndicator size="large" color="#059669" />
-        <Text style={styles.loadingText}>Loading location data...</Text>
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading map data...</Text>
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={[styles.container, { height }, styles.centerContent]}>
-        <AlertTriangle size={48} color="#dc2626" strokeWidth={2} />
-        <Text style={styles.errorText}>Failed to load map</Text>
-        <Text style={styles.errorSubtext}>{error}</Text>
-        <TouchableOpacity
-          style={styles.retryButton}
-          onPress={() => loadLocationData(true)}
-        >
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading map: {error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={refetch}>
           <Text style={styles.retryButtonText}>Retry</Text>
         </TouchableOpacity>
       </View>
@@ -319,367 +166,207 @@ export default function InteractiveLocationMap({
   }
 
   return (
-    <View style={[styles.container, { height }]}>
-      {/* View Mode Selector */}
-      <View style={styles.controlsContainer}>
-        <View style={styles.viewModeContainer}>
-          {viewModeButtons.map(({ mode, label, icon: Icon }) => (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Rwanda Scan Map</Text>
+        <View style={styles.controls}>
             <TouchableOpacity
-              key={mode}
-              style={[
-                styles.viewModeButton,
-                viewMode === mode && styles.activeViewModeButton,
-              ]}
-              onPress={() => setViewMode(mode)}
+            style={[styles.mapTypeButton, mapType === 'standard' && styles.activeButton]}
+            onPress={() => setMapType('standard')}
             >
-              <Icon
-                size={14}
-                color={viewMode === mode ? '#ffffff' : '#6b7280'}
-                strokeWidth={2}
-              />
-              <Text
-                style={[
-                  styles.viewModeText,
-                  viewMode === mode && styles.activeViewModeText,
-                ]}
+            <MaterialIcons name="map" size={20} color={mapType === 'standard' ? '#fff' : '#666'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.mapTypeButton, mapType === 'satellite' && styles.activeButton]}
+            onPress={() => setMapType('satellite')}
               >
-                {label}
-              </Text>
+            <MaterialIcons name="satellite" size={20} color={mapType === 'satellite' ? '#fff' : '#666'} />
             </TouchableOpacity>
-          ))}
         </View>
-
-        <TouchableOpacity
-          style={styles.refreshButton}
-          onPress={() => loadLocationData(true)}
-        >
-          <RefreshCw size={16} color="#6b7280" strokeWidth={2} />
-        </TouchableOpacity>
       </View>
 
-      {/* Map */}
       <MapView
-        ref={mapRef}
         style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={RWANDA_BOUNDS}
-        onRegionChangeComplete={handleRegionChange}
+        initialRegion={RWANDA_COORDINATES}
+        mapType={mapType}
         showsUserLocation={false}
-        showsCompass={true}
-        showsScale={true}
-        toolbarEnabled={false}
+        showsMyLocationButton={false}
       >
-        {clusteredPoints.map((point, index) => {
-          const [longitude, latitude] = point.geometry.coordinates;
-
-          if (point.properties.cluster) {
-            // Render cluster marker
-            return (
+        {markers.map((marker) => (
               <Marker
-                key={`cluster-${index}`}
-                coordinate={{ latitude, longitude }}
-                onPress={() => handleClusterPress(point)}
-              >
-                <View
-                  style={[styles.clusterMarker, { backgroundColor: '#059669' }]}
-                >
-                  <Text style={styles.clusterText}>
-                    {point.properties.point_count}
-                  </Text>
-                </View>
-              </Marker>
-            );
-          } else {
-            // Render individual location marker
-            const location = point.properties;
-            return (
-              <Marker
-                key={`location-${index}`}
-                coordinate={{ latitude, longitude }}
-                onPress={() => onLocationSelect?.(location)}
+            key={marker.id}
+            coordinate={marker.coordinate}
+            title={marker.title}
+            description={marker.description}
+            onPress={() => handleMarkerPress(marker)}
               >
                 <View
                   style={[
-                    styles.locationMarker,
+                styles.marker,
                     {
-                      backgroundColor: getMarkerColor(location),
-                      width: getMarkerSize(location) + 8,
-                      height: getMarkerSize(location) + 8,
-                    },
-                    selectedLocation?.location_string ===
-                      location.location_string && styles.selectedMarker,
+                  backgroundColor: getMarkerColor(marker.healthRate),
+                  width: getMarkerSize(marker.scanCount),
+                  height: getMarkerSize(marker.scanCount),
+                },
                   ]}
-                >
-                  <MapPin
-                    size={getMarkerSize(location)}
-                    color="#ffffff"
-                    strokeWidth={2}
-                  />
-                </View>
-
-                <Callout style={styles.callout}>
-                  <View style={styles.calloutContent}>
-                    <Text style={styles.calloutTitle}>
-                      {location.location_string}
+            />
+            <Callout onPress={handleCalloutPress}>
+              <View style={styles.callout}>
+                <Text style={styles.calloutTitle}>{marker.title}</Text>
+                <Text style={styles.calloutText}>
+                  {marker.scanCount} scans
                     </Text>
-                    <Text style={styles.calloutSubtitle}>
-                      {location.total_scans} scans • {location.total_users}{' '}
-                      users
-                    </Text>
-                    <Text style={styles.calloutHealth}>
-                      {location.healthy_percentage}% healthy
+                <Text style={styles.calloutText}>
+                  {marker.healthRate.toFixed(1)}% healthy
                     </Text>
                   </View>
                 </Callout>
               </Marker>
-            );
-          }
-        })}
+        ))}
       </MapView>
 
-      {/* Map Legend */}
-      <View style={styles.legendContainer}>
+      <View style={styles.legend}>
+        <Text style={styles.legendTitle}>Health Status</Text>
+        <View style={styles.legendItems}>
         <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: '#10b981' }]} />
-          <Text style={styles.legendText}>
-            {viewMode === 'scans'
-              ? 'Low Activity'
-              : viewMode === 'health'
-                ? 'Healthy'
-                : 'Low Risk'}
-          </Text>
+            <View style={[styles.legendDot, { backgroundColor: '#22c55e' }]} />
+            <Text style={styles.legendText}>Healthy (≥80%)</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: '#f59e0b' }]} />
-          <Text style={styles.legendText}>
-            {viewMode === 'scans'
-              ? 'Medium Activity'
-              : viewMode === 'health'
-                ? 'Mixed Health'
-                : 'Medium Risk'}
-          </Text>
+            <View style={[styles.legendDot, { backgroundColor: '#f59e0b' }]} />
+            <Text style={styles.legendText}>Moderate (60-79%)</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: '#dc2626' }]} />
-          <Text style={styles.legendText}>
-            {viewMode === 'scans'
-              ? 'High Activity'
-              : viewMode === 'health'
-                ? 'Needs Attention'
-                : 'High Risk'}
-          </Text>
+            <View style={[styles.legendDot, { backgroundColor: '#ef4444' }]} />
+            <Text style={styles.legendText}>Diseased (<60%)</Text>
+          </View>
         </View>
       </View>
     </View>
   );
 }
 
-// Mock coordinate data for Rwanda locations
-const getRwandaCoordinates = () => ({
-  'Kigali, Rwanda': { latitude: -1.9706, longitude: 30.1044 },
-  'Musanze, Northern Province, Rwanda': {
-    latitude: -1.4969,
-    longitude: 29.6357,
-  },
-  'Huye, Southern Province, Rwanda': { latitude: -2.5963, longitude: 29.7392 },
-  'Rubavu, Western Province, Rwanda': { latitude: -1.6792, longitude: 29.2692 },
-  'Rwamagana, Eastern Province, Rwanda': {
-    latitude: -1.9486,
-    longitude: 30.4348,
-  },
-  'Nyagatare, Eastern Province, Rwanda': {
-    latitude: -1.2919,
-    longitude: 30.3314,
-  },
-  'Karongi, Western Province, Rwanda': {
-    latitude: -1.9544,
-    longitude: 29.3953,
-  },
-  'Gatsibo, Eastern Province, Rwanda': {
-    latitude: -1.5831,
-    longitude: 30.4275,
-  },
-  'Gicumbi, Northern Province, Rwanda': {
-    latitude: -1.7053,
-    longitude: 30.1156,
-  },
-  'Muhanga, Southern Province, Rwanda': {
-    latitude: -2.0853,
-    longitude: 29.7447,
-  },
-});
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    flex: 1,
+    backgroundColor: '#f8fafc',
   },
-  centerContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  controlsContainer: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#f8fafc',
+    padding: 16,
+    backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
   },
-  viewModeContainer: {
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1f2937',
+  },
+  controls: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    padding: 2,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    gap: 8,
   },
-  viewModeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 6,
-    gap: 4,
-  },
-  activeViewModeButton: {
-    backgroundColor: '#059669',
-  },
-  viewModeText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#6b7280',
-  },
-  activeViewModeText: {
-    color: '#ffffff',
-  },
-  refreshButton: {
+  mapTypeButton: {
     padding: 8,
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    borderRadius: 6,
+    backgroundColor: '#f3f4f6',
+  },
+  activeButton: {
+    backgroundColor: '#22c55e',
   },
   map: {
     flex: 1,
   },
-  clusterMarker: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  clusterText: {
-    color: '#ffffff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  locationMarker: {
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  selectedMarker: {
+  marker: {
+    borderRadius: 50,
     borderWidth: 2,
-    borderColor: '#ffffff',
+    borderColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   callout: {
-    minWidth: 150,
-  },
-  calloutContent: {
+    width: 150,
     padding: 8,
   },
   calloutTitle: {
     fontSize: 14,
     fontWeight: 'bold',
     color: '#1f2937',
+    marginBottom: 4,
   },
-  calloutSubtitle: {
+  calloutText: {
     fontSize: 12,
     color: '#6b7280',
-    marginTop: 2,
   },
-  calloutHealth: {
-    fontSize: 12,
-    color: '#059669',
-    fontWeight: '600',
-    marginTop: 2,
-  },
-  legendContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 8,
-    backgroundColor: '#f8fafc',
+  legend: {
+    backgroundColor: '#fff',
+    padding: 16,
     borderTopWidth: 1,
     borderTopColor: '#e5e7eb',
+  },
+  legendTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    marginBottom: 8,
+  },
+  legendItems: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
   },
-  legendColor: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+  legendDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
   },
   legendText: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#6b7280',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8fafc',
   },
   loadingText: {
     fontSize: 16,
     color: '#6b7280',
-    marginTop: 12,
+    marginTop: 8,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8fafc',
+    padding: 20,
   },
   errorText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#dc2626',
-    marginTop: 12,
+    fontSize: 16,
+    color: '#ef4444',
     textAlign: 'center',
-  },
-  errorSubtext: {
-    fontSize: 14,
-    color: '#6b7280',
-    marginTop: 8,
-    textAlign: 'center',
-    paddingHorizontal: 20,
+    marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: '#059669',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    marginTop: 16,
+    backgroundColor: '#22c55e',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
   },
   retryButtonText: {
-    color: '#ffffff',
+    color: '#fff',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });

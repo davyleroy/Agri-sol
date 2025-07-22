@@ -1,0 +1,329 @@
+// 🔧 TECHNICAL IMPLEMENTATION GUIDE FOR CURSOR
+
+// ===== 1. PROJECT STRUCTURE =====
+/*
+src/
+├── components/
+│   ├── admin/
+│   │   ├── map/
+│   │   │   ├── AdminMapDashboard.tsx          // Main container
+│   │   │   ├── MapAnalyticsPanel.tsx          // Side panel with stats
+│   │   │   ├── MapFilterControls.tsx          // Advanced filtering
+│   │   │   ├── MapVisualizationModes.tsx      // Heat map, choropleth
+│   │   │   ├── MapMarkerSystem.tsx            // Custom markers & clustering
+│   │   │   ├── MapExportTools.tsx             // PDF/CSV export
+│   │   │   └── MapLegend.tsx                  // Dynamic legend
+│   │   └── analytics/
+├── hooks/
+│   ├── map/
+│   │   ├── useMapData.ts                      // Main data fetching
+│   │   ├── useMapFilters.ts                   // Filter state management
+│   │   ├── useMapClustering.ts                // Marker clustering logic
+│   │   ├── useMapRealtime.ts                  // WebSocket integration
+│   │   └── useMapExport.ts                    // Export functionality
+└── types/
+    ├── map.ts                                 // Map-related types
+    └── admin.ts                               // Admin dashboard types
+*/
+
+// ===== 2. CORE TYPES DEFINITIONS =====
+interface MapDataPoint {
+  id: string;
+  location: {
+    name: string;
+    latitude: number;
+    longitude: number;
+    district: string;
+    province: string;
+  };
+  metrics: {
+    totalScans: number;
+    healthyScans: number;
+    diseasedScans: number;
+    healthRate: number;
+    lastScanAt: Date;
+  };
+  diseases: {
+    name: string;
+    count: number;
+    severity: 'low' | 'medium' | 'high';
+  }[];
+  users: {
+    activeCount: number;
+    totalCount: number;
+  };
+}
+
+interface MapFilters {
+  dateRange: {
+    start: Date;
+    end: Date;
+  };
+  diseases: string[];
+  crops: string[];
+  healthThreshold: [number, number];
+  districts: string[];
+  userTypes: string[];
+}
+
+interface MapVisualizationMode {
+  type: 'markers' | 'heatmap' | 'choropleth' | 'clusters';
+  metric: 'scanCount' | 'healthRate' | 'diseaseRate' | 'userActivity';
+  style: 'default' | 'satellite' | 'terrain';
+}
+
+// ===== 3. MAIN DATA HOOK PATTERN =====
+export const useMapData = (filters: MapFilters) => {
+  const queryClient = useQueryClient();
+  
+  // Main data query with caching
+  const mapDataQuery = useQuery({
+    queryKey: ['mapData', filters],
+    queryFn: () => fetchMapData(filters),
+    staleTime: 30 * 1000, // 30 seconds
+    cacheTime: 5 * 60 * 1000, // 5 minutes
+    refetchInterval: 60 * 1000, // 1 minute auto-refresh
+  });
+
+  // Real-time subscription
+  const { data: realtimeUpdates } = useMapRealtime();
+  
+  // Merge real-time updates with cached data
+  const enhancedData = useMemo(() => {
+    if (!mapDataQuery.data || !realtimeUpdates) return mapDataQuery.data;
+    return mergeRealtimeUpdates(mapDataQuery.data, realtimeUpdates);
+  }, [mapDataQuery.data, realtimeUpdates]);
+
+  return {
+    data: enhancedData,
+    loading: mapDataQuery.isLoading,
+    error: mapDataQuery.error,
+    refetch: mapDataQuery.refetch,
+    // Real-time stats
+    isLive: !!realtimeUpdates,
+    lastUpdate: realtimeUpdates?.timestamp,
+  };
+};
+
+// ===== 4. CLUSTERING IMPLEMENTATION =====
+export const useMapClustering = (data: MapDataPoint[], zoomLevel: number) => {
+  return useMemo(() => {
+    if (zoomLevel > 10) return data; // Show individual markers when zoomed in
+    
+    // Implement supercluster for performance
+    const cluster = new Supercluster({
+      radius: 40,
+      maxZoom: 16,
+      minPoints: 2,
+    });
+    
+    const points = data.map(point => ({
+      type: 'Feature',
+      properties: {
+        cluster: false,
+        pointId: point.id,
+        ...point.metrics,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [point.location.longitude, point.location.latitude],
+      },
+    }));
+    
+    cluster.load(points);
+    return cluster.getClusters([-180, -85, 180, 85], Math.floor(zoomLevel));
+  }, [data, zoomLevel]);
+};
+
+// ===== 5. REAL-TIME INTEGRATION PATTERN =====
+export const useMapRealtime = () => {
+  const [wsData, setWsData] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState('connecting');
+  
+  useEffect(() => {
+    const ws = new WebSocket(WS_ENDPOINT);
+    
+    ws.onopen = () => {
+      setConnectionStatus('connected');
+      // Subscribe to map updates
+      ws.send(JSON.stringify({
+        type: 'subscribe',
+        channel: 'map_updates',
+        filters: { /* current filters */ }
+      }));
+    };
+    
+    ws.onmessage = (event) => {
+      const update = JSON.parse(event.data);
+      if (update.type === 'map_data_update') {
+        setWsData(update.data);
+      }
+    };
+    
+    ws.onclose = () => setConnectionStatus('disconnected');
+    ws.onerror = () => setConnectionStatus('error');
+    
+    return () => ws.close();
+  }, []);
+  
+  return { data: wsData, status: connectionStatus };
+};
+
+// ===== 6. FILTER STATE MANAGEMENT =====
+export const useMapFilters = () => {
+  const [filters, setFilters] = useLocalStorage<MapFilters>('mapFilters', {
+    dateRange: { start: subDays(new Date(), 30), end: new Date() },
+    diseases: [],
+    crops: [],
+    healthThreshold: [0, 100],
+    districts: [],
+    userTypes: ['all'],
+  });
+  
+  const updateFilter = useCallback((key: keyof MapFilters, value: any) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  }, [setFilters]);
+  
+  const resetFilters = useCallback(() => {
+    setFilters({
+      dateRange: { start: subDays(new Date(), 30), end: new Date() },
+      diseases: [],
+      crops: [],
+      healthThreshold: [0, 100],
+      districts: [],
+      userTypes: ['all'],
+    });
+  }, [setFilters]);
+  
+  return { filters, updateFilter, resetFilters };
+};
+
+// ===== 7. EXPORT FUNCTIONALITY =====
+export const useMapExport = () => {
+  const exportToCSV = useCallback(async (data: MapDataPoint[]) => {
+    const csv = Papa.unparse(data.map(point => ({
+      district: point.location.district,
+      province: point.location.province,
+      totalScans: point.metrics.totalScans,
+      healthyScans: point.metrics.healthyScans,
+      diseasedScans: point.metrics.diseasedScans,
+      healthRate: point.metrics.healthRate,
+      lastScan: point.metrics.lastScanAt.toISOString(),
+    })));
+    
+    await downloadFile(`map-data-${Date.now()}.csv`, csv, 'text/csv');
+  }, []);
+  
+  const exportToPDF = useCallback(async (mapRef: any) => {
+    // Capture map screenshot and generate PDF report
+    const screenshot = await mapRef.current?.takeSnapshot();
+    const pdfDoc = await generatePDFReport(screenshot, data);
+    await downloadFile(`map-report-${Date.now()}.pdf`, pdfDoc, 'application/pdf');
+  }, []);
+  
+  return { exportToCSV, exportToPDF };
+};
+
+// ===== 8. PERFORMANCE OPTIMIZATION PATTERNS =====
+
+// Memoized marker component
+const MapMarker = React.memo(({ data, onPress }: MarkerProps) => {
+  const markerStyle = useMemo(() => ({
+    backgroundColor: getHealthColor(data.metrics.healthRate),
+    borderRadius: 25,
+    width: getMarkerSize(data.metrics.totalScans),
+    height: getMarkerSize(data.metrics.totalScans),
+  }), [data.metrics.healthRate, data.metrics.totalScans]);
+  
+  return (
+    <Marker
+      coordinate={data.location}
+      onPress={() => onPress(data)}
+    >
+      <View style={markerStyle} />
+    </Marker>
+  );
+});
+
+// Debounced search hook
+export const useDebouncedSearch = (searchTerm: string, delay: number = 300) => {
+  const [debouncedValue, setDebouncedValue] = useState(searchTerm);
+  
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(searchTerm), delay);
+    return () => clearTimeout(handler);
+  }, [searchTerm, delay]);
+  
+  return debouncedValue;
+};
+
+// ===== 9. MAIN COMPONENT STRUCTURE =====
+export const AdminMapDashboard: React.FC = () => {
+  // State management
+  const { filters, updateFilter } = useMapFilters();
+  const { data, loading, error } = useMapData(filters);
+  const [visualizationMode, setVisualizationMode] = useState<MapVisualizationMode>({
+    type: 'clusters',
+    metric: 'scanCount',
+    style: 'default'
+  });
+  
+  // Map ref for screenshots/exports
+  const mapRef = useRef<MapView>(null);
+  
+  // Performance optimization
+  const clusteredData = useMapClustering(data, mapZoom);
+  const { exportToCSV, exportToPDF } = useMapExport();
+  
+  return (
+    <View style={styles.container}>
+      {/* Filter Panel */}
+      <MapFilterControls filters={filters} onFilterChange={updateFilter} />
+      
+      {/* Main Map */}
+      <MapView ref={mapRef} style={styles.map}>
+        {/* Render based on visualization mode */}
+        {visualizationMode.type === 'clusters' && (
+          <ClusteredMarkers data={clusteredData} />
+        )}
+        {visualizationMode.type === 'heatmap' && (
+          <HeatmapOverlay data={data} metric={visualizationMode.metric} />
+        )}
+      </MapView>
+      
+      {/* Analytics Panel */}
+      <MapAnalyticsPanel 
+        data={data} 
+        filters={filters}
+        onExport={{ exportToCSV, exportToPDF }}
+      />
+    </View>
+  );
+};
+
+// ===== 10. INTEGRATION WITH EXISTING SUPABASE FUNCTIONS =====
+const fetchMapData = async (filters: MapFilters): Promise<MapDataPoint[]> => {
+  // Use your existing functions
+  const [locationData, diseaseData, analyticsData] = await Promise.all([
+    supabase.rpc('get_location_leaderboard', { limit_count: 100 }),
+    supabase.rpc('get_disease_tracking_by_location'),
+    supabase.rpc('admin_dashboard_analytics'),
+  ]);
+  
+  // Transform and combine data
+  return transformToMapDataPoints(locationData, diseaseData, analyticsData, filters);
+};
+
+// ===== ADDITIONAL DEPENDENCIES TO INSTALL =====
+/*
+npm install:
+- react-native-map-clustering
+- react-native-super-grid
+- @tanstack/react-query
+- zustand
+- react-native-fs (for file operations)
+- react-native-print (for PDF generation)
+- papaparse (for CSV export)
+- date-fns (for date operations)
+- supercluster (for marker clustering)
+*/

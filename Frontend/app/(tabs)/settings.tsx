@@ -86,16 +86,16 @@ export default function SettingsScreen() {
   const handlePrivacyPolicy = () => {
     Alert.alert(
       'Privacy Policy',
-      'Privacy policy will be available on our website soon.',
-      [{ text: 'OK' }],
+      'AgriSol Privacy Policy\n\nWe collect and process your data to provide AI-powered agricultural services. Your privacy is our priority.\n\nKey Points:\n• Crop images for disease detection\n• Location data for field-specific recommendations\n• Your personal info is never shared\n• Data is encrypted and secure\n• You can request data deletion anytime\n\nFull policy available at: privacy@agrisol.app\n\nContact: privacy@agrisol.app',
+      [{ text: 'Contact Us', onPress: () => handleContact() }, { text: 'OK' }],
     );
   };
 
   const handleTermsOfService = () => {
     Alert.alert(
       'Terms of Service',
-      'Terms of service will be available on our website soon.',
-      [{ text: 'OK' }],
+      'AgriSol Terms of Service\n\nBy using AgriSol, you agree to our terms governing AI-powered agricultural services.\n\nKey Terms:\n• Must be 13+ years old\n• AI results are not professional advice\n• You own your agricultural data\n• Service requires internet connectivity\n• We may update terms with notice\n\nFull terms available at: legal@agrisol.app\n\nContact: legal@agrisol.app',
+      [{ text: 'Contact Us', onPress: () => handleContact() }, { text: 'OK' }],
     );
   };
 

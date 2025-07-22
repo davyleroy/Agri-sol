@@ -5,6 +5,7 @@ import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import QueryProvider from '@/contexts/QueryProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemedView } from '@/components/ThemedView';
 
@@ -54,10 +55,12 @@ export default function RootLayout() {
     <ThemeProvider>
       <AuthProvider>
         <LanguageProvider>
-          <ThemedView style={{ flex: 1 }}>
-            <RootLayoutNav />
-          </ThemedView>
-          <StatusBar style="auto" />
+          <QueryProvider>
+            <ThemedView style={{ flex: 1 }}>
+              <RootLayoutNav />
+            </ThemedView>
+            <StatusBar style="auto" />
+          </QueryProvider>
         </LanguageProvider>
       </AuthProvider>
     </ThemeProvider>
