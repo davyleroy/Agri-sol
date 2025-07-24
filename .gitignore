@@ -5,3 +5,4 @@ Notebook/*.h5
 Notebook/*.pkl
 .venv/
 .venv
+Diagrams/

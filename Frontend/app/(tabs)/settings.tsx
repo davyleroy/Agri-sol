@@ -28,6 +28,7 @@ import {
   Moon,
   Sun,
   LogOut,
+  MessageSquare,
 } from 'lucide-react-native';
 import {
   useLanguage,
@@ -96,6 +97,33 @@ export default function SettingsScreen() {
       'Terms of Service',
       'AgriSol Terms of Service\n\nBy using AgriSol, you agree to our terms governing AI-powered agricultural services.\n\nKey Terms:\n• Must be 13+ years old\n• AI results are not professional advice\n• You own your agricultural data\n• Service requires internet connectivity\n• We may update terms with notice\n\nFull terms available at: legal@agrisol.app\n\nContact: legal@agrisol.app',
       [{ text: 'Contact Us', onPress: () => handleContact() }, { text: 'OK' }],
+    );
+  };
+
+  const handleFeedback = () => {
+    Alert.alert(
+      t('feedback') || 'Feedback',
+      t('feedbackDescription') ||
+        'Help us improve Agrisol by sharing your thoughts, suggestions, or reporting issues. Your feedback is valuable to us!',
+      [
+        { text: t('cancel') || 'Cancel', style: 'cancel' },
+        {
+          text: t('openForm') || 'Open Form',
+          onPress: () => {
+            // TODO: Replace with your actual Google Apps Script form URL
+            const feedbackUrl =
+              'https://script.google.com/macros/s/AKfycbxT1bF13Ct6tk20GYIvYDFT6iLDI4u9n3D82aejgGpasesi_hiJYpZGaEJkf2Ugge38lg/exec';
+            Linking.openURL(feedbackUrl).catch(() => {
+              Alert.alert(
+                t('error') || 'Error',
+                t('feedbackError') ||
+                  'Unable to open feedback form. Please try again later.',
+                [{ text: t('ok') || 'OK' }],
+              );
+            });
+          },
+        },
+      ],
     );
   };
 
@@ -181,6 +209,14 @@ export default function SettingsScreen() {
       subtitle: t('shareAppSubtitle'),
       icon: Share2,
       onPress: handleShareApp,
+      showChevron: true,
+    },
+    {
+      id: 'feedback',
+      title: t('feedback') || 'Feedback',
+      subtitle: t('feedbackSubtitle') || 'Share your thoughts and suggestions',
+      icon: MessageSquare,
+      onPress: handleFeedback,
       showChevron: true,
     },
     {

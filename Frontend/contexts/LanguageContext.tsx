@@ -437,6 +437,31 @@ const translations: { [key: string]: { [key: string]: string } } = {
     rw: "Sangira na bagenzi n'umuryango",
     fr: 'Partager avec amis et famille',
   },
+  feedback: {
+    en: 'Feedback',
+    rw: 'Ibisubizo',
+    fr: 'Retour',
+  },
+  feedbackSubtitle: {
+    en: 'Share your thoughts and suggestions',
+    rw: 'Sangira ibitekerezo na ibyifuzo',
+    fr: 'Partagez vos pensées et suggestions',
+  },
+  feedbackDescription: {
+    en: 'Help us improve Agrisol by sharing your thoughts, suggestions, or reporting issues. Your feedback is valuable to us!',
+    rw: 'Dufashe kunoza Agrisol ukusangira ibitekerezo, ibyifuzo, cyangwa ukureba ibibazo. Ibisubizo byawe birafite agaciro!',
+    fr: 'Aidez-nous à améliorer Agrisol en partageant vos pensées, suggestions ou en signalant des problèmes. Votre retour est précieux pour nous !',
+  },
+  openForm: {
+    en: 'Open Form',
+    rw: 'Fungura Ifomu',
+    fr: 'Ouvrir le Formulaire',
+  },
+  feedbackError: {
+    en: 'Unable to open feedback form. Please try again later.',
+    rw: 'Ntibishoboka gufungura ifomu yibisubizo. Ongera ugerageze nyuma.',
+    fr: 'Impossible douvrir le formulaire de retour. Veuillez réessayer plus tard.',
+  },
   logout: {
     en: 'Logout',
     rw: 'Sohoka',
