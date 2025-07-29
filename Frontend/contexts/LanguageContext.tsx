@@ -467,6 +467,42 @@ const translations: { [key: string]: { [key: string]: string } } = {
     rw: 'Sohoka',
     fr: 'Déconnexion',
   },
+  // Terms and Privacy Agreement
+  acceptTermsAndPrivacy: {
+    en: 'Please accept Terms & Conditions and Privacy Policy',
+    rw: 'Uvugire Amabwiriza & Igenamiterere nPolitiki yIbanga',
+    fr: 'Veuillez accepter les Conditions et la Politique de Confidentialité',
+  },
+  termsRequired: {
+    en: 'Terms Required',
+    rw: 'Amabwiriza Birakenewe',
+    fr: 'Conditions Requises',
+  },
+  termsRequiredMessage: {
+    en: 'You must accept the Terms & Conditions and Privacy Policy to create an account.',
+    rw: 'Ukeneye kuyemera Amabwiriza & Igenamiterere nPolitiki yIbanga kugira ngo urebe konti.',
+    fr: 'Vous devez accepter les Conditions et la Politique de Confidentialité pour créer un compte.',
+  },
+  acceptTerms: {
+    en: 'I accept the ',
+    rw: 'Niyemera ',
+    fr: 'Jaccepte les ',
+  },
+  acceptPrivacy: {
+    en: 'I accept the ',
+    rw: 'Niyemera ',
+    fr: 'Jaccepte la ',
+  },
+  termsAndConditions: {
+    en: 'Terms & Conditions',
+    rw: 'Amabwiriza & Igenamiterere',
+    fr: 'Conditions',
+  },
+  privacyPolicy: {
+    en: 'Privacy Policy',
+    rw: 'Politiki yIbanga',
+    fr: 'Politique de Confidentialité',
+  },
   appSubtitle: {
     en: 'AI-Powered Crop Health Monitor',
     rw: "Kurikirana Ubuzima bw'Ibihingwa na AI",

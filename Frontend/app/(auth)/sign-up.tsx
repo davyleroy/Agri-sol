@@ -21,12 +21,14 @@ import {
   EyeOff,
   Phone,
   Tractor,
+  Check,
 } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { DarkModeToggle } from '@/components/DarkModeToggle';
 import { LocationSelector, LocationData } from '@/components/LocationSelector';
+import TermsAndConditionsModal from '@/components/TermsAndConditionsModal';
 
 export interface FarmerType {
   id: string;
@@ -71,6 +73,9 @@ export default function SignUpScreen() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
@@ -116,6 +121,12 @@ export default function SignUpScreen() {
       newErrors.farmerType = t('fillAllFields');
     }
 
+    if (!acceptedTerms || !acceptedPrivacy) {
+      newErrors.terms =
+        t('acceptTermsAndPrivacy') ||
+        'Please accept Terms & Conditions and Privacy Policy';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -157,6 +168,23 @@ export default function SignUpScreen() {
   const handleFarmerTypeSelect = (type: string) => {
     setFarmerType(type);
     setErrors({ ...errors, farmerType: '' });
+  };
+
+  const handleTermsAccept = () => {
+    setAcceptedTerms(true);
+    setAcceptedPrivacy(true);
+    setShowTermsModal(false);
+    setErrors({ ...errors, terms: '' });
+  };
+
+  const handleTermsDecline = () => {
+    setShowTermsModal(false);
+    Alert.alert(
+      t('termsRequired') || 'Terms Required',
+      t('termsRequiredMessage') ||
+        'You must accept the Terms & Conditions and Privacy Policy to create an account.',
+      [{ text: t('ok') || 'OK' }],
+    );
   };
 
   return (
@@ -351,6 +379,70 @@ export default function SignUpScreen() {
             <Text style={styles.errorText}>{errors.confirmPassword}</Text>
           )}
 
+          {/* Terms and Privacy Agreement */}
+          <View style={styles.termsContainer}>
+            <View style={styles.termsRow}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => setAcceptedTerms(!acceptedTerms)}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[styles.checkbox, acceptedTerms && styles.checkedBox]}
+                >
+                  {acceptedTerms && (
+                    <Check size={16} color="#ffffff" strokeWidth={2} />
+                  )}
+                </View>
+              </TouchableOpacity>
+              <View style={styles.termsTextContainer}>
+                <Text style={styles.termsText}>
+                  {t('acceptTerms') || 'I accept the '}
+                  <Text
+                    style={styles.termsLink}
+                    onPress={() => setShowTermsModal(true)}
+                  >
+                    {t('termsAndConditions') || 'Terms & Conditions'}
+                  </Text>
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.termsRow}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => setAcceptedPrivacy(!acceptedPrivacy)}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.checkbox,
+                    acceptedPrivacy && styles.checkedBox,
+                  ]}
+                >
+                  {acceptedPrivacy && (
+                    <Check size={16} color="#ffffff" strokeWidth={2} />
+                  )}
+                </View>
+              </TouchableOpacity>
+              <View style={styles.termsTextContainer}>
+                <Text style={styles.termsText}>
+                  {t('acceptPrivacy') || 'I accept the '}
+                  <Text
+                    style={styles.termsLink}
+                    onPress={() => setShowTermsModal(true)}
+                  >
+                    {t('privacyPolicy') || 'Privacy Policy'}
+                  </Text>
+                </Text>
+              </View>
+            </View>
+
+            {errors.terms && (
+              <Text style={styles.errorText}>{errors.terms}</Text>
+            )}
+          </View>
+
           {/* Sign Up Button */}
           <TouchableOpacity
             style={[styles.signUpButton, loading && styles.disabledButton]}
@@ -384,6 +476,13 @@ export default function SignUpScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Terms and Conditions Modal */}
+      <TermsAndConditionsModal
+        visible={showTermsModal}
+        onAccept={handleTermsAccept}
+        onDecline={handleTermsDecline}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -571,5 +670,42 @@ const styles = StyleSheet.create({
     marginTop: -12,
     marginBottom: 8,
     paddingHorizontal: 16,
+  },
+  termsContainer: {
+    marginVertical: 16,
+  },
+  termsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: '#d1d5db',
+    marginRight: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkedBox: {
+    backgroundColor: '#059669',
+    borderColor: '#059669',
+  },
+  termsText: {
+    fontSize: 14,
+    color: '#6b7280',
+    flex: 1,
+  },
+  termsLink: {
+    color: '#059669',
+    textDecorationLine: 'underline',
+  },
+  checkboxContainer: {
+    marginRight: 12,
+  },
+  termsTextContainer: {
+    flex: 1,
   },
 });

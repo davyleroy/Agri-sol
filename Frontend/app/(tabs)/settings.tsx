@@ -37,12 +37,14 @@ import {
 } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
+import TermsAndConditionsModal from '@/components/TermsAndConditionsModal';
 
 export default function SettingsScreen() {
   const { t, currentLanguage, setLanguage } = useLanguage();
   const { colors, isDarkMode, toggleDarkMode } = useTheme();
   const { signOut } = useAuth();
   const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const handleLanguageSelect = async (language: Language) => {
     await setLanguage(language);
@@ -85,19 +87,11 @@ export default function SettingsScreen() {
   };
 
   const handlePrivacyPolicy = () => {
-    Alert.alert(
-      'Privacy Policy',
-      'AgriSol Privacy Policy\n\nWe collect and process your data to provide AI-powered agricultural services. Your privacy is our priority.\n\nKey Points:\n• Crop images for disease detection\n• Location data for field-specific recommendations\n• Your personal info is never shared\n• Data is encrypted and secure\n• You can request data deletion anytime\n\nFull policy available at: privacy@agrisol.app\n\nContact: privacy@agrisol.app',
-      [{ text: 'Contact Us', onPress: () => handleContact() }, { text: 'OK' }],
-    );
+    setShowTermsModal(true);
   };
 
   const handleTermsOfService = () => {
-    Alert.alert(
-      'Terms of Service',
-      'AgriSol Terms of Service\n\nBy using AgriSol, you agree to our terms governing AI-powered agricultural services.\n\nKey Terms:\n• Must be 13+ years old\n• AI results are not professional advice\n• You own your agricultural data\n• Service requires internet connectivity\n• We may update terms with notice\n\nFull terms available at: legal@agrisol.app\n\nContact: legal@agrisol.app',
-      [{ text: 'Contact Us', onPress: () => handleContact() }, { text: 'OK' }],
-    );
+    setShowTermsModal(true);
   };
 
   const handleFeedback = () => {
@@ -236,155 +230,174 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header */}
-      <LinearGradient colors={['#374151', '#4b5563']} style={styles.header}>
-        <SettingsIcon size={32} color="#ffffff" strokeWidth={2} />
-        <Text style={styles.title}>{t('settings')}</Text>
-        <Text style={styles.subtitle}>{t('settingsSubtitle')}</Text>
-      </LinearGradient>
+    <>
+      <ScrollView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <LinearGradient colors={['#374151', '#4b5563']} style={styles.header}>
+          <SettingsIcon size={32} color="#ffffff" strokeWidth={2} />
+          <Text style={styles.title}>{t('settings')}</Text>
+          <Text style={styles.subtitle}>{t('settingsSubtitle')}</Text>
+        </LinearGradient>
 
-      {/* Settings Options */}
-      <View style={styles.settingsContainer}>
-        {settingsOptions.map((option) => (
-          <TouchableOpacity
-            key={option.id}
-            style={[
-              styles.settingItem,
-              { backgroundColor: colors.surface, shadowColor: colors.shadow },
-            ]}
-            onPress={option.onPress}
-            activeOpacity={0.7}
+        {/* Settings Options */}
+        <View style={styles.settingsContainer}>
+          {settingsOptions.map((option) => (
+            <TouchableOpacity
+              key={option.id}
+              style={[
+                styles.settingItem,
+                { backgroundColor: colors.surface, shadowColor: colors.shadow },
+              ]}
+              onPress={option.onPress}
+              activeOpacity={0.7}
+            >
+              <View
+                style={[
+                  styles.settingIcon,
+                  { backgroundColor: colors.primaryLight },
+                ]}
+              >
+                <option.icon size={24} color={colors.primary} strokeWidth={2} />
+              </View>
+
+              <View style={styles.settingContent}>
+                <Text style={[styles.settingTitle, { color: colors.text }]}>
+                  {option.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.settingSubtitle,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  {option.subtitle}
+                </Text>
+              </View>
+
+              {option.showToggle && (
+                <Switch
+                  value={isDarkMode}
+                  onValueChange={toggleDarkMode}
+                  trackColor={{ false: colors.border, true: colors.primary }}
+                  thumbColor={isDarkMode ? colors.surface : colors.surface}
+                  ios_backgroundColor={colors.border}
+                />
+              )}
+
+              {option.showChevron && (
+                <ChevronRight
+                  size={20}
+                  color={colors.textSecondary}
+                  strokeWidth={2}
+                />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* App Info */}
+        <View style={styles.appInfoContainer}>
+          <Text style={[styles.appInfoTitle, { color: colors.primary }]}>
+            Agrisol
+          </Text>
+          <Text
+            style={[styles.appInfoSubtitle, { color: colors.textSecondary }]}
+          >
+            {t('appSubtitle')}
+          </Text>
+          <Text style={[styles.appInfoVersion, { color: colors.textMuted }]}>
+            Version 1.0.0 (MVP)
+          </Text>
+          <Text style={[styles.appInfoCopyright, { color: colors.textMuted }]}>
+            © 2025 Davy Mbuto Nkurunziza. All rights reserved.
+          </Text>
+        </View>
+
+        {/* Language Selection Modal */}
+        <Modal
+          visible={showLanguageModal}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setShowLanguageModal(false)}
+        >
+          <View
+            style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}
           >
             <View
               style={[
-                styles.settingIcon,
-                { backgroundColor: colors.primaryLight },
+                styles.modalContainer,
+                { backgroundColor: colors.surface },
               ]}
             >
-              <option.icon size={24} color={colors.primary} strokeWidth={2} />
-            </View>
-
-            <View style={styles.settingContent}>
-              <Text style={[styles.settingTitle, { color: colors.text }]}>
-                {option.title}
-              </Text>
-              <Text
+              <View
                 style={[
-                  styles.settingSubtitle,
-                  { color: colors.textSecondary },
+                  styles.modalHeader,
+                  { borderBottomColor: colors.border },
                 ]}
               >
-                {option.subtitle}
-              </Text>
-            </View>
-
-            {option.showToggle && (
-              <Switch
-                value={isDarkMode}
-                onValueChange={toggleDarkMode}
-                trackColor={{ false: colors.border, true: colors.primary }}
-                thumbColor={isDarkMode ? colors.surface : colors.surface}
-                ios_backgroundColor={colors.border}
-              />
-            )}
-
-            {option.showChevron && (
-              <ChevronRight
-                size={20}
-                color={colors.textSecondary}
-                strokeWidth={2}
-              />
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* App Info */}
-      <View style={styles.appInfoContainer}>
-        <Text style={[styles.appInfoTitle, { color: colors.primary }]}>
-          Agrisol
-        </Text>
-        <Text style={[styles.appInfoSubtitle, { color: colors.textSecondary }]}>
-          {t('appSubtitle')}
-        </Text>
-        <Text style={[styles.appInfoVersion, { color: colors.textMuted }]}>
-          Version 1.0.0 (MVP)
-        </Text>
-        <Text style={[styles.appInfoCopyright, { color: colors.textMuted }]}>
-          © 2025 Davy Mbuto Nkurunziza. All rights reserved.
-        </Text>
-      </View>
-
-      {/* Language Selection Modal */}
-      <Modal
-        visible={showLanguageModal}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setShowLanguageModal(false)}
-      >
-        <View
-          style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}
-        >
-          <View
-            style={[styles.modalContainer, { backgroundColor: colors.surface }]}
-          >
-            <View
-              style={[styles.modalHeader, { borderBottomColor: colors.border }]}
-            >
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
-                {t('selectLanguage')}
-              </Text>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setShowLanguageModal(false)}
-              >
-                <X size={24} color={colors.textSecondary} strokeWidth={2} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.languageList}>
-              {SUPPORTED_LANGUAGES.map((language) => (
+                <Text style={[styles.modalTitle, { color: colors.text }]}>
+                  {t('selectLanguage')}
+                </Text>
                 <TouchableOpacity
-                  key={language.code}
-                  style={[
-                    styles.languageItem,
-                    currentLanguage.code === language.code && {
-                      backgroundColor: colors.primaryLight,
-                    },
-                  ]}
-                  onPress={() => handleLanguageSelect(language)}
-                  activeOpacity={0.7}
+                  style={styles.closeButton}
+                  onPress={() => setShowLanguageModal(false)}
                 >
-                  <Text style={styles.languageFlag}>{language.flag}</Text>
-                  <View style={styles.languageInfo}>
-                    <Text style={[styles.languageName, { color: colors.text }]}>
-                      {language.name}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.languageNativeName,
-                        { color: colors.textSecondary },
-                      ]}
-                    >
-                      {language.nativeName}
-                    </Text>
-                  </View>
-                  {currentLanguage.code === language.code && (
-                    <Check size={20} color={colors.primary} strokeWidth={2} />
-                  )}
+                  <X size={24} color={colors.textSecondary} strokeWidth={2} />
                 </TouchableOpacity>
-              ))}
+              </View>
+
+              <View style={styles.languageList}>
+                {SUPPORTED_LANGUAGES.map((language) => (
+                  <TouchableOpacity
+                    key={language.code}
+                    style={[
+                      styles.languageItem,
+                      currentLanguage.code === language.code && {
+                        backgroundColor: colors.primaryLight,
+                      },
+                    ]}
+                    onPress={() => handleLanguageSelect(language)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.languageFlag}>{language.flag}</Text>
+                    <View style={styles.languageInfo}>
+                      <Text
+                        style={[styles.languageName, { color: colors.text }]}
+                      >
+                        {language.name}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.languageNativeName,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        {language.nativeName}
+                      </Text>
+                    </View>
+                    {currentLanguage.code === language.code && (
+                      <Check size={20} color={colors.primary} strokeWidth={2} />
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      <View style={styles.bottomSpacing} />
-    </ScrollView>
+        <View style={styles.bottomSpacing} />
+      </ScrollView>
+
+      {/* Terms and Conditions Modal */}
+      <TermsAndConditionsModal
+        visible={showTermsModal}
+        onAccept={() => setShowTermsModal(false)}
+        onDecline={() => setShowTermsModal(false)}
+      />
+    </>
   );
 }
 
