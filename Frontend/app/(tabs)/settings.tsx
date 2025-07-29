@@ -10,6 +10,7 @@ import {
   Share,
   Switch,
   Modal,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -29,6 +30,7 @@ import {
   Sun,
   LogOut,
   MessageSquare,
+  Bell,
 } from 'lucide-react-native';
 import {
   useLanguage,
@@ -38,13 +40,45 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import TermsAndConditionsModal from '@/components/TermsAndConditionsModal';
+import NotificationSettingsComponent from '@/components/admin/NotificationSettings';
+
+// Helper function to get flag display
+const getFlagDisplay = (language: Language) => {
+  if (Platform.OS === 'web') {
+    // For web, use text fallbacks if emoji doesn't render
+    const flagMap: { [key: string]: string } = {
+      en: '🇺🇸',
+      rw: '🇷🇼',
+      fr: '🇫🇷',
+    };
+
+    // Try emoji first, fallback to text codes
+    const emojiFlag = flagMap[language.code] || language.flag;
+
+    // If emoji doesn't render (check if it's a single character), use text
+    if (emojiFlag.length === 2) {
+      return emojiFlag; // Emoji flag
+    } else {
+      // Fallback to text codes
+      const textFlags: { [key: string]: string } = {
+        en: 'US',
+        rw: 'RW',
+        fr: 'FR',
+      };
+      return textFlags[language.code] || language.code.toUpperCase();
+    }
+  }
+  return language.flag;
+};
 
 export default function SettingsScreen() {
   const { t, currentLanguage, setLanguage } = useLanguage();
   const { colors, isDarkMode, toggleDarkMode } = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, isAdmin } = useAuth();
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] =
+    useState(false);
 
   const handleLanguageSelect = async (language: Language) => {
     await setLanguage(language);
@@ -213,6 +247,19 @@ export default function SettingsScreen() {
       onPress: handleFeedback,
       showChevron: true,
     },
+    // Admin-only notification settings
+    ...(isAdmin
+      ? [
+          {
+            id: 'notifications',
+            title: 'Disease Alerts',
+            subtitle: 'Configure notification preferences',
+            icon: Bell,
+            onPress: () => setShowNotificationSettings(true),
+            showChevron: true,
+          },
+        ]
+      : []),
     {
       id: 'logout',
       title: t('logout') || 'Logout',
@@ -362,7 +409,14 @@ export default function SettingsScreen() {
                     onPress={() => handleLanguageSelect(language)}
                     activeOpacity={0.7}
                   >
-                    <Text style={styles.languageFlag}>{language.flag}</Text>
+                    <Text
+                      style={[
+                        styles.languageFlag,
+                        Platform.OS === 'web' && styles.webLanguageFlag,
+                      ]}
+                    >
+                      {getFlagDisplay(language)}
+                    </Text>
                     <View style={styles.languageInfo}>
                       <Text
                         style={[styles.languageName, { color: colors.text }]}
@@ -390,6 +444,38 @@ export default function SettingsScreen() {
 
         <View style={styles.bottomSpacing} />
       </ScrollView>
+
+      {/* Notification Settings Modal */}
+      <Modal
+        visible={showNotificationSettings}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowNotificationSettings(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalContainer,
+              { backgroundColor: colors.background },
+            ]}
+          >
+            <View
+              style={[styles.modalHeader, { borderBottomColor: colors.border }]}
+            >
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                Disease Alert Settings
+              </Text>
+              <TouchableOpacity
+                onPress={() => setShowNotificationSettings(false)}
+                style={styles.closeButton}
+              >
+                <X size={24} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+            <NotificationSettingsComponent />
+          </View>
+        </View>
+      </Modal>
 
       {/* Terms and Conditions Modal */}
       <TermsAndConditionsModal
@@ -518,6 +604,13 @@ const styles = StyleSheet.create({
   languageFlag: {
     fontSize: 24,
     marginRight: 16,
+  },
+  webLanguageFlag: {
+    fontSize: 26, // Slightly larger for web
+    fontFamily:
+      Platform.OS === 'web'
+        ? 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        : undefined,
   },
   languageInfo: {
     flex: 1,

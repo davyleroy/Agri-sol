@@ -1,0 +1,27 @@
+/* Global CSS for better emoji support on web */
+
+/* Ensure emoji flags render properly */
+.emoji-flag {
+  font-family:
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', sans-serif;
+  font-size: 1.2em;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Web-specific emoji rendering improvements */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .emoji-flag {
+    font-family:
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  }
+}
+
+/* Fallback for systems without emoji support */
+@supports not (font-family: 'Apple Color Emoji') {
+  .emoji-flag {
+    font-family: 'Segoe UI Symbol', 'Arial Unicode MS', sans-serif;
+  }
+}

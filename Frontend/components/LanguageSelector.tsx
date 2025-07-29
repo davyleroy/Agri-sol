@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import { Languages } from 'lucide-react-native';
 import {
   useLanguage,
@@ -13,6 +19,35 @@ interface LanguageSelectorProps {
   compact?: boolean;
   style?: any;
 }
+
+// Helper function to get flag display
+const getFlagDisplay = (language: Language) => {
+  if (Platform.OS === 'web') {
+    // For web, use text fallbacks if emoji doesn't render
+    const flagMap: { [key: string]: string } = {
+      en: '🇺🇸',
+      rw: '🇷🇼',
+      fr: '🇫🇷',
+    };
+
+    // Try emoji first, fallback to text codes
+    const emojiFlag = flagMap[language.code] || language.flag;
+
+    // If emoji doesn't render (check if it's a single character), use text
+    if (emojiFlag.length === 2) {
+      return emojiFlag; // Emoji flag
+    } else {
+      // Fallback to text codes
+      const textFlags: { [key: string]: string } = {
+        en: 'US',
+        rw: 'RW',
+        fr: 'FR',
+      };
+      return textFlags[language.code] || language.code.toUpperCase();
+    }
+  }
+  return language.flag;
+};
 
 export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   showLabel = true,
@@ -44,7 +79,16 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             {currentLanguage.nativeName}
           </Text>
         )}
-        {compact && <Text style={styles.flagText}>{currentLanguage.flag}</Text>}
+        {compact && (
+          <Text
+            style={[
+              styles.flagText,
+              Platform.OS === 'web' && styles.webFlagText,
+            ]}
+          >
+            {getFlagDisplay(currentLanguage)}
+          </Text>
+        )}
       </TouchableOpacity>
 
       {showDropdown && (
@@ -66,7 +110,11 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               ]}
               onPress={() => handleLanguageSelect(language)}
             >
-              <Text style={styles.flag}>{language.flag}</Text>
+              <Text
+                style={[styles.flag, Platform.OS === 'web' && styles.webFlag]}
+              >
+                {getFlagDisplay(language)}
+              </Text>
               <View style={styles.languageInfo}>
                 <Text style={[styles.languageName, { color: colors.text }]}>
                   {language.nativeName}
@@ -123,6 +171,13 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     fontSize: 16,
   },
+  webFlagText: {
+    fontSize: 18, // Slightly larger for web
+    fontFamily:
+      Platform.OS === 'web'
+        ? 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        : undefined,
+  },
   dropdown: {
     position: 'absolute',
     top: '100%',
@@ -150,6 +205,13 @@ const styles = StyleSheet.create({
   flag: {
     fontSize: 20,
     marginRight: 12,
+  },
+  webFlag: {
+    fontSize: 22, // Slightly larger for web
+    fontFamily:
+      Platform.OS === 'web'
+        ? 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        : undefined,
   },
   languageInfo: {
     flex: 1,

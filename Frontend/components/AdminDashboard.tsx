@@ -32,6 +32,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { supabase } from '@/contexts/AuthContext';
 import AdminMapDashboardWeb from './admin/AdminMapDashboardWeb';
+import NotificationPanel from './admin/NotificationPanel';
 
 const { width } = Dimensions.get('window');
 
@@ -391,264 +392,285 @@ export default function AdminDashboard() {
   }
 
   return (
-    <ThemedScrollView
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header */}
-      <LinearGradient colors={['#1f2937', '#374151']} style={styles.header}>
-        <View style={styles.headerTop}>
-          <View>
-            <Text style={styles.headerTitle}>
-              {t('adminDashboard') || 'Admin Dashboard'}
-            </Text>
-            <Text style={styles.headerSubtitle}>
-              {t('adminDashboardDesc') ||
-                'Monitor crop health and user activity'}
-            </Text>
-          </View>
-          <View style={styles.headerActions}>
-            <View style={styles.adminBadge}>
-              <Shield size={16} color="#ffffff" strokeWidth={2} />
-              <Text style={styles.adminBadgeText}>{t('admin') || 'Admin'}</Text>
+    <View style={styles.container}>
+      {/* Notification Panel */}
+      <NotificationPanel />
+
+      <ThemedScrollView
+        style={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <LinearGradient colors={['#1f2937', '#374151']} style={styles.header}>
+          <View style={styles.headerTop}>
+            <View>
+              <Text style={styles.headerTitle}>
+                {t('adminDashboard') || 'Admin Dashboard'}
+              </Text>
+              <Text style={styles.headerSubtitle}>
+                {t('adminDashboardDesc') ||
+                  'Monitor crop health and user activity'}
+              </Text>
             </View>
-            <TouchableOpacity
-              style={styles.signOutButton}
-              onPress={handleSignOut}
-            >
-              <LogOut size={20} color="#ffffff" strokeWidth={2} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </LinearGradient>
-
-      {/* Analytics Metrics */}
-      <View style={styles.metricsContainer}>
-        {metrics.map((metric, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.metricCard}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={metric.gradient}
-              style={styles.metricGradient}
-            >
-              <View style={styles.metricHeader}>
-                <View style={styles.metricIconContainer}>
-                  <metric.icon size={20} color="#ffffff" strokeWidth={2} />
-                </View>
-                <Text style={styles.metricLabel}>{metric.label}</Text>
+            <View style={styles.headerActions}>
+              <View style={styles.adminBadge}>
+                <Shield size={16} color="#ffffff" strokeWidth={2} />
+                <Text style={styles.adminBadgeText}>
+                  {t('admin') || 'Admin'}
+                </Text>
               </View>
-              <Text style={styles.metricValue}>{metric.value}</Text>
-              <Text style={styles.metricSubtitle}>{metric.subtitle}</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Map Section */}
-      <View style={styles.mapSection}>
-        <View style={styles.sectionHeader}>
-          <View style={styles.sectionTitleContainer}>
-            <Map size={24} color={colors.primary} strokeWidth={2} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              {t('diseaseHeatmap') || 'Disease Heatmap & User Locations'}
-            </Text>
+              <TouchableOpacity
+                style={styles.signOutButton}
+                onPress={handleSignOut}
+              >
+                <LogOut size={20} color="#ffffff" strokeWidth={2} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={styles.toggleButtonContainer}>
-          <TouchableOpacity
-            style={[styles.toggleButton, { backgroundColor: colors.primary }]}
-            onPress={() => setShowMap(!showMap)}
-          >
-            <Text style={styles.toggleButtonText}>
-              {showMap
-                ? t('hideMap') || 'Hide Map'
-                : t('showMap') || 'Show Map'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </LinearGradient>
 
-        {showMap ? (
-          <View
-            style={[
-              styles.mapContainer,
-              Platform.OS === 'web' && styles.webMapContainer,
-            ]}
-          >
-            <AdminMapDashboardWeb
-              onMarkerPress={(point: any) => {
-                Alert.alert(
-                  'Scan Details',
-                  `Crop: ${point.crop}\nDisease: ${point.disease}\nConfidence: ${point.confidence}%\nLocation: ${point.location || 'Unknown'}`,
-                  [{ text: 'OK' }],
-                );
-              }}
-              onExport={() => {
-                Alert.alert('Export', 'Export functionality coming soon!');
-              }}
-            />
-          </View>
-        ) : (
-          <View
-            style={[styles.mapPlaceholder, { backgroundColor: colors.surface }]}
-          >
-            <Map size={48} color={colors.textSecondary} strokeWidth={1} />
-            <Text style={[styles.mapPlaceholderTitle, { color: colors.text }]}>
-              {t('interactiveMap') || 'Interactive Map'}
-            </Text>
-            <Text
-              style={[
-                styles.mapPlaceholderText,
-                { color: colors.textSecondary },
-              ]}
-            >
-              {t('mapDescription') ||
-                'View disease hotspots, user locations, and analytics on an interactive map'}
-            </Text>
+        {/* Analytics Metrics */}
+        <View style={styles.metricsContainer}>
+          {metrics.map((metric, index) => (
             <TouchableOpacity
-              style={[
-                styles.showMapButton,
-                { backgroundColor: colors.primary },
-              ]}
-              onPress={() => setShowMap(true)}
+              key={index}
+              style={styles.metricCard}
+              activeOpacity={0.8}
             >
-              <Eye size={16} color="#ffffff" strokeWidth={2} />
-              <Text style={styles.showMapButtonText}>
-                {t('showMap') || 'Show Map'}
+              <LinearGradient
+                colors={metric.gradient}
+                style={styles.metricGradient}
+              >
+                <View style={styles.metricHeader}>
+                  <View style={styles.metricIconContainer}>
+                    <metric.icon size={20} color="#ffffff" strokeWidth={2} />
+                  </View>
+                  <Text style={styles.metricLabel}>{metric.label}</Text>
+                </View>
+                <Text style={styles.metricValue}>{metric.value}</Text>
+                <Text style={styles.metricSubtitle}>{metric.subtitle}</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Map Section */}
+        <View style={styles.mapSection}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleContainer}>
+              <Map size={24} color={colors.primary} strokeWidth={2} />
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                {t('diseaseHeatmap') || 'Disease Heatmap & User Locations'}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.toggleButtonContainer}>
+            <TouchableOpacity
+              style={[styles.toggleButton, { backgroundColor: colors.primary }]}
+              onPress={() => setShowMap(!showMap)}
+            >
+              <Text style={styles.toggleButtonText}>
+                {showMap
+                  ? t('hideMap') || 'Hide Map'
+                  : t('showMap') || 'Show Map'}
               </Text>
             </TouchableOpacity>
           </View>
-        )}
-      </View>
 
-      {/* Most Active Location */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {t('mostActiveLocation') || 'Most Active Location'}
-        </Text>
-        <View
-          style={[styles.locationCard, { backgroundColor: colors.surface }]}
-        >
-          <View style={styles.locationHeader}>
-            <MapPin size={20} color={colors.primary} strokeWidth={2} />
-            <Text style={[styles.locationName, { color: colors.text }]}>
-              {analyticsData.mostActiveLocation}
+          {showMap ? (
+            <View
+              style={[
+                styles.mapContainer,
+                Platform.OS === 'web' && styles.webMapContainer,
+              ]}
+            >
+              <AdminMapDashboardWeb
+                onMarkerPress={(point: any) => {
+                  Alert.alert(
+                    'Scan Details',
+                    `Crop: ${point.crop}\nDisease: ${point.disease}\nConfidence: ${point.confidence}%\nLocation: ${point.location || 'Unknown'}`,
+                    [{ text: 'OK' }],
+                  );
+                }}
+                onExport={() => {
+                  Alert.alert('Export', 'Export functionality coming soon!');
+                }}
+              />
+            </View>
+          ) : (
+            <View
+              style={[
+                styles.mapPlaceholder,
+                { backgroundColor: colors.surface },
+              ]}
+            >
+              <Map size={48} color={colors.textSecondary} strokeWidth={1} />
+              <Text
+                style={[styles.mapPlaceholderTitle, { color: colors.text }]}
+              >
+                {t('interactiveMap') || 'Interactive Map'}
+              </Text>
+              <Text
+                style={[
+                  styles.mapPlaceholderText,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                {t('mapDescription') ||
+                  'View disease hotspots, user locations, and analytics on an interactive map'}
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.showMapButton,
+                  { backgroundColor: colors.primary },
+                ]}
+                onPress={() => setShowMap(true)}
+              >
+                <Eye size={16} color="#ffffff" strokeWidth={2} />
+                <Text style={styles.showMapButtonText}>
+                  {t('showMap') || 'Show Map'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        {/* Most Active Location */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('mostActiveLocation') || 'Most Active Location'}
+          </Text>
+          <View
+            style={[styles.locationCard, { backgroundColor: colors.surface }]}
+          >
+            <View style={styles.locationHeader}>
+              <MapPin size={20} color={colors.primary} strokeWidth={2} />
+              <Text style={[styles.locationName, { color: colors.text }]}>
+                {analyticsData.mostActiveLocation}
+              </Text>
+            </View>
+            <Text
+              style={[styles.locationCount, { color: colors.textSecondary }]}
+            >
+              {analyticsData.mostActiveLocationCount} scans
             </Text>
           </View>
-          <Text style={[styles.locationCount, { color: colors.textSecondary }]}>
-            {analyticsData.mostActiveLocationCount} scans
-          </Text>
         </View>
-      </View>
 
-      {/* Recent Scans */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          {t('recentScans') || 'Recent Scans'}
-        </Text>
-        {analyticsData.recentScans.length > 0 ? (
-          analyticsData.recentScans.map((scan) => {
-            const StatusIcon = getStatusIcon(scan.status);
-            return (
-              <View
-                key={scan.id}
-                style={[styles.scanCard, { backgroundColor: colors.surface }]}
-              >
-                <View style={styles.scanHeader}>
-                  <Text style={[styles.scanCrop, { color: colors.text }]}>
-                    {getCropTranslation(scan.crop)}
-                  </Text>
-                  <View
-                    style={[
-                      styles.confidenceBadge,
-                      { backgroundColor: `${getStatusColor(scan.status)}20` },
-                    ]}
-                  >
-                    <Text
+        {/* Recent Scans */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('recentScans') || 'Recent Scans'}
+          </Text>
+          {analyticsData.recentScans.length > 0 ? (
+            analyticsData.recentScans.map((scan) => {
+              const StatusIcon = getStatusIcon(scan.status);
+              return (
+                <View
+                  key={scan.id}
+                  style={[styles.scanCard, { backgroundColor: colors.surface }]}
+                >
+                  <View style={styles.scanHeader}>
+                    <Text style={[styles.scanCrop, { color: colors.text }]}>
+                      {getCropTranslation(scan.crop)}
+                    </Text>
+                    <View
                       style={[
-                        styles.confidenceText,
-                        { color: getStatusColor(scan.status) },
+                        styles.confidenceBadge,
+                        { backgroundColor: `${getStatusColor(scan.status)}20` },
                       ]}
                     >
-                      {scan.confidence}%
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.scanContent}>
-                  <View style={styles.scanInfo}>
-                    <StatusIcon
-                      size={16}
-                      color={getStatusColor(scan.status)}
-                      strokeWidth={2}
-                    />
-                    <Text
-                      style={[
-                        styles.scanDisease,
-                        { color: colors.textSecondary },
-                      ]}
-                    >
-                      {getDiseaseTranslation(scan.disease)}
-                    </Text>
+                      <Text
+                        style={[
+                          styles.confidenceText,
+                          { color: getStatusColor(scan.status) },
+                        ]}
+                      >
+                        {scan.confidence}%
+                      </Text>
+                    </View>
                   </View>
 
-                  {scan.location && (
-                    <View style={styles.scanLocation}>
-                      <MapPin
-                        size={12}
-                        color={colors.textSecondary}
+                  <View style={styles.scanContent}>
+                    <View style={styles.scanInfo}>
+                      <StatusIcon
+                        size={16}
+                        color={getStatusColor(scan.status)}
                         strokeWidth={2}
                       />
                       <Text
                         style={[
-                          styles.scanLocationText,
+                          styles.scanDisease,
                           { color: colors.textSecondary },
                         ]}
                       >
-                        {scan.location}
+                        {getDiseaseTranslation(scan.disease)}
                       </Text>
                     </View>
-                  )}
-                </View>
 
-                <View style={styles.scanFooter}>
-                  <Text
-                    style={[styles.scanUser, { color: colors.textSecondary }]}
-                  >
-                    {scan.user_email}
-                  </Text>
-                  <Text
-                    style={[styles.scanDate, { color: colors.textSecondary }]}
-                  >
-                    {scan.date}
-                  </Text>
-                </View>
-              </View>
-            );
-          })
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Activity size={48} color={colors.textSecondary} strokeWidth={1} />
-            <Text style={[styles.emptyTitle, { color: colors.text }]}>
-              {t('noScansYet') || 'No scans yet'}
-            </Text>
-            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              {t('scansWillAppearHere') ||
-                'Scans will appear here as users start using the app'}
-            </Text>
-          </View>
-        )}
-      </View>
+                    {scan.location && (
+                      <View style={styles.scanLocation}>
+                        <MapPin
+                          size={12}
+                          color={colors.textSecondary}
+                          strokeWidth={2}
+                        />
+                        <Text
+                          style={[
+                            styles.scanLocationText,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
+                          {scan.location}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
 
-      <View style={styles.bottomSpacing} />
-    </ThemedScrollView>
+                  <View style={styles.scanFooter}>
+                    <Text
+                      style={[styles.scanUser, { color: colors.textSecondary }]}
+                    >
+                      {scan.user_email}
+                    </Text>
+                    <Text
+                      style={[styles.scanDate, { color: colors.textSecondary }]}
+                    >
+                      {scan.date}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Activity
+                size={48}
+                color={colors.textSecondary}
+                strokeWidth={1}
+              />
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>
+                {t('noScansYet') || 'No scans yet'}
+              </Text>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+                {t('scansWillAppearHere') ||
+                  'Scans will appear here as users start using the app'}
+              </Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.bottomSpacing} />
+      </ThemedScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scrollContainer: {
     flex: 1,
   },
   loadingContainer: {
