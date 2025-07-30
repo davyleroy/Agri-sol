@@ -21,6 +21,9 @@ interface ThemeContextType {
     warning: string;
     error: string;
     info: string;
+    danger: string;
+    dangerLight: string;
+    warningLight: string;
     inputBackground: string;
     inputBorder: string;
     shadow: string;
@@ -49,6 +52,9 @@ const lightColors = {
   warning: '#f59e0b',
   error: '#ef4444',
   info: '#3b82f6',
+  danger: '#dc2626',
+  dangerLight: '#fef2f2',
+  warningLight: '#fffbeb',
   inputBackground: '#ffffff',
   inputBorder: '#d1d5db',
   shadow: 'rgba(0, 0, 0, 0.1)',
@@ -72,6 +78,9 @@ const darkColors = {
   warning: '#d97706',
   error: '#dc2626',
   info: '#2563eb',
+  danger: '#ef4444',
+  dangerLight: '#450a0a',
+  warningLight: '#451a03',
   inputBackground: '#374151',
   inputBorder: '#4b5563',
   shadow: 'rgba(0, 0, 0, 0.3)',

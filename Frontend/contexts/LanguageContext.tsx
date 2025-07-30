@@ -228,6 +228,57 @@ const translations: { [key: string]: { [key: string]: string } } = {
     rw: 'Subira Kwinjira',
     fr: 'Retour à la Connexion',
   },
+  // Delete Account
+  deleteAccount: {
+    en: 'Delete Account',
+    rw: 'Siba Konti',
+    fr: 'Supprimer le Compte',
+  },
+  deleteAccountSubtitle: {
+    en: 'Permanently delete your account',
+    rw: 'Siba konti yawe kureba',
+    fr: 'Supprimer définitivement votre compte',
+  },
+  deleteAccountWarning: {
+    en: 'Are you sure you want to delete your account?',
+    rw: 'Uzi neza ko ushaka gusiba konti yawe?',
+    fr: 'Êtes-vous sûr de vouloir supprimer votre compte ?',
+  },
+  deleteAccountWarning2: {
+    en: 'This action cannot be undone. Your account will be permanently deleted, but your scan history will be preserved.',
+    rw: 'Iki gice ntibishoboka gusubiramo. Konti yawe izasibwa kureba, ariko amateka yawe yo gushushanya azabikwa.',
+    fr: 'Cette action ne peut pas être annulée. Votre compte sera définitivement supprimé, mais votre historique de scans sera conservé.',
+  },
+  typeDeleteToConfirm: {
+    en: 'Type "DELETE" to confirm',
+    rw: 'Andika "DELETE" kugira ngo ugerageze',
+    fr: 'Tapez "DELETE" pour confirmer',
+  },
+  deleteConfirmation: {
+    en: 'DELETE',
+    rw: 'DELETE',
+    fr: 'DELETE',
+  },
+  accountDeleted: {
+    en: 'Account deleted successfully',
+    rw: 'Konti yasibwe neza',
+    fr: 'Compte supprimé avec succès',
+  },
+  deleteAccountError: {
+    en: 'Failed to delete account',
+    rw: 'Ntibishoboka gusiba konti',
+    fr: 'Échec de la suppression du compte',
+  },
+  continue: {
+    en: 'Continue',
+    rw: 'Gerageza',
+    fr: 'Continuer',
+  },
+  goBack: {
+    en: 'Go Back',
+    rw: 'Subira Inyuma',
+    fr: 'Retour',
+  },
   error: {
     en: 'Error',
     rw: 'Ikibazo',

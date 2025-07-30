@@ -69,6 +69,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
+  deleteAccount: () => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -192,7 +193,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         data: {
           full_name: fullName,
         },
-        emailRedirectTo: `${process.env.EXPO_PUBLIC_APP_URL || 'agrisol://'}/confirm-email`,
+        emailRedirectTo: 'agrisol://confirm-email',
       },
     });
 
@@ -269,9 +270,77 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const resetPassword = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.EXPO_PUBLIC_APP_URL || 'agrisol://'}/reset-password`,
+      redirectTo: 'agrisol://reset-password',
     });
     return { error };
+  };
+
+  const deleteAccount = async () => {
+    try {
+      if (!user) {
+        return { error: { message: 'No user logged in' } };
+      }
+
+      const userId = user.id;
+
+      // First, anonymize scan history (remove user association but keep data)
+      const { error: scanError } = await supabase
+        .from('scan_history')
+        .update({
+          user_id: null,
+          anonymized_at: new Date().toISOString(),
+        })
+        .eq('user_id', userId);
+
+      if (scanError) {
+        console.error('Error anonymizing scan history:', scanError);
+        // Continue with deletion even if anonymization fails
+      }
+
+      // Delete user profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+
+      if (profileError) {
+        console.error('Error deleting profile:', profileError);
+        // Continue with deletion even if profile deletion fails
+      }
+
+      // Delete admin record if exists
+      const { error: adminError } = await supabase
+        .from('admin_users')
+        .delete()
+        .eq('id', userId);
+
+      if (adminError) {
+        console.error('Error deleting admin record:', adminError);
+        // Continue with deletion even if admin deletion fails
+      }
+
+      // Finally, delete the user account from Supabase Auth
+      const { error: authError } = await supabase.auth.admin.deleteUser(userId);
+
+      if (authError) {
+        // If admin delete fails, try regular user deletion
+        const { error: userDeleteError } =
+          await supabase.auth.admin.deleteUser(userId);
+        if (userDeleteError) {
+          return { error: userDeleteError };
+        }
+      }
+
+      // Clear local state
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+
+      return { error: null };
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      return { error };
+    }
   };
 
   return (
@@ -285,6 +354,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         signIn,
         signOut,
         resetPassword,
+        deleteAccount,
       }}
     >
       {children}

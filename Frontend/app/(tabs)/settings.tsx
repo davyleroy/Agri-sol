@@ -31,6 +31,7 @@ import {
   LogOut,
   MessageSquare,
   Bell,
+  Trash2,
 } from 'lucide-react-native';
 import {
   useLanguage,
@@ -41,6 +42,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import TermsAndConditionsModal from '@/components/TermsAndConditionsModal';
 import NotificationSettingsComponent from '@/components/admin/NotificationSettings';
+import DeleteAccountModal from '@/components/DeleteAccountModal';
 
 // Helper function to get flag display
 const getFlagDisplay = (language: Language) => {
@@ -79,6 +81,7 @@ export default function SettingsScreen() {
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showNotificationSettings, setShowNotificationSettings] =
     useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
   const handleLanguageSelect = async (language: Language) => {
     await setLanguage(language);
@@ -261,6 +264,15 @@ export default function SettingsScreen() {
         ]
       : []),
     {
+      id: 'deleteAccount',
+      title: t('deleteAccount'),
+      subtitle: t('deleteAccountSubtitle'),
+      icon: Trash2,
+      onPress: () => setShowDeleteAccountModal(true),
+      showChevron: true,
+      isDestructive: true,
+    },
+    {
       id: 'logout',
       title: t('logout') || 'Logout',
       subtitle: '',
@@ -297,6 +309,10 @@ export default function SettingsScreen() {
               style={[
                 styles.settingItem,
                 { backgroundColor: colors.surface, shadowColor: colors.shadow },
+                option.isDestructive && {
+                  borderLeftWidth: 4,
+                  borderLeftColor: colors.danger,
+                },
               ]}
               onPress={option.onPress}
               activeOpacity={0.7}
@@ -304,14 +320,29 @@ export default function SettingsScreen() {
               <View
                 style={[
                   styles.settingIcon,
-                  { backgroundColor: colors.primaryLight },
+                  {
+                    backgroundColor: option.isDestructive
+                      ? colors.dangerLight
+                      : colors.primaryLight,
+                  },
                 ]}
               >
-                <option.icon size={24} color={colors.primary} strokeWidth={2} />
+                <option.icon
+                  size={24}
+                  color={option.isDestructive ? colors.danger : colors.primary}
+                  strokeWidth={2}
+                />
               </View>
 
               <View style={styles.settingContent}>
-                <Text style={[styles.settingTitle, { color: colors.text }]}>
+                <Text
+                  style={[
+                    styles.settingTitle,
+                    {
+                      color: option.isDestructive ? colors.danger : colors.text,
+                    },
+                  ]}
+                >
                   {option.title}
                 </Text>
                 <Text
@@ -486,6 +517,12 @@ export default function SettingsScreen() {
         visible={showTermsModal}
         onAccept={() => setShowTermsModal(false)}
         onDecline={() => setShowTermsModal(false)}
+      />
+
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        visible={showDeleteAccountModal}
+        onClose={() => setShowDeleteAccountModal(false)}
       />
     </>
   );
