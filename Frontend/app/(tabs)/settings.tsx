@@ -472,7 +472,11 @@ export default function SettingsScreen() {
                 <X size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
-            <NotificationSettingsComponent />
+            <View style={styles.modalContent}>
+              <NotificationSettingsComponent
+                onClose={() => setShowNotificationSettings(false)}
+              />
+            </View>
           </View>
         </View>
       </Modal>
@@ -568,13 +572,18 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
   modalContainer: {
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    paddingBottom: 40,
-    maxHeight: '70%',
+    maxHeight: '90%',
+    minHeight: '60%',
+  },
+  modalContent: {
+    flex: 1,
+    paddingBottom: 20,
   },
   modalHeader: {
     flexDirection: 'row',

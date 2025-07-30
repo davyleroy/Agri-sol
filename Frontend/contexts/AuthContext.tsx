@@ -192,6 +192,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         data: {
           full_name: fullName,
         },
+        emailRedirectTo: `${process.env.EXPO_PUBLIC_APP_URL || 'agrisol://'}/confirm-email`,
       },
     });
 

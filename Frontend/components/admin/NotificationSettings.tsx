@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import {
   Bell,
@@ -24,7 +25,13 @@ import {
 import { useTheme } from '../../contexts/ThemeContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 
-export default function NotificationSettingsComponent() {
+interface NotificationSettingsComponentProps {
+  onClose?: () => void;
+}
+
+export default function NotificationSettingsComponent({
+  onClose,
+}: NotificationSettingsComponentProps) {
   const [settings, setSettings] = useState<NotificationSettings>({
     email_notifications: true,
     sms_notifications: false,
@@ -36,6 +43,10 @@ export default function NotificationSettingsComponent() {
   const [saving, setSaving] = useState(false);
   const { colors } = useTheme();
   const { t } = useLanguage();
+
+  // Get screen dimensions for responsive design
+  const { width, height } = Dimensions.get('window');
+  const isSmallScreen = width < 400;
 
   useEffect(() => {
     loadSettings();
@@ -64,7 +75,17 @@ export default function NotificationSettingsComponent() {
       if (error) {
         Alert.alert('Error', 'Failed to save notification settings');
       } else {
-        Alert.alert('Success', 'Notification settings saved successfully');
+        Alert.alert('Success', 'Notification settings saved successfully!', [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Auto-close modal after successful save
+              if (onClose) {
+                onClose();
+              }
+            },
+          },
+        ]);
       }
     } catch (error) {
       console.error('Error saving notification settings:', error);
@@ -98,8 +119,15 @@ export default function NotificationSettingsComponent() {
 
   return (
     <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+          paddingHorizontal: isSmallScreen ? 12 : 16,
+        },
+      ]}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.scrollContent}
     >
       {/* Header */}
       <View style={styles.header}>
@@ -266,7 +294,7 @@ export default function NotificationSettingsComponent() {
         >
           <Save size={16} color="#ffffff" />
           <Text style={styles.actionButtonText}>
-            {saving ? 'Saving...' : 'Save Settings'}
+            {saving ? 'Saving...' : 'Save & Close'}
           </Text>
         </TouchableOpacity>
 
@@ -299,7 +327,10 @@ export default function NotificationSettingsComponent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingVertical: 16,
+  },
+  scrollContent: {
+    paddingBottom: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -327,7 +358,12 @@ const styles = StyleSheet.create({
   settingCard: {
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   settingHeader: {
     flexDirection: 'row',
@@ -350,14 +386,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    flexWrap: 'wrap',
   },
   input: {
     flex: 1,
+    minWidth: 120,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 12,
     fontSize: 16,
+    minHeight: 44,
   },
   inputLabel: {
     fontSize: 14,
@@ -371,10 +410,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 8,
     gap: 8,
+    minHeight: 48,
   },
   actionButtonText: {
     color: '#ffffff',

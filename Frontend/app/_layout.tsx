@@ -70,6 +70,7 @@ function RootLayoutNav() {
       <Stack.Screen name="results" options={{ headerShown: false }} />
       <Stack.Screen name="scan-guide" options={{ headerShown: false }} />
       <Stack.Screen name="reset-password" options={{ headerShown: false }} />
+      <Stack.Screen name="confirm-email" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

@@ -55,7 +55,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   style,
 }) => {
   const { currentLanguage, setLanguage } = useLanguage();
-  const { colors } = useTheme();
+  const { colors, isDarkMode } = useTheme();
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   const handleLanguageSelect = async (language: Language) => {
@@ -95,7 +95,10 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         <View
           style={[
             styles.dropdown,
-            { backgroundColor: colors.surface, borderColor: colors.border },
+            {
+              backgroundColor: isDarkMode ? '#374151' : '#ffffff',
+              borderColor: colors.border,
+            },
           ]}
         >
           {SUPPORTED_LANGUAGES.map((language) => (
@@ -116,11 +119,19 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 {getFlagDisplay(language)}
               </Text>
               <View style={styles.languageInfo}>
-                <Text style={[styles.languageName, { color: colors.text }]}>
+                <Text
+                  style={[
+                    styles.languageName,
+                    { color: isDarkMode ? '#f9fafb' : '#1f2937' },
+                  ]}
+                >
                   {language.nativeName}
                 </Text>
                 <Text
-                  style={[styles.languageCode, { color: colors.textSecondary }]}
+                  style={[
+                    styles.languageCode,
+                    { color: isDarkMode ? '#9ca3af' : '#6b7280' },
+                  ]}
                 >
                   {language.name}
                 </Text>
