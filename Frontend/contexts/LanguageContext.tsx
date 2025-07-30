@@ -47,6 +47,187 @@ const translations: { [key: string]: { [key: string]: string } } = {
     rw: 'Kurura...',
     fr: 'Chargement...',
   },
+  // Authentication
+  emailAddress: {
+    en: 'Email Address',
+    rw: 'Imeyili',
+    fr: 'Adresse Email',
+  },
+  password: {
+    en: 'Password',
+    rw: 'Ijambo ryibanga',
+    fr: 'Mot de Passe',
+  },
+  confirmPassword: {
+    en: 'Confirm Password',
+    rw: 'Emeza Ijambo ryibanga',
+    fr: 'Confirmer le Mot de Passe',
+  },
+  signIn: {
+    en: 'Sign In',
+    rw: 'Injira',
+    fr: 'Se Connecter',
+  },
+  signUp: {
+    en: 'Sign Up',
+    rw: 'Iyandikishe',
+    fr: "S'inscrire",
+  },
+  signOut: {
+    en: 'Sign Out',
+    rw: 'Sohoka',
+    fr: 'Se Déconnecter',
+  },
+  signingIn: {
+    en: 'Signing In...',
+    rw: 'Uraza...',
+    fr: 'Connexion...',
+  },
+  signingUp: {
+    en: 'Signing Up...',
+    rw: 'Uraza...',
+    fr: 'Inscription...',
+  },
+  welcomeBack: {
+    en: 'Welcome Back',
+    rw: 'Uraza',
+    fr: 'Bon Retour',
+  },
+  signInToContinue: {
+    en: 'Sign in to continue',
+    rw: 'Injira kugira ngo ugerageze',
+    fr: 'Connectez-vous pour continuer',
+  },
+  dontHaveAccount: {
+    en: "Don't have an account? ",
+    rw: 'Niba ufite konti? ',
+    fr: "Vous n'avez pas de compte ? ",
+  },
+  alreadyHaveAccount: {
+    en: 'Already have an account? ',
+    rw: 'Urafite konti? ',
+    fr: 'Vous avez déjà un compte ? ',
+  },
+  forgotPassword: {
+    en: 'Forgot Password?',
+    rw: 'Wibagiwe Ijambo ryibanga?',
+    fr: 'Mot de Passe Oublié ?',
+  },
+  resetPassword: {
+    en: 'Reset Password',
+    rw: 'Subiramo Ijambo ryibanga',
+    fr: 'Réinitialiser le Mot de Passe',
+  },
+  enterEmailAddress: {
+    en: 'Please enter your email address',
+    rw: 'Urugero imeyili yawe',
+    fr: 'Veuillez entrer votre adresse email',
+  },
+  fillAllFields: {
+    en: 'Please fill in all fields',
+    rw: 'Urugero ibintu byose',
+    fr: 'Veuillez remplir tous les champs',
+  },
+  passwordTooShort: {
+    en: 'Password must be at least 6 characters',
+    rw: 'Ijambo ryibanga rikenewe kuba inyuguti 6',
+    fr: 'Le mot de passe doit contenir au moins 6 caractères',
+  },
+  passwordsDoNotMatch: {
+    en: 'Passwords do not match',
+    rw: 'Amagambo yibanga ntibuhura',
+    fr: 'Les mots de passe ne correspondent pas',
+  },
+  signInError: {
+    en: 'Sign In Error',
+    rw: 'Ikibazo cyo Kwinjira',
+    fr: 'Erreur de Connexion',
+  },
+  signUpError: {
+    en: 'Sign Up Error',
+    rw: 'Ikibazo cyo Kwiyandikisha',
+    fr: "Erreur d'Inscription",
+  },
+  fullName: {
+    en: 'Full Name',
+    rw: 'Amazina Yose',
+    fr: 'Nom Complet',
+  },
+  enterFullName: {
+    en: 'Enter your full name',
+    rw: 'Andika amazina yawe yose',
+    fr: 'Entrez votre nom complet',
+  },
+  createAccount: {
+    en: 'Create Account',
+    rw: 'Reba Konti',
+    fr: 'Créer un Compte',
+  },
+  joinAgrisolCommunity: {
+    en: 'Join the Agrisol community',
+    rw: 'Urugero umuryango wa Agrisol',
+    fr: 'Rejoignez la communauté Agrisol',
+  },
+  phoneNumber: {
+    en: 'Phone Number',
+    rw: 'Telefoni',
+    fr: 'Numéro de Téléphone',
+  },
+  farmerType: {
+    en: 'Farmer Type',
+    rw: 'Ubwoko bwUmworozi',
+    fr: 'Type dAgriculteur',
+  },
+  selectFarmerType: {
+    en: 'Select your farmer type',
+    rw: 'Hitamo ubwoko bwawe bwumworozi',
+    fr: 'Sélectionnez votre type dagriculteur',
+  },
+  location: {
+    en: 'Location',
+    rw: 'Aho',
+    fr: 'Localisation',
+  },
+  creatingAccount: {
+    en: 'Creating Account...',
+    rw: 'Reka Konti...',
+    fr: 'Création du Compte...',
+  },
+  accountCreated: {
+    en: 'Account created successfully! Please check your email for verification.',
+    rw: 'Konti yarebwe neza! Urugero reba imeyili yawe kugira ngo ugerageze.',
+    fr: 'Compte créé avec succès ! Veuillez vérifier votre email pour la vérification.',
+  },
+  or: {
+    en: 'or',
+    rw: 'cyangwa',
+    fr: 'ou',
+  },
+  resetPasswordInstructions: {
+    en: 'Enter your email address and we will send you a password reset link',
+    rw: 'Andika imeyili yawe kugira ngo dutumeho ijambo ryibanga',
+    fr: 'Entrez votre adresse email et nous vous enverrons un lien de réinitialisation',
+  },
+  passwordResetSent: {
+    en: 'Password reset link sent to your email',
+    rw: 'Ijambo ryibanga ryatumwe kuri imeyili yawe',
+    fr: 'Lien de réinitialisation envoyé à votre email',
+  },
+  sendResetLink: {
+    en: 'Send Reset Link',
+    rw: 'Ohereza Ijambo ryibanga',
+    fr: 'Envoyer le Lien de Réinitialisation',
+  },
+  sending: {
+    en: 'Sending...',
+    rw: 'Uraza...',
+    fr: 'Envoi...',
+  },
+  backToSignIn: {
+    en: 'Back to Sign In',
+    rw: 'Subira Kwinjira',
+    fr: 'Retour à la Connexion',
+  },
   error: {
     en: 'Error',
     rw: 'Ikibazo',
