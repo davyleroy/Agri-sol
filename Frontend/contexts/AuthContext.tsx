@@ -267,7 +267,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const resetPassword = async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.EXPO_PUBLIC_APP_URL || 'agrisol://'}/reset-password`,
+    });
     return { error };
   };
 

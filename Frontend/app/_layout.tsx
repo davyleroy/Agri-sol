@@ -8,6 +8,8 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import QueryProvider from '@/contexts/QueryProvider';
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemedView } from '@/components/ThemedView';
+import * as Linking from 'expo-linking';
+import { handleDeepLink } from '@/utils/resetPasswordHandler';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,6 +33,30 @@ function RootLayoutNav() {
     }
   }, [user, loading, navigationState?.key]);
 
+  // Handle deep links for password reset
+  useEffect(() => {
+    const handleUrl = (url: string) => {
+      console.log('🔗 Deep link received:', url);
+      handleDeepLink(url);
+    };
+
+    // Handle initial URL if app was opened via deep link
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleUrl(url);
+      }
+    });
+
+    // Listen for incoming links when app is already running
+    const subscription = Linking.addEventListener('url', (event) => {
+      handleUrl(event.url);
+    });
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
+
   // Render nothing while waiting for authentication state and navigation readiness
   if (loading || !navigationState?.key) {
     return null;
@@ -43,6 +69,7 @@ function RootLayoutNav() {
       <Stack.Screen name="crop-selection" options={{ headerShown: false }} />
       <Stack.Screen name="results" options={{ headerShown: false }} />
       <Stack.Screen name="scan-guide" options={{ headerShown: false }} />
+      <Stack.Screen name="reset-password" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
