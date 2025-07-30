@@ -69,8 +69,14 @@ function RootLayoutNav() {
       <Stack.Screen name="crop-selection" options={{ headerShown: false }} />
       <Stack.Screen name="results" options={{ headerShown: false }} />
       <Stack.Screen name="scan-guide" options={{ headerShown: false }} />
-      <Stack.Screen name="reset-password" options={{ headerShown: false }} />
-      <Stack.Screen name="confirm-email" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(auth)/reset-password"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(auth)/confirm-email"
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
