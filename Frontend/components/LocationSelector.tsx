@@ -145,8 +145,15 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
           <Picker
             selectedValue={value.country}
             onValueChange={handleCountryChange}
-            style={[styles.picker, { color: colors.text }]}
+            style={[
+              styles.picker,
+              {
+                color: colors.text,
+                backgroundColor: colors.inputBackground,
+              },
+            ]}
             dropdownIconColor={colors.text}
+            mode="dropdown"
           >
             <Picker.Item
               label={t('location.selectCountry')}
@@ -186,8 +193,15 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
               <Picker
                 selectedValue={value.province || ''}
                 onValueChange={handleProvinceChange}
-                style={[styles.picker, { color: colors.text }]}
+                style={[
+                  styles.picker,
+                  {
+                    color: colors.text,
+                    backgroundColor: colors.inputBackground,
+                  },
+                ]}
                 dropdownIconColor={colors.text}
+                mode="dropdown"
               >
                 <Picker.Item
                   label={t('location.selectProvince')}
@@ -226,8 +240,15 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
                 <Picker
                   selectedValue={value.district || ''}
                   onValueChange={handleDistrictChange}
-                  style={[styles.picker, { color: colors.text }]}
+                  style={[
+                    styles.picker,
+                    {
+                      color: colors.text,
+                      backgroundColor: colors.inputBackground,
+                    },
+                  ]}
                   dropdownIconColor={colors.text}
+                  mode="dropdown"
                 >
                   <Picker.Item
                     label={t('location.selectDistrict')}
@@ -267,8 +288,15 @@ export const LocationSelector: React.FC<LocationSelectorProps> = ({
                 <Picker
                   selectedValue={value.sector || ''}
                   onValueChange={handleSectorChange}
-                  style={[styles.picker, { color: colors.text }]}
+                  style={[
+                    styles.picker,
+                    {
+                      color: colors.text,
+                      backgroundColor: colors.inputBackground,
+                    },
+                  ]}
                   dropdownIconColor={colors.text}
+                  mode="dropdown"
                 >
                   <Picker.Item
                     label={t('location.selectSector')}

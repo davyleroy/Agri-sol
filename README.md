@@ -5,21 +5,23 @@
 [![React Native](https://img.shields.io/badge/React%20Native-0.74+-61DAFB.svg)](https://reactnative.dev/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15+-FF6F00.svg)](https://tensorflow.org/)
 
-**AgriSol** is a comprehensive mobile application designed for agricultural disease detection and monitoring, specifically tailored for farmers in Rwanda. The system combines AI-powered plant disease detection with advanced location analytics and administrative dashboard capabilities.
+**AgriSol** is a comprehensive mobile application designed for agricultural disease detection and monitoring, specifically tailored for farmers in Rwanda. The system combines AI-powered plant disease detection with advanced location analytics, secure authentication, and administrative dashboard capabilities.
 
 ## 🎬 Demo Video
 
 Watch AgriSol in action! See how farmers can easily detect plant diseases and get treatment recommendations:
 
-[![AgriSol Demo](https://img.shields.io/badge/📹_Watch_Demo-Video-blue?style=for-the-badge&logo=youtube)](https://drive.google.com/file/d/11l0kAVQWxtTgfcdfy6jIcC517kcvxMWl/view?usp=sharing)
+[![AgriSol Demo](https://img.shields.io/badge/📹_Watch_Demo-Video-blue?style=for-the-badge&logo=youtube)](https://drive.google.com/file/d/1akAciRDqzLp7KUPhfgRUxdEgjcnX5bvC/view?usp=drive_link)
 
 **Demo Highlights:**
 
 - 📱 Mobile app interface walkthrough
 - 🔍 Real-time plant disease detection
 - 📍 Location-based analytics
+- 🔐 Secure authentication system
 - 💼 Admin dashboard features
-- 🌍 Multi-language support (English/Kinyarwanda)
+- 🌍 Multi-language support (English/Kinyarwanda/French)
+- 🌙 Dark/Light theme support
 
 ## 📱 App Screenshots
 
@@ -75,6 +77,7 @@ _Administrative dashboard with analytics and user management_
 
 - [🎯 Project Overview](#-project-overview)
 - [✨ Key Features](#-key-features)
+- [🆕 Recent Updates](#-recent-updates)
 - [🏗️ Architecture](#️-architecture)
 - [🚀 Quick Start](#-quick-start)
 - [📱 Frontend Setup](#-frontend-setup)
@@ -96,7 +99,8 @@ AgriSol addresses the critical need for early plant disease detection in Rwandan
 - **Real-time Disease Detection**: AI-powered analysis of plant images
 - **Treatment Recommendations**: Comprehensive guidance for disease management
 - **Location Analytics**: Geographic insights for disease patterns and trends
-- **Multi-language Support**: Available in English and Kinyarwanda
+- **Multi-language Support**: Available in English, Kinyarwanda, and French
+- **Secure Authentication**: Password reset, email confirmation, and account management
 - **Administrative Dashboard**: Advanced analytics for agricultural authorities
 
 ### Supported Crops
@@ -116,19 +120,29 @@ AgriSol addresses the critical need for early plant disease detection in Rwandan
 - **Treatment Guidance**: Immediate actions, organic alternatives, recovery estimates
 - **Scan History**: Complete tracking of all user analyses
 
+### 🔐 Authentication & Security
+
+- **Secure Sign-up**: Email confirmation with auto-login
+- **Password Reset**: Deep link integration for seamless recovery
+- **Account Management**: Profile settings and account deletion
+- **Multi-language Auth**: Login/signup in English, Kinyarwanda, French
+- **Theme Support**: Dark/Light mode for all authentication screens
+
 ### 🗺️ Location Intelligence
 
 - **Interactive Maps**: Real-time disease distribution visualization
 - **Geographic Analytics**: Province, district, and sector-level insights
 - **Risk Assessment**: Location-based disease risk scoring
 - **Trend Analysis**: Historical disease pattern tracking
+- **Theme-Aware UI**: Dropdowns and selectors adapt to dark/light themes
 
 ### 👥 User Management
 
 - **Authentication System**: Secure login with role-based access
 - **Profile Management**: User preferences and settings
 - **Admin Dashboard**: Comprehensive analytics and user management
-- **Multi-language**: English and Kinyarwanda support
+- **Multi-language**: English, Kinyarwanda, and French support
+- **Account Deletion**: Secure account removal with data preservation
 
 ### 📊 Analytics Dashboard
 
@@ -136,6 +150,35 @@ AgriSol addresses the critical need for early plant disease detection in Rwandan
 - **Location Leaderboards**: Performance metrics by region
 - **Disease Trends**: Pattern analysis and alert systems
 - **User Growth**: Engagement and adoption metrics
+- **Responsive Design**: Mobile-optimized admin interface
+
+## 🆕 Recent Updates
+
+### ✅ **Authentication Enhancements**
+
+- **Email Confirmation Flow**: Auto-login after email verification
+- **Password Reset**: Deep link integration with app navigation
+- **Account Deletion**: Multi-step confirmation with data preservation
+- **Multi-language Auth**: Complete translation support for all auth screens
+
+### ✅ **UI/UX Improvements**
+
+- **Theme-Aware Dropdowns**: Fixed white background issues in dark theme
+- **Responsive Admin Panels**: Mobile-optimized disease alert settings
+- **Auto-close Modals**: Enhanced user experience with smart modal behavior
+- **Placeholder Text**: Fixed missing placeholder text in authentication forms
+
+### ✅ **Deep Link Integration**
+
+- **Password Reset Links**: `agrisol://reset-password` deep link support
+- **Email Confirmation**: `agrisol://confirm-email` auto-login flow
+- **App Navigation**: Seamless transitions from email links to app screens
+
+### ✅ **Data Preservation**
+
+- **Account Deletion**: Scan history preserved when accounts are deleted
+- **Anonymized Data**: User data anonymized rather than deleted
+- **Admin Records**: Proper cleanup of admin user records
 
 ## 🏗️ Architecture
 
@@ -156,6 +199,11 @@ graph TB
     D --> L[Scan History]
     D --> M[Location Data]
     D --> N[Analytics Data]
+
+    A --> O[Deep Links]
+    O --> P[Password Reset]
+    O --> Q[Email Confirmation]
+    O --> R[App Navigation]
 ```
 
 ### Components
@@ -165,6 +213,7 @@ graph TB
 - **Database**: Supabase (PostgreSQL) for user data and analytics
 - **ML Models**: TensorFlow-based disease detection models
 - **Maps**: React Native Maps with clustering for location visualization
+- **Authentication**: Supabase Auth with deep link integration
 
 ## 🚀 Quick Start
 
@@ -193,6 +242,9 @@ python run.py
 
 The backend will start at `http://localhost:5000`
 
+**🌐 Production Backend**: The backend is also deployed on Render and accessible at:
+**https://agri-sol.onrender.com**
+
 ### 3. Frontend Setup
 
 ```bash
@@ -205,8 +257,12 @@ npx expo start
 
 - **Mobile**: Scan QR code with Expo Go app
 - **Web**: Open browser at `http://localhost:8081`
-- **API Documentation**: `http://localhost:5000/docs`
-- **API Testing**: `http://localhost:5000/test`
+- **API Documentation**:
+  - Local: `http://localhost:5000/docs`
+  - Production: `https://agri-sol.onrender.com/docs`
+- **API Testing**:
+  - Local: `http://localhost:5000/test`
+  - Production: `https://agri-sol.onrender.com/test`
 
 ### Try AgriSol Now!
 
@@ -220,7 +276,7 @@ Want to test AgriSol immediately? Use the Expo Go app on your mobile device:
 2. Tap the link above or scan the QR code
 3. 🌱 Start detecting plant diseases immediately!
 
-_Note: The app requires the backend server to be running for full functionality. For a complete demo, follow the setup instructions above._
+_Note: The app requires the backend server to be running for full functionality. You can either run it locally or use the production backend at https://agri-sol.onrender.com. For a complete demo, follow the setup instructions above._
 
 ## 📱 Frontend Setup
 
@@ -236,7 +292,12 @@ npm install
 Create `.env` file (optional):
 
 ```env
+# For local development
 EXPO_PUBLIC_API_BASE_URL=http://localhost:5000
+
+# For production (recommended)
+EXPO_PUBLIC_API_BASE_URL=https://agri-sol.onrender.com
+
 EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
 ```
@@ -324,6 +385,9 @@ python utils/testing_utils.py
 - `GET /docs` - Swagger API documentation
 - `GET /test` - Interactive web test interface
 
+**🌐 Production API**: All endpoints are available at:
+**https://agri-sol.onrender.com**
+
 ## 🤖 Machine Learning Models
 
 ### Model Architecture
@@ -402,13 +466,24 @@ The system works without Supabase - location features will be disabled gracefull
 ```python
 import requests
 
-# Health check
+# Health check (local)
 response = requests.get('http://localhost:5000/')
 
-# Disease detection
+# Health check (production)
+response = requests.get('https://agri-sol.onrender.com/')
+
+# Disease detection (local)
 files = {'image': open('plant_image.jpg', 'rb')}
 response = requests.post(
     'http://localhost:5000/api/ml/tomatoes',
+    files=files
+)
+result = response.json()
+
+# Disease detection (production)
+files = {'image': open('plant_image.jpg', 'rb')}
+response = requests.post(
+    'https://agri-sol.onrender.com/api/ml/tomatoes',
     files=files
 )
 result = response.json()
@@ -490,8 +565,11 @@ npm run test:e2e
 Agri-sol/
 ├── Frontend/                          # Mobile Application
 │   ├── app/                          # App screens and navigation
+│   │   ├── (auth)/                   # Authentication screens
+│   │   └── (tabs)/                   # Main app tabs
 │   ├── components/                   # Reusable UI components
-│   │   └── admin/                   # Admin dashboard components
+│   │   ├── admin/                   # Admin dashboard components
+│   │   └── auth/                    # Authentication components
 │   ├── contexts/                    # React contexts
 │   ├── hooks/                       # Custom React hooks
 │   ├── services/                    # API and external services
@@ -526,6 +604,7 @@ Agri-sol/
 - **React Native Maps** - Map integration with clustering
 - **Expo Camera** - Camera and image picker
 - **AsyncStorage** - Local data persistence
+- **Supabase Auth** - Authentication and user management
 
 ### Backend
 
